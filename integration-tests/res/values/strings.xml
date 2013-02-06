@@ -4,6 +4,6 @@
 <resources>
 
     <string name="hello">Hello World!</string>
-    <string name="app_name">com.cmput301.recipe.testsTest</string>
+    <string name="app_name">com.cmput301.recipebot.testsTest</string>
 
 </resources>

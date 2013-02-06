@@ -4,15 +4,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>com-cmput301-recipe</artifactId>
+    <artifactId>com-cmput301-recipebot</artifactId>
     <packaging>apk</packaging>
-    <name>recipe app</name>
-    <url>https://github.com.cmput301.recipe</url>
+    <name>RecipeBot app</name>
+    <url>https://github.com.cmput301.recipebot</url>
 
     <parent>
         <version>1.0</version>
-        <groupId>com.cmput301.recipe</groupId>
-        <artifactId>com-cmput301-recipe-parent</artifactId>
+        <groupId>com.cmput301.recipebot</groupId>
+        <artifactId>com-cmput301-recipebot-parent</artifactId>
     </parent>
 
     <properties>

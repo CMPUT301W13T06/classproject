@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>com.cmput301.recipe.tests</name>
+	<name>com.cmput301.recipebot.tests</name>
 	<comment></comment>
 	<projects>
-		<project>com.cmput301.recipe</project>
+		<project>com.cmput301.recipebot</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="140" android:versionName="1.4-SNAPSHOT" package="com.cmput301.recipe.tests">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="140" android:versionName="1.4-SNAPSHOT" package="com.cmput301.recipebot.tests">
     <!-- Note: This file will be auto-formatted by the build (specifically android:manifest-update goal) -->
 
 	<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/>
@@ -8,6 +8,6 @@
 		<uses-library android:name="android.test.runner"/>
 	</application>
 
-	<instrumentation android:label="recipe - Integration Tests" android:name="android.test.InstrumentationTestRunner" android:targetPackage="com.cmput301.recipe"/>
+	<instrumentation android:label="RecipeBot - Integration Tests" android:name="android.test.InstrumentationTestRunner" android:targetPackage="com.cmput301.recipebot"/>
 
 </manifest>

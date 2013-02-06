@@ -6,13 +6,13 @@ device = MonkeyRunner.waitForConnection()
 
 # Installs the Android package. Notice that this method returns a boolean, so you can test
 # to see if the installation worked.
-device.installPackage('../app/target/com-cmput301-recipe-1.0.apk')
+device.installPackage('../app/target/com-cmput301-recipebot-1.0.apk')
 
 # sets a variable with the package's internal name
-package = 'com.cmput301.recipe'
+package = 'com.cmput301.recipebot'
 
 # sets a variable with the name of an Activity in the package
-activity = 'com.cmput301.recipe.ui.CarouselActivity'
+activity = 'com.cmput301.recipebot.ui.CarouselActivity'
 
 # sets the name of the component to start
 runComponent = package + '/' + activity

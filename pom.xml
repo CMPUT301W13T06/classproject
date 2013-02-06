@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <version>1.0</version>
-    <groupId>com.cmput301.recipe</groupId>
-    <artifactId>com-cmput301-recipe-parent</artifactId>
-    <name>recipe parent</name>
+    <groupId>com.cmput301.recipebot</groupId>
+    <artifactId>com-cmput301-recipebot-parent</artifactId>
+    <name>RecipeBot parent</name>
     <packaging>pom</packaging>
 
     <issueManagement>
-        <url>https://github.com.cmput301.recipe/issues</url>
+        <url>https://github.com.cmput301.recipebot/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
@@ -24,9 +24,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com.cmput301.recipe</url>
-        <connection>scm:git:git://github.com.cmput301.recipe.git</connection>
-        <developerConnection>scm:git:git@github.com.cmput301.recipe.git</developerConnection>
+        <url>https://github.com.cmput301.recipebot</url>
+        <connection>scm:git:git://github.com.cmput301.recipebot.git</connection>
+        <developerConnection>scm:git:git@github.com.cmput301.recipebot.git</developerConnection>
     </scm>
 
     <developers>

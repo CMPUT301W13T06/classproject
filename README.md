@@ -1,14 +1,14 @@
-# recipe App
+# RecipeBot App
 
-This repository contains the source code for the [recipe](http://www.androidbootstrap.com/)
-Android app available from [Google Play](https://play.google.com/store/apps/details?id=com.cmput301.recipe).
+This repository contains the source code for the [RecipeBot](http://www.androidbootstrap.com/)
+Android app available from [Google Play](https://play.google.com/store/apps/details?id=com.cmput301.recipebot).
 
-Please see the [issues](https://github.com.cmput301.recipe/issues) section
+Please see the [issues](https://github.com.cmput301.recipebot/issues) section
 to report any bugs or feature requests and to see the list of known issues.
 
-Have a questions about recipe? Ask away on the [com-cmput301-recipe discussion forum](https://groups.google.com/forum/#!forum/com-cmput301-recipe). 
+Have a questions about RecipeBot? Ask away on the [com-cmput301-recipebot discussion forum](https://groups.google.com/forum/#!forum/com-cmput301-recipebot). 
 
-<a href="https://play.google.com/store/apps/details?id=com.cmput301.recipe" alt="Download from Google Play">
+<a href="https://play.google.com/store/apps/details?id=com.cmput301.recipebot" alt="Download from Google Play">
   <img src="http://f.cl.ly/items/000s3k2I2J1V281X2A1f/bootstrap-image.png">
 </a>
 
@@ -33,12 +33,12 @@ As an example, you know that you want your app name and package to the following
 
 After generating the app on [AndroidBootstrap.com](http://www.androidbootstrap.com) the folder structure of the source code for the app will change:
 
-  - From: __com.cmput301.recipe__ 
+  - From: __com.cmput301.recipebot__ 
   - To: __com/notify/app/mobile__
 
-At that point all the source files that were located in ____com.cmput301.recipe__ will be moved to the new folder __com/notify/app/mobile__. 
+At that point all the source files that were located in ____com.cmput301.recipebot__ will be moved to the new folder __com/notify/app/mobile__. 
 
-All import statments that reference the old resources (__R.com.cmput301.recipe.R__) will now be renamed to the correct package. The artifact id's in the *pom.xml* (and various other places) will be replaced. The App Name will be replaced in the strings/etc. 
+All import statments that reference the old resources (__R.com.cmput301.recipebot.R__) will now be renamed to the correct package. The artifact id's in the *pom.xml* (and various other places) will be replaced. The App Name will be replaced in the strings/etc. 
 
 The end result is that you will be given a zip file with the correct structure. Open the zip and then execute *mvn clean package* and your app should be ready for development. 
 
@@ -88,17 +88,17 @@ After satisfying those requirements, the build is pretty simple:
 You might find that your device doesn't let you install your build if you
 already have the version from the Android Market installed.  This is standard
 Android security as it it won't let you directly replace an app that's been
-signed with a different key.  Manually uninstall recipe from your device and
+signed with a different key.  Manually uninstall RecipeBot from your device and
 you will then be able to install your own built version.
 
 ## Acknowledgements
 
-recipe is a result of a template project I've developed over the years as well as
+RecipeBot is a result of a template project I've developed over the years as well as
 a combination of a lot of great work that the [GitHub Gaug.es](http://www.github.com/github/gauges-android)
 app and [GitHub Android](http://www.github.com/github/android) app showcased. Some fo the
 code in this project is based on the GitHub Gaug.es and GitHub Android app.
 
-recipe is built on the awesome [Parse.com API](http://www.parse.com/)
+RecipeBot is built on the awesome [Parse.com API](http://www.parse.com/)
 and uses many great open-source libraries from the Android dev community:
 
 * [ActionBarSherlock](https://github.com/JakeWharton/ActionBarSherlock) for a
@@ -121,7 +121,7 @@ and uses many great open-source libraries from the Android dev community:
 ## Contributing
 
 Please fork this repository and contribute back using
-[pull requests](https://github.com.cmput301.recipe/pulls).
+[pull requests](https://github.com.cmput301.recipebot/pulls).
 
 Any contributions, large or small, major features, bug fixes, additional
 language translations, unit/integration tests are welcomed and appreciated

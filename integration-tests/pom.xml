@@ -4,14 +4,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>com-cmput301-recipe-integration-tests</artifactId>
+    <artifactId>com-cmput301-recipebot-integration-tests</artifactId>
     <name>Android-Bootstrap integration tests</name>
     <packaging>apk</packaging>
 
     <parent>
         <version>1.0</version>
-        <groupId>com.cmput301.recipe</groupId>
-        <artifactId>com-cmput301-recipe-parent</artifactId>
+        <groupId>com.cmput301.recipebot</groupId>
+        <artifactId>com-cmput301-recipebot-parent</artifactId>
     </parent>
 
     <dependencies>
@@ -28,15 +28,15 @@
             <version>${android.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.cmput301.recipe</groupId>
-            <artifactId>com-cmput301-recipe</artifactId>
+            <groupId>com.cmput301.recipebot</groupId>
+            <artifactId>com-cmput301-recipebot</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
             <type>apk</type>
         </dependency>
         <dependency>
-            <groupId>com.cmput301.recipe</groupId>
-            <artifactId>com-cmput301-recipe</artifactId>
+            <groupId>com.cmput301.recipebot</groupId>
+            <artifactId>com-cmput301-recipebot</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
             <type>jar</type>
