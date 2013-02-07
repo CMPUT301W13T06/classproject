@@ -1,4 +1,4 @@
-lt application files
+# built application files
 *.apk
 *.ap_
 
@@ -56,25 +56,4 @@ project.properties
 */seed.txt
 notes
 logs
-classes*/target
-target
-tmp
-*~
-lib
-bin
-*/test-output
-temp-testng-customsuite.xml
-**pom.xml.releaseBackup
-release.properties
-project.properties
-*.iws
-*.iml
-gen
-*/seed.txt
-notes
-logs
-gen-external-apklibs
-.idea
-out
-.DS_Store
-
+classes
