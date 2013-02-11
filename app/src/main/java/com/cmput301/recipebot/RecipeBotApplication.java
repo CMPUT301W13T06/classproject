@@ -17,12 +17,12 @@ import roboguice.RoboGuice;
 /**
  * RecipeBot application
  */
-public class BootstrapApplication extends Application {
+public class RecipeBotApplication extends Application {
 
     /**
      * Create main application
      */
-    public BootstrapApplication() {
+    public RecipeBotApplication() {
         // Disable http.keepAlive on Froyo and below
         if (SDK_INT <= FROYO)
             HttpRequest.keepAlive(false);
@@ -33,7 +33,7 @@ public class BootstrapApplication extends Application {
      *
      * @param context
      */
-    public BootstrapApplication(final Context context) {
+    public RecipeBotApplication(final Context context) {
         this();
         attachBaseContext(context);
     }
@@ -50,19 +50,19 @@ public class BootstrapApplication extends Application {
      *
      * @param instrumentation
      */
-    public BootstrapApplication(final Instrumentation instrumentation) {
+    public RecipeBotApplication(final Instrumentation instrumentation) {
         this();
         attachBaseContext(instrumentation.getTargetContext());
     }
 
     /**
      * Sets the application injector. Using the {@link RoboGuice#newDefaultRoboModule} as well as a
-     * custom binding module {@link BootstrapModule} to set up your application module
+     * custom binding module {@link RecipeBotModule} to set up your application module
      * @param application
      * @return
      */
     public static Injector setApplicationInjector(Application application) {
         return RoboGuice.setBaseApplicationInjector(application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule
-                (application), new BootstrapModule());
+                (application), new RecipeBotModule());
     }
 }
