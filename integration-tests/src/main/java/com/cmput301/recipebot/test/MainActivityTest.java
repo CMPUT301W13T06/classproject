@@ -1,10 +1,8 @@
-
-
 package com.cmput301.recipebot.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 import com.cmput301.recipebot.ui.MainActivity;
-
+import com.squareup.spoon.Spoon;
 
 /**
  * Tests of displaying the authenticator activity
@@ -23,6 +21,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     public void testActivityExists() {
         assertNotNull(getActivity());
+        Spoon.screenshot(getActivity(), "initial_state");
     }
 }
 
