@@ -1,90 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <version>1.0</version>
-  <groupId>com.cmput301.recipebot</groupId>
-  <artifactId>com-cmput301-recipebot-parent</artifactId>
-  <name>RecipeBot parent</name>
-  <packaging>pom</packaging>
+    <version>1.0</version>
+    <groupId>com.cmput301.recipebot</groupId>
+    <artifactId>com-cmput301-recipebot-parent</artifactId>
+    <name>RecipeBot parent</name>
+    <packaging>pom</packaging>
 
-  <issueManagement>
-    <url>https://github.com.cmput301.recipebot/issues</url>
-    <system>GitHub Issues</system>
-  </issueManagement>
+    <issueManagement>
+        <url>https://github.com.cmput301.recipebot/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
 
-  <licenses>
-    <license>
-      <name>Apache License Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+    <licenses>
+        <license>
+            <name>Apache License Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-  <scm>
-    <url>https://github.com.cmput301.recipebot</url>
-    <connection>scm:git:git://github.com.cmput301.recipebot.git</connection>
-    <developerConnection>scm:git:git@github.com.cmput301.recipebot.git</developerConnection>
-  </scm>
+    <scm>
+        <url>https://github.com.cmput301.recipebot</url>
+        <connection>scm:git:git://github.com.cmput301.recipebot.git</connection>
+        <developerConnection>scm:git:git@github.com.cmput301.recipebot.git</developerConnection>
+    </scm>
 
-  <developers>
-    <developer>
-      <email>f2prateek@gmail.com</email>
-      <name>Prateek Srivastava</name>
-      <url>https://github.com/f2prateek</url>
-      <id>f2prateek</id>
-    </developer>
-  </developers>
+    <developers>
+        <developer>
+            <email>f2prateek@gmail.com</email>
+            <name>Prateek Srivastava</name>
+            <url>https://github.com/f2prateek</url>
+            <id>f2prateek</id>
+        </developer>
+    </developers>
 
-  <modules>
-    <module>app</module>
-    <module>integration-tests</module>
-  </modules>
+    <modules>
+        <module>app</module>
+        <module>integration-tests</module>
+    </modules>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <android.version>4.1.1.4</android.version>
-  </properties>
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-          <artifactId>android-maven-plugin</artifactId>
-          <version>3.4.0</version>
-          <extensions>true</extensions>
-          <configuration>
-            <sdk>
-              <platform>16</platform>
-            </sdk>
-            <!--<undeployBeforeDeploy>true</undeployBeforeDeploy>-->
-            <proguard>
-              <skip>true</skip>
-              <config>../proguard.cfg</config>
-            </proguard>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>2.9.1</version>
-          <configuration>
-            <failsOnError>true</failsOnError>
-            <configLocation>../checkstyle.xml</configLocation>
-            <consoleOutput>true</consoleOutput>
-          </configuration>
-          <executions>
-            <execution>
-              <phase>verify</phase>
-              <goals>
-                <goal>checkstyle</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <android.version>4.1.1.4</android.version>
+    </properties>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                    <artifactId>android-maven-plugin</artifactId>
+                    <version>3.4.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <sdk>
+                            <platform>16</platform>
+                        </sdk>
+                        <!--<undeployBeforeDeploy>true</undeployBeforeDeploy>-->
+                        <proguard>
+                            <skip>true</skip>
+                            <config>../proguard.cfg</config>
+                        </proguard>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>2.9.1</version>
+                    <configuration>
+                        <failsOnError>true</failsOnError>
+                        <configLocation>../checkstyle.xml</configLocation>
+                        <consoleOutput>true</consoleOutput>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>checkstyle</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
