@@ -1,5 +1,10 @@
 language: java
 jdk: oraclejdk7
+notifications:
+  email: false
+branches:
+  excludes:
+      - gh-pages
 env:
   matrix:
     # android-16 is always included
@@ -30,4 +35,4 @@ before_install:
 before_script:
   - ./wait_for_emulator
 
-script: mvn clean verify
+script: mvn install -Pintegration-tests -Dandroid.device=test
