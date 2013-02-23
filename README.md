@@ -16,7 +16,6 @@ Copyright 2013 Brian Trinh
 Copyright 2013 Ethan Mykytiuk
 Copyright 2013 Prateek Srivastava (@f2prateek)
 
-
 Copyright 2012 Google Inc.
 Copyright 2012 Donn Felker
 Copyright 2012 GitHub Inc.
