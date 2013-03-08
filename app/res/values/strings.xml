@@ -33,6 +33,9 @@
     <!-- Saved Recipes Fragment !-->
     <string name="fragment_saved_recipes_title">Saved Recipes</string>
 
+    <!-- Add Pantry Item Activity !-->
+    <string name="activity_add_pantry_item_title">@string/add</string>
+
     <!-- Generic words !-->
     <string name="search">Search</string>
     <string name="add">Add</string>

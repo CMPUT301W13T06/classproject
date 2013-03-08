@@ -19,13 +19,14 @@
 
 package com.cmput301.recipebot.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
+import com.cmput301.recipebot.ui.AddPantryItemActivity;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 /**
@@ -78,8 +79,8 @@ public class PantryFragment extends RoboSherlockListFragment {
     }
 
     private void addEntry() {
-        // TODO : add an entry here
-        Toast.makeText(getSherlockActivity(), "TODO: Add to Pantry", Toast.LENGTH_LONG).show();
+        Intent i = new Intent(getSherlockActivity(), AddPantryItemActivity.class);
+        startActivity(i);
     }
 
 }
