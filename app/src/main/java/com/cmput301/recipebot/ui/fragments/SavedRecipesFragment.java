@@ -29,7 +29,7 @@ import com.cmput301.recipebot.R;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 /**
- * A simple fragment that shows a list of fragment
+ * A simple fragment that shows a list of recipes
  */
 public class SavedRecipesFragment extends RoboSherlockListFragment {
 
