@@ -20,6 +20,7 @@
 package com.cmput301.recipebot.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import com.actionbarsherlock.app.ActionBar;
 import com.cmput301.recipebot.ui.MainActivity;
 import com.squareup.spoon.Spoon;
 
@@ -51,6 +52,16 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void testActivityExists() {
         assertThat(activity).isNotNull();
         Spoon.screenshot(activity, "initial_state");
+    }
+
+    /**
+     * Verify that two tabs are shown to the user.
+     * TODO : verify the titles themselves?
+     */
+    public void testTabsExist() {
+        Spoon.screenshot(activity, "tabs_shown");
+        ActionBar actionBar = activity.getSupportActionBar();
+        assertEquals(2, actionBar.getTabCount());
     }
 }
 

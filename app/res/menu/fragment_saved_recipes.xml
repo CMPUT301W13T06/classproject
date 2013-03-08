@@ -19,24 +19,11 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <string name="app_name">RecipeBot</string>
+    <item android:id="@+id/menu_search_saved_recipes"
+          android:icon="@drawable/ic_action_search"
+          android:title="@string/menu_search"
+          android:showAsAction="ifRoom|withText"/>
 
-    <!-- Main Activity !-->
-    <string name="menu_search">@string/search</string>
-    <string name="menu_add">@string/add</string>
-
-    <!-- Pantry Fragment !-->
-    <string name="fragment_pantry_title">Pantry</string>
-
-    <!-- Saved Recipes Fragment !-->
-    <string name="fragment_saved_recipes_title">Saved Recipes</string>
-
-    <!-- Generic words !-->
-    <string name="search">Search</string>
-    <string name="add">Add</string>
-    <string name="no_pantry_items">Pantry is Empty!</string>
-    <string name="no_saved_recipes">No Saved Recipes</string>
-
-</resources>
+</menu>
