@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+
+        >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent"
+            >
+        <HorizontalScrollView
+                android:id="@+id/hscroll"
+                android:layout_width="match_parent"
+                android:layout_height="175dp">
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="175dp" android:layout_gravity="center">
+                <ImageButton
+                        android:id="@+id/ImageButton"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:contentDescription="Add Image"
+                        android:src="@drawable/buttonimage" android:layout_alignBottom="@+id/scrollView"/>
+                <ScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/scrollView" android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"/>
+            </RelativeLayout>
+        </HorizontalScrollView>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Ingredients:"
+                />
+
+        <EditText
+                android:id="@+id/IngredientID"
+                android:layout_width="fill_parent"
+                android:layout_height="110dp"
+                android:hint="Insert Ingredients Needed"
+                android:background="@android:color/transparent"
+                android:textSize="16dp"
+                >
+        </EditText>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView" android:layout_gravity="right|center_vertical"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Instructions:"
+                android:id="@+id/textView" android:layout_gravity="left"/>
+        <EditText
+                android:id="@+id/InstructionID"
+                android:layout_width="fill_parent"
+                android:layout_height="110dp"
+                android:hint="Add Instructions"
+                android:background="@android:color/transparent"
+                android:textSize="16dp"
+                />
+        <GridLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            <Button
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="Publish"
+                    android:id="@+id/PublishButton" android:layout_row="0" android:layout_column="1"/>
+            <Button
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:id="@+id/SaveButton"
+                    android:layout_row="0" android:layout_column="3"/>
+        </GridLayout>
+
+
+    </LinearLayout>
+</ScrollView>

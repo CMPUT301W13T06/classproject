@@ -20,13 +20,18 @@
 package com.cmput301.recipebot.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import com.actionbarsherlock.app.ActionBar;
 import com.cmput301.recipebot.ui.MainActivity;
 import com.squareup.spoon.Spoon;
+
+import static org.fest.assertions.api.ANDROID.assertThat;
 
 /**
  * Tests of displaying the authenticator activity
  */
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+
+    MainActivity activity;
 
     /**
      * Create test for {@link com.cmput301.recipebot.ui.MainActivity}
@@ -35,12 +40,28 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         super(MainActivity.class);
     }
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        activity = getActivity();
+    }
+
     /**
      * Verify activity exists
      */
     public void testActivityExists() {
-        assertNotNull(getActivity());
-        Spoon.screenshot(getActivity(), "initial_state");
+        assertThat(activity).isNotNull();
+        Spoon.screenshot(activity, "initial_state");
+    }
+
+    /**
+     * Verify that two tabs are shown to the user.
+     * TODO : verify the titles themselves?
+     */
+    public void testTabsExist() {
+        Spoon.screenshot(activity, "tabs_shown");
+        ActionBar actionBar = activity.getSupportActionBar();
+        assertEquals(2, actionBar.getTabCount());
     }
 }
 
