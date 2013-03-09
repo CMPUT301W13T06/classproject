@@ -6,6 +6,7 @@ package com.cmput301.recipebot.ui;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ImageButton;
 import com.cmput301.recipebot.R;
 import android.app.Activity;
@@ -14,11 +15,13 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.net.Uri;
 import android.database.Cursor;
 import android.widget.ShareActionProvider;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.MotionEvent;
 
 /*
  *     btrinh
@@ -29,7 +32,7 @@ import android.view.Menu;
  *     ToDo:
  *     Horizontal Scroll On Image Button
  *     Multiple Images
- *     Context Menus for clicks of ImageClick
+ *     Context Menus for clicks of ImageClick  ?
  *     Save Author, Date
  *
  */
@@ -46,7 +49,8 @@ public class AddRecipe extends Activity {
         //Buttons
         Button publishButton = (Button) findViewById(R.id.PublishButton);
         Button saveButton = (Button) findViewById(R.id.SaveButton);
-        Button imageButton = (Button) findViewById(R.id.ImageButton);
+        ImageButton imageButton = (ImageButton) findViewById(R.id.ImageButton);
+
 
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -160,5 +164,14 @@ public class AddRecipe extends Activity {
         }
     }
 
+//    parentScrollView.setTouchOnListener(new View.OnTouchListener(){
+//            public boolean onTouch(View v, MotionEvent event){
+//            Log.v(TAG,"PARENT TOUCH");
+//            findViewById(R.id.child_scroll).getParent().requestDisallowInterceptTouchEvent(false);
+//            return false;
+//        }
+//    });
+
+   // }
 
 }
