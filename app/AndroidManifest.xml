@@ -15,15 +15,11 @@
             android:label="@string/app_name"
             android:theme="@style/AppBaseTheme"
             android:debuggable="true">
-
+       <!--
         <activity
                 android:name=".ui.MainActivity"
-                android:excludeFromRecents="true">
+                android:configChanges="orientation|keyboardHidden|screenSize" android:label="@string/app_name">
 
-            <!--
-                No intent-filter here! This activity is only ever launched by
-                someone who explicitly knows the class name
-            -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -33,6 +29,22 @@
             </intent-filter>
         </activity>
 
+        <activity
+                android:name=".ui.AddPantryItemActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:label="@string/activity_add_pantry_item_title"/>
+                -->
+        <activity
+                android:name=".ui.AddRecipe"
+                android:label="@string/app_name">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+
+            <category android:name="android.intent.category.LAUNCHER"/>
+
+            <category android:name="android.intent.category.DEFAULT"/>
+        </intent-filter>
+        </activity>
     </application>
 
 </manifest>
