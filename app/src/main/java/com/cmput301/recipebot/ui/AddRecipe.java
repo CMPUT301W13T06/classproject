@@ -195,7 +195,7 @@ public class AddRecipe extends Activity {
         myShareIntent.setType("text/plain");
         myShareIntent.putExtra(Intent.EXTRA_TEXT,"TEST");
 
-        mShareActionProvider.setShareIntent(myShareIntent);
+        mShareActionProvider.setShareIntent(getShareIntent());
 
         // myShareIntent.putExtra(Intent.EXTRA_STREAM);
 
@@ -217,7 +217,7 @@ public class AddRecipe extends Activity {
     private Intent getShareIntent(){
         Intent myShareIntent = new Intent();
         myShareIntent.setAction(Intent.ACTION_SEND);
-       // myShareIntent.putExtra(Intent.EXTRA_STREAM);
+        myShareIntent.putExtra(Intent.EXTRA_TEXT,"TEST");
 
        // myShareIntent.setType("image/jpeg");
         return myShareIntent;
@@ -232,5 +232,7 @@ public class AddRecipe extends Activity {
 //    });
 
    // }
+
+
 
 }
