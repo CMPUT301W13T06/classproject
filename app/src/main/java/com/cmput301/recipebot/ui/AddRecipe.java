@@ -36,6 +36,19 @@ import android.view.MotionEvent;
  *
  *     Save Title,Author, Date (Not sure how to implement this.. context menu on save?)
  *
+ *     Fix "MojoFailureException" somehow.
+ *
+ *     Completed:
+ *     User can publish photo to recipe
+ *
+ *     Attach Photo to Downloaded Recipe should use logic from previous.
+ *
+ *     Publish photo/recipe is stubbed and ready for database implementation
+ *
+ *     Save recipe is stubbed and also ready for cacheing
+ *
+ *     Share recipe needs menu button fixed.
+ *
  *
  */
 public class AddRecipe extends Activity {
