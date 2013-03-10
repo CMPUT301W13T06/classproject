@@ -3,9 +3,9 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
+        android:theme="Theme.Black">
 
-        >
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="vertical"
                   android:layout_width="fill_parent"
@@ -30,17 +30,17 @@
                     android:layout_height="200dp" android:layout_gravity="center"
                   >
                   -->
-            <!--
-                    android:layout_alignBottom="@+id/scrollView"/> -->
+        <!--
+                android:layout_alignBottom="@+id/scrollView"/> -->
 
-                <!--
-                <ScrollView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/scrollView" android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"/>                      -->
-            <!--</GridLayout> =-->
-       <!-- </HorizontalScrollView>      -->
+        <!--
+        <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/scrollView" android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"/>                      -->
+        <!--</GridLayout> =-->
+        <!-- </HorizontalScrollView>      -->
 
         <TextView
                 android:layout_width="fill_parent"

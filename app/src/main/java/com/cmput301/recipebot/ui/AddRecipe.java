@@ -3,22 +3,21 @@ package com.cmput301.recipebot.ui;
 
 //import android.R;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.ImageButton;
+import android.widget.*;
 import com.cmput301.recipebot.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.net.Uri;
 import android.database.Cursor;
-import android.widget.ShareActionProvider;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -29,11 +28,14 @@ import android.view.MotionEvent;
  *     For Ethan/Adam
  *     If you guys are looking for the stubs to add your work simply Ctrl+F and search for STUB
  *
+ *      Image is currently a place holder. Logic to upload multiple images needs to be figured out.
+ *
  *     ToDo:
  *     Horizontal Scroll On Image Button
  *     Multiple Images
- *     Context Menus for clicks of ImageClick  ?
- *     Save Author, Date
+ *
+ *     Save Title,Author, Date (Not sure how to implement this.. context menu on save?)
+ *
  *
  */
 public class AddRecipe extends Activity {
@@ -51,6 +53,20 @@ public class AddRecipe extends Activity {
         Button saveButton = (Button) findViewById(R.id.SaveButton);
         ImageButton imageButton = (ImageButton) findViewById(R.id.ImageButton);
 
+        // Context menu example. Possibly use for save/share if needed
+        final CharSequence[] items = {"Red","Green","Blue"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pick a color");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                Toast.makeText(getApplicationContext(),items[item], Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
 
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -69,11 +85,16 @@ public class AddRecipe extends Activity {
         /*
         This is the publish button's on click listener.
         The data from this recipe should be uploaded to the database.
+
+        Until menu's share button works this button opens a context menu
+        that asks the user whether they wish to publish or share...
+        if we intend to keep this way we should change "Publish" to "Share"
          */
         publishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //To change body of implemented methods use File | Settings | File Templates.
+
 
                     /*
                     STUB
@@ -81,6 +102,7 @@ public class AddRecipe extends Activity {
 
             }
         });
+
          /*
         This is the Save button's on click listener.
         The data from this recipe should be stored for the user to view if needed.
@@ -89,6 +111,7 @@ public class AddRecipe extends Activity {
             @Override
             public void onClick(View v) {
                 //To change body of implemented methods use File | Settings | File Templates.
+                //onCreateContextMenu();
 
                     /*
                     STUB
@@ -151,17 +174,40 @@ public class AddRecipe extends Activity {
         MenuItem item = menu.findItem(R.id.menu_item_share);
 
         // Fetch and store ShareActionProvider
+       // mShareActionProvider.setShareIntent(getShareIntent());
         mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+
+        Intent myShareIntent = new Intent(Intent.ACTION_SEND);
+        myShareIntent.setAction(Intent.ACTION_SEND);
+        myShareIntent.setType("text/plain");
+        myShareIntent.putExtra(Intent.EXTRA_TEXT,"TEST");
+
+        mShareActionProvider.setShareIntent(myShareIntent);
+
+        // myShareIntent.putExtra(Intent.EXTRA_STREAM);
+
+        // myShareIntent.setType("image/jpeg");
+
 
         //Return true to display menu
         return true;
     }
 
     //Call to update the share intent
+
     private void setShareIntent (Intent shareIntent){
-        if(mShareActionProvider != null){
+        //if(mShareActionProvider != null){
             mShareActionProvider.setShareIntent(shareIntent);
-        }
+        //}
+    }
+
+    private Intent getShareIntent(){
+        Intent myShareIntent = new Intent();
+        myShareIntent.setAction(Intent.ACTION_SEND);
+       // myShareIntent.putExtra(Intent.EXTRA_STREAM);
+
+       // myShareIntent.setType("image/jpeg");
+        return myShareIntent;
     }
 
 //    parentScrollView.setTouchOnListener(new View.OnTouchListener(){
