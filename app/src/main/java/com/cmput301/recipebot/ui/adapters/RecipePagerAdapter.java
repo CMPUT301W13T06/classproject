@@ -1,4 +1,4 @@
-package com.cmput301.recipebot.ui;
+package com.cmput301.recipebot.ui.adapters;
 
 import android.app.Activity;
 import android.os.Parcelable;

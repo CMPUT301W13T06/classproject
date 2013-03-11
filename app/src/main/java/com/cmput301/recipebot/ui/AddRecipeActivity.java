@@ -1,27 +1,3 @@
-package com.cmput301.recipebot.ui;
-
-
-//import android.R;
-
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.method.ScrollingMovementMethod;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.*;
-import com.cmput301.recipebot.R;
-
-//import com.actionbarsherlock.view.MenuItem;
-
 /*
  * Copyright 2013 Adam Saturna
  * Copyright 2013 Brian Trinh
@@ -40,42 +16,62 @@ import com.cmput301.recipebot.R;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.cmput301.recipebot.ui;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.*;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.ShareActionProvider;
+import com.cmput301.recipebot.R;
+
 /**
- *     This class handles users creating a new recipe. It currently takes an uploaded user image
- *     and two edit texts for Instruction and Ingredients. The Save button would when implemented
- *     saved the Recipe for offline viewing. Users can share the recipe by uploading it online or
- *     publishing onto the database for online viewing/saving by other users.
- *
- *     ToDo:
- *     Horizontal Scroll On Images
- *     Multiple Images
- *     Waiting on DB for Publish/Save/Email
- *
- *     Save Title,Author, Date (Not sure how to implement this.. context menu on save?)
- *
- *
- *     Completed:
- *     User can publish photo to recipe
- *
- *     Attach Photo to Downloaded Recipe should use logic from previous.
- *
- *     Publish photo/recipe is stubbed and ready for database implementation
- *
- *     Save recipe is stubbed and also ready for cacheing
- *
- *     Share recipe needs menu button fixed.
- *
- *     Dialog for email appears, just need to implement a button for the send
- *
- *
+ * This class handles users creating a new recipe. It currently takes an uploaded user image
+ * and two edit texts for Instruction and Ingredients. The Save button would when implemented
+ * saved the Recipe for offline viewing. Users can share the recipe by uploading it online or
+ * publishing onto the database for online viewing/saving by other users.
+ * <p/>
+ * ToDo:
+ * Horizontal Scroll On Images
+ * Multiple Images
+ * Waiting on DB for Publish/Save/Email
+ * <p/>
+ * Save Title,Author, Date (Not sure how to implement this.. context menu on save?)
+ * <p/>
+ * <p/>
+ * Completed:
+ * User can publish photo to recipe
+ * <p/>
+ * Attach Photo to Downloaded Recipe should use logic from previous.
+ * <p/>
+ * Publish photo/recipe is stubbed and ready for database implementation
+ * <p/>
+ * Save recipe is stubbed and also ready for cacheing
+ * <p/>
+ * Share recipe needs menu button fixed.
+ * <p/>
+ * Dialog for email appears, just need to implement a button for the send
  */
-public class AddRecipe extends Activity {
+public class AddRecipeActivity extends BaseActivity {
 
 
     private static int RESULT_LOAD_IMAGE = 1;
     private ShareActionProvider mShareActionProvider;
 
-    /** To be Implemented after **/
+    /**
+     * To be Implemented after *
+     */
 //
 //    private int[] Images = new int[] { R.drawable.buttonimage};
 //
@@ -91,7 +87,7 @@ public class AddRecipe extends Activity {
 //
 //    private ViewPager viewPager;
     //@InjectView(R.id.viewPager)
-   // ViewPager viewPager;
+    // ViewPager viewPager;
 
 //    @Override
 //    public void onBackPressed() {
@@ -105,7 +101,6 @@ public class AddRecipe extends Activity {
 //            super.onBackPressed();
 //        }
 //    }
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -144,19 +139,19 @@ public class AddRecipe extends Activity {
             public void onClick(View v) {
                 //To change body of implemented methods use File | Settings | File Templates.
                 // Context menu example. Possibly use for save/share if needed
-                final CharSequence[] items = {"Publish","Email"};
+                final CharSequence[] items = {"Publish", "Email"};
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddRecipe.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddRecipeActivity.this);
                 builder.setTitle("How would you like to share?");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-                        Toast.makeText(getApplicationContext(),items[item], Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
 
-                        System.out.println("ITEM IS: "+item);
+                        System.out.println("ITEM IS: " + item);
 
-                        if(item == 1){
-                            AlertDialog.Builder ebuilder = new AlertDialog.Builder(AddRecipe.this);
+                        if (item == 1) {
+                            AlertDialog.Builder ebuilder = new AlertDialog.Builder(AddRecipeActivity.this);
                             LayoutInflater inflater = getLayoutInflater();
                             final View myView = inflater.inflate(R.layout.email_entry, null);
                             ebuilder.setTitle("Who would you like to email?");
@@ -196,7 +191,7 @@ public class AddRecipe extends Activity {
             }
         });
 
-   ImageButton imageButton = (ImageButton) findViewById(R.id.ImageButton);
+        ImageButton imageButton = (ImageButton) findViewById(R.id.ImageButton);
          /*
         This is the Image button's on click listener.
         A context menu should appear and ask what the user wishes to do with images.
@@ -219,18 +214,18 @@ public class AddRecipe extends Activity {
     }
 
     /**
-     *  Allows for an image to be selected from the phone's Gallery
+     * Allows for an image to be selected from the phone's Gallery
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
 
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null,null,null);
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -247,7 +242,7 @@ public class AddRecipe extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu resource file.
-        getMenuInflater().inflate(R.menu.recipe_share, menu);
+        getSupportMenuInflater().inflate(R.menu.recipe_share, menu);
 
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.menu_item_share);
@@ -267,22 +262,22 @@ public class AddRecipe extends Activity {
 
     //Call to update the share intent
 
-    private void setShareIntent (Intent shareIntent){
-        //if(mShareActionProvider != null){
-            mShareActionProvider.setShareIntent(shareIntent);
-        //}
-    }
     // Gets the share intent
-    private Intent getShareIntent(){
+    private Intent getShareIntent() {
         Intent myShareIntent = new Intent();
         myShareIntent.setAction(Intent.ACTION_SEND);
         myShareIntent.setType("text/plain");
-        myShareIntent.putExtra(Intent.EXTRA_TEXT,"TEST");
+        myShareIntent.putExtra(Intent.EXTRA_TEXT, "TEST");
 
-       // myShareIntent.setType("image/jpeg");
+        // myShareIntent.setType("image/jpeg");
         return myShareIntent;
     }
 
+    private void setShareIntent(Intent shareIntent) {
+        //if(mShareActionProvider != null){
+        mShareActionProvider.setShareIntent(shareIntent);
+        //}
+    }
 
 
 }
