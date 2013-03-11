@@ -29,6 +29,7 @@
 
     <!-- Pantry Fragment !-->
     <string name="fragment_pantry_title">Pantry</string>
+    <string name="select_all">SELECT ALL</string>
 
     <!-- Saved Recipes Fragment !-->
     <string name="fragment_saved_recipes_title">Saved Recipes</string>
