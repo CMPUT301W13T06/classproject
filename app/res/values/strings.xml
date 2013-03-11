@@ -1,7 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--
+  ~ Copyright 2013 Adam Saturna
+  ~ Copyright 2013 Brian Trinh
+  ~ Copyright 2013 Ethan Mykytiuk
+  ~ Copyright 2013 Prateek Srivastava (@f2prateek)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
 
     <string name="app_name">RecipeBot</string>
+
+    <!-- Main Activity !-->
+    <string name="menu_search">@string/search</string>
+    <string name="menu_add">@string/add</string>
+
+    <!-- Pantry Fragment !-->
+    <string name="fragment_pantry_title">Pantry</string>
+
+    <!-- Saved Recipes Fragment !-->
+    <string name="fragment_saved_recipes_title">Saved Recipes</string>
+
+    <!-- Add Pantry Item Activity !-->
+    <string name="activity_add_pantry_item_title">@string/add</string>
+
+    <!-- Generic words !-->
+    <string name="search">Search</string>
+    <string name="add">Add</string>
+    <string name="no_pantry_items">Pantry is Empty!</string>
+    <string name="no_saved_recipes">No Saved Recipes</string>
 
 </resources>

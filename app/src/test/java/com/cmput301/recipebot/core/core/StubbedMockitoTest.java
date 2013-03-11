@@ -15,7 +15,7 @@ import java.io.OutputStreamWriter;
 import static org.mockito.Mockito.verify;
 
 /**
- * Stubbed unit tests
+ * Stubbed mockito Tests.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class StubbedMockitoTest {
