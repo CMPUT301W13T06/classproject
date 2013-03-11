@@ -30,7 +30,7 @@ import com.cmput301.recipebot.ui.AddPantryItemActivity;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 /**
- * A fragment that shows a list of items in the pantry.
+ * A fragment that shows a list of items in the pantry - {@link com.cmput301.recipebot.model.PantryItem}
  */
 public class PantryFragment extends RoboSherlockListFragment {
 
@@ -71,14 +71,17 @@ public class PantryFragment extends RoboSherlockListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add_pantry:
-                addEntry();
+                addPantryItem();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void addEntry() {
+    /**
+     * Start an activity to add a new PantryItem
+     */
+    private void addPantryItem() {
         Intent i = new Intent(getSherlockActivity(), AddPantryItemActivity.class);
         startActivity(i);
     }

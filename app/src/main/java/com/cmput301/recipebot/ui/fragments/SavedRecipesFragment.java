@@ -39,7 +39,7 @@ import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragmen
 import java.util.ArrayList;
 
 /**
- * A simple fragment that shows a list of recipes
+ * A simple fragment that shows a list of {@link Recipe} items.
  */
 public class SavedRecipesFragment extends RoboSherlockFragment implements AdapterView.OnItemClickListener {
 

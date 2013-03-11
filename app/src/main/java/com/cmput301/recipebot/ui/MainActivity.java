@@ -29,7 +29,7 @@ import com.cmput301.recipebot.ui.fragments.PantryFragment;
 import com.cmput301.recipebot.ui.fragments.SavedRecipesFragment;
 
 /**
- * Main Activity, that shows two fragments (pantry and saved recipe).
+ * Main Activity, that shows two fragments {@link PantryFragment} and {@link SavedRecipesFragment}.
  */
 public class MainActivity extends BaseActivity {
 
@@ -38,11 +38,12 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
         setupTabs();
-
     }
 
+    /**
+     * Setup the tabs two display our fragments.
+     */
     private void setupTabs() {
         ActionBar actionBar = getSupportActionBar();
         ActionBar.Tab tab = actionBar.newTab()
@@ -58,6 +59,10 @@ public class MainActivity extends BaseActivity {
         actionBar.addTab(tab);
     }
 
+    /**
+     * Simply switches between our tabs.
+     * @param <T>
+     */
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private final FragmentActivity mActivity;
         private final String mTag;
