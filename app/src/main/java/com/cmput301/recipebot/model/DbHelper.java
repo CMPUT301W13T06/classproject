@@ -1,6 +1,18 @@
 package com.cmput301.recipebot.model;
 //code from: http://www.youtube.com/watch?v=v61A90qlK9s
 
+/*
+* Method Summary:
+*
+*   public void addRecipe(int id, String writer, String recipe_name, String prep, ArrayList<String> ingr, ArrayList<String> pics) {
+        SQLiteDatabase db = this.getWritableDatabase();
+    public ArrayList<String> loadPantry();
+    public ArrayList<Recipe> loadRecipes();
+    public void editRecipeName(Recipe recipe, String r_name);
+    public void addPantryItem(String food_name);
+    public void removePantryItem(String food_name);
+* */
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +25,7 @@ import java.util.ArrayList;
 
 public class DbHelper extends SQLiteOpenHelper {
 
+    //Define Database table + column names
     private static final String TAG = "DbHelper";
     public static final String DB_NAME = "log.db";
     public static final int DB_VERSION = 21;
@@ -63,7 +76,7 @@ public class DbHelper extends SQLiteOpenHelper {
         		"foreign key(%s) references %s)",
                 INGREDIENTS_TABLE, I_ID, REC_ID, INGREDIENT, REC_ID, RECIPES_TABLE);
         
-
+         //Create tables
         try {
             db.execSQL(sql1);
         } catch (Exception e) {
@@ -104,6 +117,10 @@ public class DbHelper extends SQLiteOpenHelper {
     // code from: http://www.androidhive.info/2011/11/android-sqlite-database-tutorial/
     //returns a list of log entries
 
+    /*
+    * Function returns a list of ingredients
+    * from the user's pantry
+    * */
     public ArrayList<String> loadPantry() {
 
         ArrayList<String> logList = new ArrayList<String>();
@@ -123,7 +140,10 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return logList;
     }
-
+    /*
+    * Returns all the Recipes that are stored
+    * in the database of a user
+    * */
     public ArrayList<Recipe> loadRecipes() {
 
         ArrayList<Recipe> logList = new ArrayList<Recipe>();
@@ -186,7 +206,9 @@ public class DbHelper extends SQLiteOpenHelper {
         return logList;
     }
 
-     //TODO
+    /*
+    * Adds a recipe to the database
+    * */
     public void addRecipe(int id, String writer, String recipe_name, String prep, ArrayList<String> ingr, ArrayList<String> pics) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -204,7 +226,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         ContentValues values2 = new ContentValues();
-
+        //Insert all the ingredients of the recipe and give it a common id
         for(int x = 0; x < ingr.size(); x++) {
             values2.put(INGREDIENT, ingr.get(x));
             values2.put(REC_ID, id);
@@ -219,6 +241,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         ContentValues values3 = new ContentValues();
+        //Insert all the pictures of the recipe and give it a common id
         for(int y = 0; y < pics.size(); y++) {  	
             values3.put(IMAGE_PATH, pics.get(y));
             values3.put(RECIPE, id);
@@ -234,8 +257,17 @@ public class DbHelper extends SQLiteOpenHelper {
         values.clear();
         db.close();
     }
-    
-    public void editRecipeName(Recipe recipe, String r_name) {
+    /*
+    * Edit complex edits different parts of the recipe object
+    * changing the corresponding data in the database as well
+    * as in the passed Recipe object. For Images and Ingredients
+    * upon edit calls, the database deletes any old images or ingredients
+    * and then adds the new ones that are passed to the function
+    * (it is done so for the simplicity of implementation)
+    * */
+
+     //Edits the Recipe Name
+     public void editRecipeName(Recipe recipe, String r_name) {
 	    SQLiteDatabase db = this.getWritableDatabase();
 	
 	    String sql1 = String.format("UPDATE " + RECIPES_TABLE + " SET " + R_NAME + " ='%s'" +
@@ -249,7 +281,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	    db.close();
     }
-    
+    //Edits the Description/Preparation of a recipe
     public void editRecipePrep(Recipe recipe, String prep) {
 	    SQLiteDatabase db = this.getWritableDatabase();
 	    ArrayList<String> preparation = new ArrayList<String>();
@@ -267,7 +299,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	    db.close();
     }
-    
+    //Edits the recipe's ingredients removing old ones first and adding the new ones
     public void editRecipeIngredients(Recipe recipe, ArrayList<String> ingredients) {
 	    SQLiteDatabase db = this.getWritableDatabase();
 	    ContentValues values = new ContentValues(0);
@@ -290,7 +322,7 @@ public class DbHelper extends SQLiteOpenHelper {
         recipe.setIngredients(ingr);
 	    db.close();
     }
-    
+    //edits the recipe's pictures
     public void editRecipePictures(Recipe recipe, ArrayList<String> pictures) {
 	    SQLiteDatabase db = this.getWritableDatabase();
 	    ContentValues values = new ContentValues(0);
@@ -310,7 +342,10 @@ public class DbHelper extends SQLiteOpenHelper {
 	
 	    db.close();
     }
-
+    /*
+    *  Given the recipe id, it removes the recipe and all
+    *  corresponding pictures and ingredients
+    * */
     public void removeRecipe(int r_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
@@ -323,7 +358,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
-
+    //Removes a pantry item called food_name
     public void removePantryItem(String food_name) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
@@ -333,7 +368,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         db.close();
     }
-
+   //adds a new item to the user's pantry
     public void addPantryItem(String food_name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues value = new ContentValues();
