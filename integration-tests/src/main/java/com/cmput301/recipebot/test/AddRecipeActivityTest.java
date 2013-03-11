@@ -35,7 +35,7 @@ public class AddRecipeActivityTest extends ActivityInstrumentationTestCase2<AddR
     private Instrumentation instrumentation;
 
     /**
-     * Create test for {@link com.cmput301.recipebot.ui.MainActivity}
+     * Create test for {@link com.cmput301.recipebot.ui.AddRecipeActivity}
      */
     public AddRecipeActivityTest() {
         super(AddRecipeActivity.class);
@@ -49,7 +49,7 @@ public class AddRecipeActivityTest extends ActivityInstrumentationTestCase2<AddR
     }
 
     /**
-     * Verify that {@link com.cmput301.recipebot.ui.MainActivity} exists
+     * Verify that {@link com.cmput301.recipebot.ui.AddRecipeActivity} exists
      * TODO: might not be required - {@link org.fest.assertions.api.ANDROID} checks for null with every test.
      */
     public void testActivityExists() {
