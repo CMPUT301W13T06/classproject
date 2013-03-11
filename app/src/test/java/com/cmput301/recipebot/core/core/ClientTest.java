@@ -15,6 +15,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class ClientTest {
 
+    /**
+     * Test that a {@link Recipe} object can be created.
+     * @throws Exception
+     */
     @Test
     public void testInsert() throws Exception {
         Recipe.Builder builder = new Recipe.Builder();
@@ -40,6 +44,10 @@ public class ClientTest {
         assertEquals("Cheese Cake", recipe2.getName());
     }
 
+    /**
+     * Test that a {@link Recipe} object can be retrieved.
+     * @throws Exception
+     */
     @Test
     public void testRetrieval() throws Exception {
         Recipe recipe = ESClient.getRecipe(999);
