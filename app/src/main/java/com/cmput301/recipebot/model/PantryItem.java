@@ -1,6 +1,4 @@
-package com.cmput301.recipebot.ui;
-
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
+package com.cmput301.recipebot.model;
 
 /**
  * Copyright 2013 prateek
@@ -17,9 +15,26 @@ import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivit
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+public class PantryItem {
 
-/**
- * An activity that adds items to the Pantry
- */
-public class AddPantryItemActivity extends RoboSherlockActivity {
+    protected String name;
+
+    public PantryItem(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "PantryItem{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

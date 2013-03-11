@@ -1,6 +1,4 @@
-package com.cmput301.recipebot.ui;
-
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivity;
+package com.cmput301.recipebot.client;
 
 /**
  * Copyright 2013 prateek
@@ -17,9 +15,23 @@ import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockActivit
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+public class ESResponse<T> {
 
-/**
- * An activity that adds items to the Pantry
- */
-public class AddPantryItemActivity extends RoboSherlockActivity {
+    String _index;
+    String _type;
+    String _id;
+    int _version;
+    boolean exists;
+    T _source;
+    double max_score;
+
+    public T getSource() {
+        return _source;
+    }
+
+    @Override
+    public String toString() {
+        return "Response [id=" + _id;
+    }
+
 }
