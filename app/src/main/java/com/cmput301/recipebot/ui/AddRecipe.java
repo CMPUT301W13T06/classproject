@@ -12,15 +12,15 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.view.ViewPager;
 import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-import android.view.MenuItem;
-//import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
-import android.view.LayoutInflater;
+
+//import com.actionbarsherlock.view.MenuItem;
 
 /*
  * Copyright 2013 Adam Saturna
@@ -48,12 +48,12 @@ import android.view.LayoutInflater;
  *     publishing onto the database for online viewing/saving by other users.
  *
  *     ToDo:
- *     Horizontal Scroll On Image Button
+ *     Horizontal Scroll On Images
  *     Multiple Images
+ *     Waiting on DB for Publish/Save/Email
  *
  *     Save Title,Author, Date (Not sure how to implement this.. context menu on save?)
  *
- *     Fix "MojoFailureException" somehow.
  *
  *     Completed:
  *     User can publish photo to recipe
@@ -66,86 +66,53 @@ import android.view.LayoutInflater;
  *
  *     Share recipe needs menu button fixed.
  *
+ *     Dialog for email appears, just need to implement a button for the send
+ *
  *
  */
 public class AddRecipe extends Activity {
 
+
     private static int RESULT_LOAD_IMAGE = 1;
     private ShareActionProvider mShareActionProvider;
 
-    private int[] Images = new int[] { R.drawable.buttonimage};
-
-    // mainLayout is the child of the HorizontalScrollView
-    private LinearLayout mainLayout;
-
-    // Array that holds our image button/future drawables
-    private int[] images = {R.drawable.buttonimage, R.drawable.buttonimage,
-            R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage};
-
-    private View cell;
-    private TextView text;
-
-    private ViewPager viewPager;
+    /** To be Implemented after **/
+//
+//    private int[] Images = new int[] { R.drawable.buttonimage};
+//
+//    // mainLayout is the child of the HorizontalScrollView
+//    private LinearLayout mainLayout;
+//
+//    // Array that holds our image button/future drawables
+//    private int[] images = {R.drawable.buttonimage, R.drawable.buttonimage,
+//            R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage};
+//
+//    private View cell;
+//    private TextView text;
+//
+//    private ViewPager viewPager;
     //@InjectView(R.id.viewPager)
    // ViewPager viewPager;
 
-    @Override
-    public void onBackPressed() {
-
-        if(viewPager != null && viewPager.isShown()){
-
-            viewPager.setVisibility(View.GONE);
-        }
-        else{
-
-            super.onBackPressed();
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//
+//        if(viewPager != null && viewPager.isShown()){
+//
+//            viewPager.setVisibility(View.GONE);
+//        }
+//        else{
+//
+//            super.onBackPressed();
+//        }
+//    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.add_recipe);
 
-
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-
-        mainLayout = (LinearLayout) findViewById(R.id.linearLayout);
-
-            for (int i = 0; i < images.length; i++) {
-
-                cell = getLayoutInflater().inflate(R.layout.cell, null);
-
-                ImageView imageButton = (ImageView) cell.findViewById(R.id.buttonimage);
-                imageButton.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-
-                        viewPager.setVisibility(View.VISIBLE);
-                        viewPager.setAdapter
-                                (new RecipePagerAdapter(AddRecipe.this, images));
-                        viewPager.setCurrentItem(v.getId());
-
-
-                        // Allows for image upload from gallery
-                         Intent i = new Intent(
-                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                         startActivityForResult(i, RESULT_LOAD_IMAGE);
-                    }
-                });
-
-                imageButton.setId(i);
-
-                text = (TextView) cell.findViewById(R.id._imageName);
-
-                imageButton.setImageResource(images[i]);
-                text.setText("Image#"+(i+1));
-
-                mainLayout.addView(cell);
-            }
-
+        /**Move here later**/
         //Buttons
         Button publishButton = (Button) findViewById(R.id.PublishButton);
         Button saveButton = (Button) findViewById(R.id.SaveButton);
@@ -229,28 +196,28 @@ public class AddRecipe extends Activity {
 
             }
         });
-    }
-   // ImageButton imageButton = (ImageButton) cell.findViewById(R.id.buttonimage);
+
+   ImageButton imageButton = (ImageButton) findViewById(R.id.ImageButton);
          /*
         This is the Image button's on click listener.
         A context menu should appear and ask what the user wishes to do with images.
          */
-//        imageButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //To change body of implemented methods use File | Settings | File Templates.
-//                Intent i = new Intent(
-//                Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//                startActivityForResult(i, RESULT_LOAD_IMAGE);
-//
-//                    /*
-//                    STUB
-//                     */
-//
-//            }
-//        });
-//       }
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //To change body of implemented methods use File | Settings | File Templates.
+                Intent i = new Intent(
+                        Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+
+                    /*
+                    STUB
+                     */
+
+            }
+        });
+    }
 
     /**
      *  Allows for an image to be selected from the phone's Gallery
@@ -275,8 +242,8 @@ public class AddRecipe extends Activity {
             myImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
         }
-        }
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -320,3 +287,44 @@ public class AddRecipe extends Activity {
 
 
 }
+
+
+/**
+ //        viewPager = (ViewPager) findViewById(R.id.viewPager);
+ //
+ //        mainLayout = (LinearLayout) findViewById(R.id.linearLayout);
+ //
+ //            for (int i = 0; i < images.length; i++) {
+ //
+ //                cell = getLayoutInflater().inflate(R.layout.cell, null);
+ //
+ //                ImageView imageButton = (ImageView) cell.findViewById(R.id.buttonimage);
+ //                imageButton.setOnClickListener(new View.OnClickListener() {
+ //
+ //                    @Override
+ //                    public void onClick(View v) {
+ //
+ //                        viewPager.setVisibility(View.VISIBLE);
+ //                        viewPager.setAdapter
+ //                                (new RecipePagerAdapter(AddRecipe.this, images));
+ //                        viewPager.setCurrentItem(v.getId());
+ //
+ //
+ //                        // Allows for image upload from gallery
+ //                         Intent i = new Intent(
+ //                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+ //
+ //                         startActivityForResult(i, RESULT_LOAD_IMAGE);
+ //                    }
+ //                });
+ //
+ //                imageButton.setId(i);
+ //
+ //                text = (TextView) cell.findViewById(R.id._imageName);
+ //
+ //                imageButton.setImageResource(images[i]);
+ //                text.setText("Image#"+(i+1));
+ //
+ //                mainLayout.addView(cell);
+ //     }
+ */
