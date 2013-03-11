@@ -41,7 +41,6 @@ import com.cmput301.recipebot.R;
  * limitations under the License.
  */
 /**
- *
  *     This class handles users creating a new recipe. It currently takes an uploaded user image
  *     and two edit texts for Instruction and Ingredients. The Save button would when implemented
  *     saved the Recipe for offline viewing. Users can share the recipe by uploading it online or
