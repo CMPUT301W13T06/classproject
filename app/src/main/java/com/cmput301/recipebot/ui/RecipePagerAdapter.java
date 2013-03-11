@@ -7,6 +7,15 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 
+/**
+ * Sources:
+ * http://developer.android.com/reference/android/support/v4/view/PagerAdapter.html
+ * http://stackoverflow.com/questions/6879137/imageview-and-pageradapter
+ *
+ * Recipe Pager Adapter holds our ViewPager and in the future should scroll our images.
+ *
+ */
+
 public class RecipePagerAdapter extends PagerAdapter {
 
     private Activity activity;
@@ -23,11 +32,11 @@ public class RecipePagerAdapter extends PagerAdapter {
         return drawableIDs.length;
     }
 
-    /**
+     /**
+     *
      * Create the page for the given position. The adapter is responsible
-     * for adding the view to the container given here, although it only
-     * must ensure this is done by the time it returns from
-     * {link finup.
+     * for adding the view to the container given here. Methods may need to
+     * be updated since a lot of methods are deprecated.. Need to update possibly
      *
      * param container The containing View in which the page will be shown.
      * @param position The page position to be instantiated.

@@ -1,5 +1,11 @@
 package com.cmput301.recipebot.ui;
 
+/**
+ * Sources:
+ * https://gist.github.com/devunwired/8cbe094bb7a783e37ad1
+ * http://commonsware.com/blog/2012/08/20/multiple-view-viewpager-options.html
+ */
+
 /*
  * Copyright (c) 2012 Wireless Designs, LLC
  *

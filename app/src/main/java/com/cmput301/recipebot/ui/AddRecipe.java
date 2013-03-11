@@ -22,14 +22,30 @@ import android.view.MenuItem;
 import com.cmput301.recipebot.R;
 import android.view.LayoutInflater;
 
-
 /*
- *     btrinh
+ * Copyright 2013 Adam Saturna
+ * Copyright 2013 Brian Trinh
+ * Copyright 2013 Ethan Mykytiuk
+ * Copyright 2013 Prateek Srivastava (@f2prateek)
  *
- *     For Ethan/Adam
- *     If you guys are looking for the stubs to add your work simply Ctrl+F and search for STUB
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      Image is currently a place holder. Logic to upload multiple images needs to be figured out.
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ *
+ *     This class handles users creating a new recipe. It currently takes an uploaded user image
+ *     and two edit texts for Instruction and Ingredients. The Save button would when implemented
+ *     saved the Recipe for offline viewing. Users can share the recipe by uploading it online or
+ *     publishing onto the database for online viewing/saving by other users.
  *
  *     ToDo:
  *     Horizontal Scroll On Image Button
@@ -57,12 +73,12 @@ public class AddRecipe extends Activity {
     private static int RESULT_LOAD_IMAGE = 1;
     private ShareActionProvider mShareActionProvider;
 
-    // private int[] Images = new int[] { R.drawable.buttonimage};
+    private int[] Images = new int[] { R.drawable.buttonimage};
 
-    // mainLayout is the child of the HorizontalScrollView ...
+    // mainLayout is the child of the HorizontalScrollView
     private LinearLayout mainLayout;
 
-    // this is an array that holds the IDs of the drawables ...
+    // Array that holds our image button/future drawables
     private int[] images = {R.drawable.buttonimage, R.drawable.buttonimage,
             R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage};
 
@@ -112,8 +128,7 @@ public class AddRecipe extends Activity {
                         viewPager.setCurrentItem(v.getId());
 
 
-                        // Allows for image upload
-
+                        // Allows for image upload from gallery
                          Intent i = new Intent(
                          Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
@@ -291,7 +306,7 @@ public class AddRecipe extends Activity {
             mShareActionProvider.setShareIntent(shareIntent);
         //}
     }
-
+    // Gets the share intent
     private Intent getShareIntent(){
         Intent myShareIntent = new Intent();
         myShareIntent.setAction(Intent.ACTION_SEND);
