@@ -19,43 +19,43 @@
 
 package com.cmput301.recipebot.ui.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
+import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+
+import java.util.ArrayList;
 
 /**
- * A simple fragment that shows a list of fragment
+ * A simple fragment that shows a list of {@link Recipe} items.
  */
-public class SavedRecipesFragment extends RoboSherlockListFragment {
+public class SavedRecipesFragment extends RoboSherlockFragment implements AdapterView.OnItemClickListener {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         setHasOptionsMenu(true);
-        fillView();
-
     }
 
-    private void fillView() {
-        setListShown(false);
-
-        // TODO : fill with stuff
-        setEmptyText(getSherlockActivity().getResources().getString(R.string.no_saved_recipes));
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getSherlockActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
-
-        setListAdapter(adapter);
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_saved_recipes, container, false);
+        GridView gridview = (GridView) v.findViewById(R.id.gridview);
+        gridview.setAdapter(new RecipeGridAdapter(getSherlockActivity(), getTestRecipes()));
+        gridview.setOnItemClickListener(this);
+        return v;
     }
 
     @Override
@@ -75,4 +75,29 @@ public class SavedRecipesFragment extends RoboSherlockListFragment {
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(getSherlockActivity(), "clicked recipe # " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    private ArrayList<Recipe> getTestRecipes() {
+
+        // TODO : this is just a test, should also do on a background thread, check for recycled views etc.
+        int[] bitmapIDs = {R.drawable.test_recipe_image_1, R.drawable.test_recipe_image_2,
+                R.drawable.test_recipe_image_3, R.drawable.test_recipe_image_4, R.drawable.test_recipe_image_5,
+                R.drawable.test_recipe_image_6};
+
+        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+        for (int i = 0; i < 15; i++) {
+            Bitmap test = BitmapFactory.decodeResource(getSherlockActivity().getResources(),
+                    bitmapIDs[i % bitmapIDs.length]);
+            ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
+            bitmaps.add(test);
+            Recipe r = new Recipe.Builder().setDirections(null).setId(0).setIngredients(null).setName("hi").
+                    setUser("bob").setImages(bitmaps).build();
+            recipes.add(r);
+        }
+
+        return recipes;
+    }
 }

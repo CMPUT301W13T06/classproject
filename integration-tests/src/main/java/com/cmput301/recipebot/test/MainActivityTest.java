@@ -19,6 +19,7 @@
 
 package com.cmput301.recipebot.test;
 
+import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
 import com.actionbarsherlock.app.ActionBar;
 import com.cmput301.recipebot.ui.MainActivity;
@@ -31,7 +32,8 @@ import static org.fest.assertions.api.ANDROID.assertThat;
  */
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
-    MainActivity activity;
+    private MainActivity activity;
+    private Instrumentation instrumentation;
 
     /**
      * Create test for {@link com.cmput301.recipebot.ui.MainActivity}
@@ -44,10 +46,12 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     public void setUp() throws Exception {
         super.setUp();
         activity = getActivity();
+        instrumentation = getInstrumentation();
     }
 
     /**
-     * Verify activity exists
+     * Verify that {@link MainActivity} exists
+     * TODO: might not be required - {@link org.fest.assertions.api.ANDROID} checks for null with every test.
      */
     public void testActivityExists() {
         assertThat(activity).isNotNull();
@@ -59,7 +63,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      * TODO : verify the titles themselves?
      */
     public void testTabsExist() {
-        Spoon.screenshot(activity, "tabs_shown");
+        Spoon.screenshot(activity, "initial_state");
         ActionBar actionBar = activity.getSupportActionBar();
         assertEquals(2, actionBar.getTabCount());
     }

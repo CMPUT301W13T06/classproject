@@ -4,8 +4,6 @@
  * Copyright 2013 Ethan Mykytiuk
  * Copyright 2013 Prateek Srivastava (@f2prateek)
  *
- * Copyright 2012 Donn Felker
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,27 +17,41 @@
  * limitations under the License.
  */
 
-package com.cmput301.recipebot;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
-import com.squareup.otto.Bus;
+package com.cmput301.recipebot.model;
 
 /**
- * Module for setting up custom bindings in RoboGuice.
+ * A class that represents items in the Pantry.
+ * For ingredients, use {@link Ingredient}.
+ * Match it to an ingredient with its name.
  */
-public class RecipeBotModule extends AbstractModule {
+public class PantryItem {
 
-    /**
-     * Contributes bindings and other configurations for this module to binder.
-     */
-    @Override
-    protected void configure() {
+    protected String name;
 
-        // We want Otto to be bound as a singleton as one instance only needs
-        // to be present in this app
-        bind(Bus.class).in(Singleton.class);
-
+    public PantryItem(String name) {
+        this.name = name;
     }
 
+    /**
+     * Get the name of the item
+     * @return Name of item.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set the name of the item.
+     * @param name Name of item.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "PantryItem{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }
