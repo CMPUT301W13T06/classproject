@@ -40,30 +40,27 @@ The build requires [Maven](http://maven.apache.org/download.html) v3.0.3+ and th
 `export ANDROID_HOME=~/tools/android-sdk`
 
 After satisfying those requirements, the build is pretty simple:
+(a connected device is required)
 
 * Run `mvn clean package` from the `app` directory to build the APK only
-* Run `mvn clean install` from the root directory to build the app and also run
-the integration tests, this requires a connected Android device or running
-emulator
+* Run `mvn clean install` from the root directory to build the app and also run the integration tests, this requires a connected Android device or running emulator
 * Run `mvn clean verify` from the root directory to build the app, run the integration tests, and run checkstyle
 * Run ./test-cli.sh, to build the app, run integration tests and view the output in a web browser
+* Run ./test-cli-windows.sh (on Windows), to build the app, run integration tests and view the output in a web browser
 
 ## Acknowledgements
 
-  * [ActionBarSherlock](https://github.com/JakeWharton/ActionBarSherlock) for a
-consistent, great looking header across all Android platforms.
-  * [ViewPagerIndicator](https://github.com/JakeWharton/Android-ViewPagerIndicator)
-  for swiping between fragments.
-  * [NineOldAndroids](https://github.com/JakeWharton/NineOldAndroids) for 
-  view animations.
+  * [ActionBarSherlock](https://github.com/JakeWharton/ActionBarSherlock) for a consistent, great looking header across all Android platforms.
+  * [ViewPagerIndicator](https://github.com/JakeWharton/Android-ViewPagerIndicator) for swiping between fragments.
+  * [NineOldAndroids](https://github.com/JakeWharton/NineOldAndroids) for view animations.
   * [RoboGuice](http://code.google.com/p/roboguice/) for dependency-injection.
-  * [Robotium](http://code.google.com/p/robotium/)
-  for driving our app during integration tests.
-  * [android-maven-plugin](https://github.com/jayway/maven-android-plugin)
-  for automating our build and producing release-ready APKs.
+  * [Robotium](http://code.google.com/p/robotium/) for driving our app during integration tests.
+  * [android-maven-plugin](https://github.com/jayway/maven-android-plugin) for automating our build and producing release-ready APKs.
   * [Otto](https://github.com/square/otto) - An event bus for publish subscribe style communication between application components
+  * [fest-android](https://github.com/square/fest-android) - For fluent assertions
   * [AndroidBootstrap](http://www.androidbootstrap.com/) - for generating the template of our source code.
   * [Travis-CI](https://travis-ci.org/f2prateek/FoodBot) for continuous integration
+  * [http-request](https://github.com/kevinsawicki/http-request) A simple convenience library for using a HttpURLConnection.
   * [Spoon](http://square.github.com/spoon/) - for making sense of our instrumentation tests
 
 ## Contributing

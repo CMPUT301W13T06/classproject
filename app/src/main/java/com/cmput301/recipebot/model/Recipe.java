@@ -1,18 +1,15 @@
-package com.cmput301.recipebot.model;
-
-import android.graphics.Bitmap;
-
-import java.util.ArrayList;
-
-/**
- * Copyright 2013 prateek
- * <p/>
+/*
+ * Copyright 2013 Adam Saturna
+ * Copyright 2013 Brian Trinh
+ * Copyright 2013 Ethan Mykytiuk
+ * Copyright 2013 Prateek Srivastava (@f2prateek)
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,8 +17,15 @@ import java.util.ArrayList;
  * limitations under the License.
  */
 
+package com.cmput301.recipebot.model;
+
+import android.graphics.Bitmap;
+
+import java.util.ArrayList;
+
 /**
- * A recipe class
+ * A recipe class.
+ * Setter methods undocumented - use {@link Builder} to build objects of this class.
  */
 public class Recipe {
 
@@ -42,6 +46,11 @@ public class Recipe {
         this.images = images;
     }
 
+    /**
+     * Get the unique id for this recipe.
+     *
+     * @return id of this recipe.
+     */
     public int getId() {
         return id;
     }
@@ -50,6 +59,11 @@ public class Recipe {
         this.id = id;
     }
 
+    /**
+     * Get name of the user who created this recipe.
+     *
+     * @return Name of user.
+     */
     public String getUser() {
         return user;
     }
@@ -58,6 +72,11 @@ public class Recipe {
         this.user = user;
     }
 
+    /**
+     * Get the name of the recipe.
+     *
+     * @return Name of recipe.
+     */
     public String getName() {
         return name;
     }
@@ -66,6 +85,11 @@ public class Recipe {
         this.name = name;
     }
 
+    /**
+     * Get ingredients required for this recipe.
+     *
+     * @return List of ingredients required for this recipe.
+     */
     public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
@@ -74,6 +98,11 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    /**
+     * Get directions for this recipe.
+     *
+     * @return Ordered set of directions for this recipe.
+     */
     public ArrayList<String> getDirections() {
         return directions;
     }
@@ -82,6 +111,12 @@ public class Recipe {
         this.directions = directions;
     }
 
+    /**
+     * Get all images for this recipe.
+     * TODO: consider using a custom Bitmap class, with a boolean unpublished.*
+     *
+     * @return Images for this recipe.
+     */
     public ArrayList<Bitmap> getImages() {
         return images;
     }
