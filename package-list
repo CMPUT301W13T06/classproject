@@ -1,0 +1,8 @@
+com.actionbarsherlock
+com.cmput301.recipebot
+com.cmput301.recipebot.client
+com.cmput301.recipebot.model
+com.cmput301.recipebot.ui
+com.cmput301.recipebot.ui.adapters
+com.cmput301.recipebot.ui.fragments
+com.viewpagerindicator
