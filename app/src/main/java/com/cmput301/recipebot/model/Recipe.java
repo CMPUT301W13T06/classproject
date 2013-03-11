@@ -35,6 +35,7 @@ public class Recipe {
     private ArrayList<Ingredient> ingredients;
     private ArrayList<String> directions;
     private ArrayList<Bitmap> images;
+    private ArrayList<String> photos;
 
     public Recipe(int id, String user, String name, ArrayList<Ingredient> ingredients,
                   ArrayList<String> directions, ArrayList<Bitmap> images) {
@@ -44,6 +45,16 @@ public class Recipe {
         this.ingredients = ingredients;
         this.directions = directions;
         this.images = images;
+    }
+
+
+    //Another constructor added for db support
+    public Recipe() {
+        this.id = 0;
+        this.user = "";
+        this.name = "";
+        this.ingredients = new ArrayList<Ingredient>();
+        this.directions = new ArrayList<String>();
     }
 
     /**
@@ -123,6 +134,10 @@ public class Recipe {
 
     public void setImage(ArrayList<Bitmap> images) {
         this.images = images;
+    }
+
+    public void setPhotos(ArrayList<String> photos) {
+        this.photos = photos;
     }
 
     @Override
