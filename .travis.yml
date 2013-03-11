@@ -5,7 +5,7 @@ notifications:
 branches:
   excludes:
       - gh-pages
-      - fix-travis
+      - javadoc
 env:
   matrix:
     # android-16 is always included
