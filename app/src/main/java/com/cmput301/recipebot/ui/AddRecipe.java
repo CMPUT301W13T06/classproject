@@ -3,24 +3,25 @@ package com.cmput301.recipebot.ui;
 
 //import android.R;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.widget.*;
-import com.cmput301.recipebot.R;
-import android.app.Activity;
-import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
-import android.view.View;
-import android.widget.ImageButton;
-import android.net.Uri;
 import android.database.Cursor;
-import android.view.MenuItem;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.view.ViewPager;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
-import android.view.MotionEvent;
+import android.view.View;
+import android.widget.*;
+import android.view.MenuItem;
+//import com.actionbarsherlock.view.MenuItem;
+import com.cmput301.recipebot.R;
+import android.view.LayoutInflater;
+
 
 /*
  *     btrinh
@@ -56,30 +57,84 @@ public class AddRecipe extends Activity {
     private static int RESULT_LOAD_IMAGE = 1;
     private ShareActionProvider mShareActionProvider;
 
+    // private int[] Images = new int[] { R.drawable.buttonimage};
+
+    // mainLayout is the child of the HorizontalScrollView ...
+    private LinearLayout mainLayout;
+
+    // this is an array that holds the IDs of the drawables ...
+    private int[] images = {R.drawable.buttonimage, R.drawable.buttonimage,
+            R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage, R.drawable.buttonimage};
+
+    private View cell;
+    private TextView text;
+
+    private ViewPager viewPager;
+    //@InjectView(R.id.viewPager)
+   // ViewPager viewPager;
+
+    @Override
+    public void onBackPressed() {
+
+        if(viewPager != null && viewPager.isShown()){
+
+            viewPager.setVisibility(View.GONE);
+        }
+        else{
+
+            super.onBackPressed();
+        }
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.add_recipe);
 
+
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+
+        mainLayout = (LinearLayout) findViewById(R.id.linearLayout);
+
+            for (int i = 0; i < images.length; i++) {
+
+                cell = getLayoutInflater().inflate(R.layout.cell, null);
+
+                ImageView imageButton = (ImageView) cell.findViewById(R.id.buttonimage);
+                imageButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        viewPager.setVisibility(View.VISIBLE);
+                        viewPager.setAdapter
+                                (new RecipePagerAdapter(AddRecipe.this, images));
+                        viewPager.setCurrentItem(v.getId());
+
+
+                        // Allows for image upload
+
+                         Intent i = new Intent(
+                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                         startActivityForResult(i, RESULT_LOAD_IMAGE);
+                    }
+                });
+
+                imageButton.setId(i);
+
+                text = (TextView) cell.findViewById(R.id._imageName);
+
+                imageButton.setImageResource(images[i]);
+                text.setText("Image#"+(i+1));
+
+                mainLayout.addView(cell);
+            }
+
         //Buttons
         Button publishButton = (Button) findViewById(R.id.PublishButton);
         Button saveButton = (Button) findViewById(R.id.SaveButton);
-        ImageButton imageButton = (ImageButton) findViewById(R.id.ImageButton);
 
-        // Context menu example. Possibly use for save/share if needed
-        final CharSequence[] items = {"Red","Green","Blue"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Pick a color");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                Toast.makeText(getApplicationContext(),items[item], Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
 
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -107,8 +162,35 @@ public class AddRecipe extends Activity {
             @Override
             public void onClick(View v) {
                 //To change body of implemented methods use File | Settings | File Templates.
+                // Context menu example. Possibly use for save/share if needed
+                final CharSequence[] items = {"Publish","Email"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddRecipe.this);
+                builder.setTitle("How would you like to share?");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        Toast.makeText(getApplicationContext(),items[item], Toast.LENGTH_SHORT).show();
+
+                        System.out.println("ITEM IS: "+item);
+
+                        if(item == 1){
+                            AlertDialog.Builder ebuilder = new AlertDialog.Builder(AddRecipe.this);
+                            LayoutInflater inflater = getLayoutInflater();
+                            final View myView = inflater.inflate(R.layout.email_entry, null);
+                            ebuilder.setTitle("Who would you like to email?");
+                            ebuilder.setView(myView);
+                            AlertDialog alert = ebuilder.create();
+                            alert.show();
 
 
+                        }
+                    }
+
+                });
+                AlertDialog alert = builder.create();
+
+                alert.show();
                     /*
                     STUB
                      */
@@ -132,26 +214,28 @@ public class AddRecipe extends Activity {
 
             }
         });
+    }
+   // ImageButton imageButton = (ImageButton) cell.findViewById(R.id.buttonimage);
          /*
         This is the Image button's on click listener.
         A context menu should appear and ask what the user wishes to do with images.
          */
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //To change body of implemented methods use File | Settings | File Templates.
-                Intent i = new Intent(
-                Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
-
-                    /*
-                    STUB
-                     */
-
-            }
-        });
-    }
+//        imageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//                Intent i = new Intent(
+//                Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//                startActivityForResult(i, RESULT_LOAD_IMAGE);
+//
+//                    /*
+//                    STUB
+//                     */
+//
+//            }
+//        });
+//       }
 
     /**
      *  Allows for an image to be selected from the phone's Gallery
@@ -172,11 +256,12 @@ public class AddRecipe extends Activity {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            ImageButton myImage = (ImageButton) findViewById(R.id.ImageButton);
+            ImageView myImage = (ImageView) findViewById(R.id.buttonimage);
             myImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
         }
-    }
+        }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -186,25 +271,18 @@ public class AddRecipe extends Activity {
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.menu_item_share);
 
-        // Fetch and store ShareActionProvider
-       // mShareActionProvider.setShareIntent(getShareIntent());
         mShareActionProvider = (ShareActionProvider) item.getActionProvider();
 
-        Intent myShareIntent = new Intent(Intent.ACTION_SEND);
-        myShareIntent.setAction(Intent.ACTION_SEND);
-        myShareIntent.setType("text/plain");
-        myShareIntent.putExtra(Intent.EXTRA_TEXT,"TEST");
+//        Intent myShareIntent = new Intent(Intent.ACTION_SEND);
+
 
         mShareActionProvider.setShareIntent(getShareIntent());
-
-        // myShareIntent.putExtra(Intent.EXTRA_STREAM);
-
-        // myShareIntent.setType("image/jpeg");
-
+        this.setShareIntent(getShareIntent());
 
         //Return true to display menu
         return true;
     }
+
 
     //Call to update the share intent
 
@@ -217,21 +295,12 @@ public class AddRecipe extends Activity {
     private Intent getShareIntent(){
         Intent myShareIntent = new Intent();
         myShareIntent.setAction(Intent.ACTION_SEND);
+        myShareIntent.setType("text/plain");
         myShareIntent.putExtra(Intent.EXTRA_TEXT,"TEST");
 
        // myShareIntent.setType("image/jpeg");
         return myShareIntent;
     }
-
-//    parentScrollView.setTouchOnListener(new View.OnTouchListener(){
-//            public boolean onTouch(View v, MotionEvent event){
-//            Log.v(TAG,"PARENT TOUCH");
-//            findViewById(R.id.child_scroll).getParent().requestDisallowInterceptTouchEvent(false);
-//            return false;
-//        }
-//    });
-
-   // }
 
 
 
