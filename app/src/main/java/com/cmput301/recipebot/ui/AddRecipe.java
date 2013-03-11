@@ -237,7 +237,7 @@ public class AddRecipe extends Activity {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            ImageView myImage = (ImageView) findViewById(R.id.buttonimage);
+            ImageView myImage = (ImageView) findViewById(R.id.ImageButton);
             myImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
         }
