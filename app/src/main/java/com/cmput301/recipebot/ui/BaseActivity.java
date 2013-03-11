@@ -27,7 +27,7 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 
 /**
- * This is our base activity
+ * This is our base activity. All activities should be derived form this.
  */
 public class BaseActivity extends RoboSherlockFragmentActivity {
 
