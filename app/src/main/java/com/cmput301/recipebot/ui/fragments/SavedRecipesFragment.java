@@ -19,6 +19,7 @@
 
 package com.cmput301.recipebot.ui.fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.ui.AddRecipe;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 
@@ -66,6 +68,9 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_add_recipe:
+                addRecipe();
+                return true;
             case R.id.menu_search_saved_recipes:
                 // TODO : search recipes
                 Toast.makeText(getSherlockActivity(), "TODO: Search Recipe", Toast.LENGTH_LONG).show();
@@ -74,6 +79,15 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    /**
+     * Start an activity to add a new Recipe
+     */
+    private void addRecipe() {
+        Intent i = new Intent(getActivity(), AddRecipe.class);
+        startActivity(i);
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
