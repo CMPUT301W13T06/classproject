@@ -19,68 +19,57 @@
 
 package com.cmput301.recipebot.ui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.TextView;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.ui.AddPantryItemActivity;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
+import com.cmput301.recipebot.ui.ObservableScrollView;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 
 /**
  * A fragment that shows a list of items in the pantry.
+ * Contains an edit text box in addition to a ListView
  */
-public class PantryFragment extends RoboSherlockListFragment {
+public class PantryFragment extends RoboSherlockFragment implements ObservableScrollView.Callbacks {
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    private TextView mStickyView;
+    private View mPlaceholderView;
+    private ObservableScrollView mObservableScrollView;
 
-        setHasOptionsMenu(true);
-        fillView();
-
-    }
-
-    private void fillView() {
-        setListShown(false);
-
-        // TODO : fill with stuff
-        setEmptyText(getSherlockActivity().getResources().getString(R.string.no_pantry_items));
-
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getSherlockActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
-
-        setListAdapter(adapter);
-
-        setListShown(true);
-
+    public PantryFragment() {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_pantry, menu);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        ViewGroup rootView = (ViewGroup) inflater
+                .inflate(R.layout.fragment_pantry, container, false);
+
+        mObservableScrollView = (ObservableScrollView) rootView.findViewById(R.id.scroll_view);
+        mObservableScrollView.setCallbacks(this);
+
+        mStickyView = (TextView) rootView.findViewById(R.id.sticky);
+        mStickyView.setText(R.string.add);
+        mPlaceholderView = rootView.findViewById(R.id.placeholder);
+
+        mObservableScrollView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        onScrollChanged();
+                    }
+                });
+
+        return rootView;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_add_pantry:
-                addEntry();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void addEntry() {
-        Intent i = new Intent(getSherlockActivity(), AddPantryItemActivity.class);
-        startActivity(i);
+    public void onScrollChanged() {
+        mStickyView.setTranslationY(
+                Math.max(0, mPlaceholderView.getTop() - mObservableScrollView.getScrollY()));
     }
 
 }
