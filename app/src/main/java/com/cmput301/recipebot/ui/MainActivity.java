@@ -61,6 +61,7 @@ public class MainActivity extends BaseActivity {
 
     /**
      * Simply switches between our tabs.
+     *
      * @param <T>
      */
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {

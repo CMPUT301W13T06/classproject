@@ -22,6 +22,7 @@ package com.cmput301.recipebot.client;
 /**
  * A wrapper class for response from ElasticSearch
  * Fields are mappings of a query retrieval from ElasticSearch.
+ *
  * @param <T> the data that is wrapped in this response
  */
 public class ESResponse<T> {
@@ -36,6 +37,7 @@ public class ESResponse<T> {
 
     /**
      * Get the object associated with this repsonse.
+     *
      * @return Object of type T
      */
     public T getSource() {
