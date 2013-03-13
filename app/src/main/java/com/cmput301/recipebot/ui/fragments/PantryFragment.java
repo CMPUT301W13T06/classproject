@@ -46,7 +46,6 @@ public class PantryFragment extends RoboSherlockListFragment {
     private void fillView() {
         setListShown(false);
 
-        // TODO : fill with stuff
         setEmptyText(getSherlockActivity().getResources().getString(R.string.no_pantry_items));
 
         String[] values = new String[]{"Android", "iPhone", "WindowsMobile",

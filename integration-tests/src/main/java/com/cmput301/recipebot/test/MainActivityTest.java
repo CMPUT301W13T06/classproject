@@ -20,8 +20,9 @@
 package com.cmput301.recipebot.test;
 
 import android.app.Instrumentation;
+import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
-import com.actionbarsherlock.app.ActionBar;
+import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.ui.MainActivity;
 import com.squareup.spoon.Spoon;
 
@@ -60,12 +61,27 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
     /**
      * Verify that two tabs are shown to the user.
-     * TODO : verify the titles themselves?
      */
     public void testTabsExist() {
-        Spoon.screenshot(activity, "initial_state");
-        ActionBar actionBar = activity.getSupportActionBar();
-        assertEquals(2, actionBar.getTabCount());
+        final ViewPager viewPager = (ViewPager) activity.findViewById(R.id.pager);
+
+        instrumentation.runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(0);
+            }
+        });
+        instrumentation.waitForIdleSync();
+        Spoon.screenshot(activity, "tab_0");
+
+        instrumentation.runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(1);
+            }
+        });
+        instrumentation.waitForIdleSync();
+        Spoon.screenshot(activity, "tab_1");
     }
 }
 
