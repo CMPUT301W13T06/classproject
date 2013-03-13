@@ -34,6 +34,7 @@ public class PantryItem {
 
     /**
      * Get the name of the item
+     *
      * @return Name of item.
      */
     public String getName() {
@@ -42,6 +43,7 @@ public class PantryItem {
 
     /**
      * Set the name of the item.
+     *
      * @param name Name of item.
      */
     public void setName(String name) {
