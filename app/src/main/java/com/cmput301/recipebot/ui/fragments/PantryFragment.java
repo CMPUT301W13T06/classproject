@@ -49,7 +49,7 @@ public class PantryFragment extends RoboSherlockListFragment {
     ArrayList<String> pantry_ingredients_list = new ArrayList<String>();
 
     // Not sure which one needs to be used. Commented out onCreateView
-
+/*
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -89,10 +89,11 @@ public class PantryFragment extends RoboSherlockListFragment {
             }
         });
     }
-    /*
+   */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_pantry, container, false);
+
+        final View v = inflater.inflate(R.layout.fragment_pantry, container, false);
 
         setHasOptionsMenu(true);
         fillView();
@@ -108,7 +109,7 @@ public class PantryFragment extends RoboSherlockListFragment {
             @Override
             public void onClick(View view) {
 
-                EditText ingredientsText = (EditText) getView().findViewById(R.id.ingredients_box);
+                EditText ingredientsText = (EditText) v.findViewById(R.id.ingredients_box);
                 Log.v("Adding Ingredient", ingredientsText.getText().toString());
                 addIngredients(ingredientsText.getText().toString());
 
@@ -132,7 +133,7 @@ public class PantryFragment extends RoboSherlockListFragment {
         });
         return v;
     }
-    */
+
 
     // Should take everything from the array list and create checklist the
     private void fillView() {
