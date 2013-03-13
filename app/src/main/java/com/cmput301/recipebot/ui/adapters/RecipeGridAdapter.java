@@ -36,6 +36,7 @@ public class RecipeGridAdapter extends BaseAdapter {
 
     /**
      * Construct the Adapter
+     *
      * @param context everything needs a context =(
      * @param recipes List of {@link Recipe} to display
      */
