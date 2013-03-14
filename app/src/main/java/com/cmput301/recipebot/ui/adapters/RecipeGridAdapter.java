@@ -20,12 +20,14 @@
 package com.cmput301.recipebot.ui.adapters;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
+import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Recipe;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -62,17 +64,16 @@ public class RecipeGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO: don;t use this in production code, do on a background thread
-        ImageView imageView;
+        final ImageView imageView;
         if (convertView == null) {
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(300, 300));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            imageView = (ImageView) layoutInflater.inflate(R.layout.item_recipe_image, parent, false);
         } else {
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageBitmap(mRecipes.get(position).getImages().get(0));
+        ImageLoader.getInstance().displayImage(mRecipes.get(position).getPhotos().get(0).toString(), imageView);
+
         return imageView;
     }
 }

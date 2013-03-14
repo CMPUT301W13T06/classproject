@@ -33,7 +33,7 @@ public class ClientTest {
         ArrayList<String> directions = new ArrayList<String>();
         directions.add("mix and bake");
         builder.setDirections(directions);
-        builder.setImages(null);
+        builder.setPhotos(null);
         Recipe recipe = builder.build();
         boolean response = ESClient.insertRecipe(recipe);
 

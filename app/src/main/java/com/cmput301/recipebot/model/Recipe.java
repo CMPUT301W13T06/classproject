@@ -19,7 +19,7 @@
 
 package com.cmput301.recipebot.model;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
 
 import java.util.ArrayList;
 
@@ -34,27 +34,16 @@ public class Recipe {
     private String name;
     private ArrayList<Ingredient> ingredients;
     private ArrayList<String> directions;
-    private ArrayList<Bitmap> images;
-    private ArrayList<String> photos;
+    private ArrayList<Uri> photos;
 
     public Recipe(int id, String user, String name, ArrayList<Ingredient> ingredients,
-                  ArrayList<String> directions, ArrayList<Bitmap> images) {
+                  ArrayList<String> directions, ArrayList<Uri> photos) {
         this.id = id;
         this.user = user;
         this.name = name;
         this.ingredients = ingredients;
         this.directions = directions;
-        this.images = images;
-    }
-
-
-    //Another constructor added for db support
-    public Recipe() {
-        this.id = 0;
-        this.user = "";
-        this.name = "";
-        this.ingredients = new ArrayList<Ingredient>();
-        this.directions = new ArrayList<String>();
+        this.photos = photos;
     }
 
     /**
@@ -123,20 +112,16 @@ public class Recipe {
     }
 
     /**
-     * Get all images for this recipe.
+     * Get all photoes for this recipe.
      * TODO: consider using a custom Bitmap class, with a boolean unpublished.*
      *
-     * @return Images for this recipe.
+     * @return `photos for this recipe.
      */
-    public ArrayList<Bitmap> getImages() {
-        return images;
+    public ArrayList<Uri> getPhotos() {
+        return photos;
     }
 
-    public void setImage(ArrayList<Bitmap> images) {
-        this.images = images;
-    }
-
-    public void setPhotos(ArrayList<String> photos) {
+    public void setPhotos(ArrayList<Uri> photos) {
         this.photos = photos;
     }
 
@@ -152,7 +137,7 @@ public class Recipe {
         private String name;
         private ArrayList<Ingredient> ingredients;
         private ArrayList<String> directions;
-        private ArrayList<Bitmap> images;
+        private ArrayList<Uri> photos;
 
         public Builder setId(int id) {
             this.id = id;
@@ -179,13 +164,13 @@ public class Recipe {
             return this;
         }
 
-        public Builder setImages(ArrayList<Bitmap> images) {
-            this.images = images;
+        public Builder setPhotos(ArrayList<Uri> photos) {
+            this.photos = photos;
             return this;
         }
 
         public Recipe build() {
-            return new Recipe(id, user, name, ingredients, directions, images);
+            return new Recipe(id, user, name, ingredients, directions, photos);
         }
     }
 
