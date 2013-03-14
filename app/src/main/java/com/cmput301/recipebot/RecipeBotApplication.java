@@ -27,7 +27,13 @@ import android.content.Context;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import roboguice.RoboGuice;
+
+import java.io.File;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.FROYO;
@@ -61,6 +67,24 @@ public class RecipeBotApplication extends Application {
         super.onCreate();
 
         setApplicationInjector(this);
+
+        buildImageCache();
+    }
+
+    private void buildImageCache() {
+        File cacheDir = StorageUtils.getCacheDirectory(getApplicationContext());
+
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory()
+                .cacheOnDisc()
+                .showImageForEmptyUri(android.R.drawable.ic_menu_report_image)
+                .build();
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                .defaultDisplayImageOptions(defaultOptions)
+                .build();
+
+        ImageLoader.getInstance().init(config);
     }
 
     /**

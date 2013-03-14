@@ -18,6 +18,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -149,7 +150,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         ArrayList<Recipe> logList = new ArrayList<Recipe>();
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-        ArrayList<String> photos = new ArrayList<String>();
+        ArrayList<Uri> photos = new ArrayList<Uri>();
         ArrayList<String> directions = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -158,12 +159,12 @@ public class DbHelper extends SQLiteOpenHelper {
             try {
                 do {
                     //SET RECIPE INFO
-                    Recipe recipe = new Recipe();
-                    recipe.setId(cursor.getInt(0));
-                    recipe.setUser(cursor.getString(1));
-                    recipe.setName(cursor.getString(2));
+                    Recipe.Builder recipeBuilder = new Recipe.Builder();
+                    recipeBuilder.setId(cursor.getInt(0));
+                    recipeBuilder.setUser(cursor.getString(1));
+                    recipeBuilder.setName(cursor.getString(2));
                     directions.add(cursor.getString(3));
-                    recipe.setDirections(directions);
+                    recipeBuilder.setDirections(directions);
 
                     //SET INGREDIENTS
                     Cursor cursor2 = db.rawQuery("SELECT " + INGREDIENT + " FROM " + INGREDIENTS_TABLE + " WHERE " +
@@ -179,7 +180,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         }
                     }
                     cursor2.close();
-                    recipe.setIngredients(ingredients);
+                    recipeBuilder.setIngredients(ingredients);
 
                     //SET PHOTOS
                     Cursor cursor3 = db.rawQuery("SELECT " + IMAGE_PATH + " FROM " + HASIMAGES_TABLE + " WHERE " +
@@ -187,16 +188,17 @@ public class DbHelper extends SQLiteOpenHelper {
                     if (cursor3.moveToFirst()) {
                         try {
                             do {
-                                photos.add(cursor3.getString(0));
+                                photos.add(Uri.parse(cursor3.getString(0)));
                             } while (cursor3.moveToNext());
                         } catch (Exception e) {
                             Log.e(TAG, "failed to load IMAGES from: " + HASIMAGES_TABLE);
                         }
                     }
                     cursor3.close();
-                    recipe.setPhotos(photos);
+                    recipeBuilder.setPhotos(photos);
 
-                    logList.add(recipe);
+
+                    logList.add(recipeBuilder.build());
                 } while (cursor.moveToNext());
             } catch (Exception e) {
                 Log.e(TAG, "failed to load all Recipes from: " + RECIPES_TABLE);
@@ -327,20 +329,19 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //edits the recipe's pictures
-    public void editRecipePictures(Recipe recipe, ArrayList<String> pictures) {
+    public void editRecipePictures(Recipe recipe, ArrayList<Uri> photos) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues(0);
         db.delete(HASIMAGES_TABLE, RECIPE + " = ?", new String[]{String.valueOf(recipe.getId())});
 
-        for (int x = 0; x < pictures.size(); x++) {
-
+        for (int x = 0; x < photos.size(); x++) {
             values.put(RECIPE, recipe.getId());
-            values.put(IMAGE_PATH, pictures.get(x));
+            values.put(IMAGE_PATH, photos.get(x).toString());
             try {
                 db.insertOrThrow(HASIMAGES_TABLE, null, values);
-                recipe.setPhotos(pictures);
+                recipe.setPhotos(photos);
             } catch (Exception e) {
-                Log.e(TAG, "FAILED TO UPDATE A PICTURE: " + pictures.get(x));
+                Log.e(TAG, "FAILED TO UPDATE A PICTURE: " + photos.get(x).toString());
             }
         }
 

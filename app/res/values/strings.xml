@@ -42,5 +42,6 @@
     <string name="add">Add</string>
     <string name="no_pantry_items">Pantry is Empty!</string>
     <string name="no_saved_recipes">No Saved Recipes</string>
+    <string name="descr_image">Recipe image</string>
 
 </resources>
