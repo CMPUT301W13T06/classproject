@@ -32,11 +32,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-                android:name=".ui.AddPantryItemActivity"
-                android:configChanges="orientation|keyboardHidden|screenSize"
-                android:label="@string/activity_add_pantry_item_title"/>
-
     </application>
 
 </manifest>

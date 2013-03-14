@@ -19,20 +19,28 @@
 
 package com.cmput301.recipebot.ui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.ui.AddPantryItemActivity;
+import com.cmput301.recipebot.model.PantryItem;
+import com.cmput301.recipebot.ui.adapters.PantryListAdapter;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
+
+import java.util.ArrayList;
 
 /**
  * A fragment that shows a list of items in the pantry.
  */
-public class PantryFragment extends RoboSherlockListFragment {
+public class PantryFragment extends RoboSherlockListFragment implements View.OnClickListener {
+
+    private EditText mEdiText;
+    ArrayList<PantryItem> mItems;
+    PantryListAdapter mAdapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -48,15 +56,22 @@ public class PantryFragment extends RoboSherlockListFragment {
 
         setEmptyText(getSherlockActivity().getResources().getString(R.string.no_pantry_items));
 
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
+        LayoutInflater layoutInflater = getSherlockActivity().getLayoutInflater();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getSherlockActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        View header = layoutInflater.inflate(R.layout.fragment_pantry_header, null);
+        header.findViewById(R.id.button_add_pantry).setOnClickListener(this);
+        mEdiText = (EditText) header.findViewById(R.id.editText_pantry);
+        getListView().addHeaderView(header);
 
-        setListAdapter(adapter);
+        mItems = new ArrayList<PantryItem>();
+        mItems.add(new PantryItem("Eggs"));
+        mItems.add(new PantryItem("Milk"));
+        mItems.add(new PantryItem("Butter"));
+        mItems.add(new PantryItem("Toast"));
+        mItems.add(new PantryItem("Crouton"));
 
+        mAdapter = new PantryListAdapter(getSherlockActivity(), mItems);
+        setListAdapter(mAdapter);
         setListShown(true);
 
     }
@@ -78,8 +93,16 @@ public class PantryFragment extends RoboSherlockListFragment {
     }
 
     private void addEntry() {
-        Intent i = new Intent(getSherlockActivity(), AddPantryItemActivity.class);
-        startActivity(i);
+        PantryItem item = new PantryItem(mEdiText.getText().toString());
+        mItems.add(item);
+        mAdapter.swapData(mItems);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_add_pantry:
+                addEntry();
+        }
+    }
 }
