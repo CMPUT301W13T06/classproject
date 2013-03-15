@@ -1,22 +1,20 @@
 /*
  * Copyright 2013 Adam Saturna
- * Copyright 2013 Brian Trinh
- * Copyright 2013 Ethan Mykytiuk
- * Copyright 2013 Prateek Srivastava (@f2prateek)
+ *  Copyright 2013 Brian Trinh
+ *  Copyright 2013 Ethan Mykytiuk
+ *  Copyright 2013 Prateek Srivastava (@f2prateek)
  *
- * Copyright 2012 Donn Felker
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package com.cmput301.recipebot;
@@ -27,6 +25,7 @@ import android.content.Context;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -82,6 +81,8 @@ public class RecipeBotApplication extends Application {
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .defaultDisplayImageOptions(defaultOptions)
+                .discCache(new UnlimitedDiscCache(cacheDir))
+                .memoryCacheExtraOptions(250, 300)
                 .build();
 
         ImageLoader.getInstance().init(config);
