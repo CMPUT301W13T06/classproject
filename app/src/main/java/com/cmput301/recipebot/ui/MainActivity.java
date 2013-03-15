@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
+        outState.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
     }
 
 }

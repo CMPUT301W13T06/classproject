@@ -141,7 +141,7 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
         };
 
         ArrayList<Recipe> recipes = new ArrayList<Recipe>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 150; i++) {
             ArrayList<Uri> photos = new ArrayList<Uri>();
             photos.add(Uri.parse(IMAGES[i % IMAGES.length]));
             Recipe r = new Recipe();
