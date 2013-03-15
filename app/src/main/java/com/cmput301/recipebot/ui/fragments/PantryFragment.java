@@ -1,34 +1,37 @@
 /*
  * Copyright 2013 Adam Saturna
- * Copyright 2013 Brian Trinh
- * Copyright 2013 Ethan Mykytiuk
- * Copyright 2013 Prateek Srivastava (@f2prateek)
+ *  Copyright 2013 Brian Trinh
+ *  Copyright 2013 Ethan Mykytiuk
+ *  Copyright 2013 Prateek Srivastava (@f2prateek)
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package com.cmput301.recipebot.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.model.PantryItem;
-import com.cmput301.recipebot.ui.adapters.PantryListAdapter;
+import com.cmput301.recipebot.model.Ingredient;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 import java.util.ArrayList;
@@ -39,7 +42,7 @@ import java.util.ArrayList;
 public class PantryFragment extends RoboSherlockListFragment implements View.OnClickListener {
 
     private EditText mEdiText;
-    ArrayList<PantryItem> mItems;
+    ArrayList<Ingredient> mItems;
     PantryListAdapter mAdapter;
 
     @Override
@@ -63,14 +66,11 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         mEdiText = (EditText) header.findViewById(R.id.editText_pantry);
         getListView().addHeaderView(header);
 
-        mItems = new ArrayList<PantryItem>();
-        mItems.add(new PantryItem("Eggs"));
-        mItems.add(new PantryItem("Milk"));
-        mItems.add(new PantryItem("Butter"));
-        mItems.add(new PantryItem("Toast"));
-        mItems.add(new PantryItem("Crouton"));
+        mItems = new ArrayList<Ingredient>();
+        mItems.add(new Ingredient("Eggs", "nos.", 2f));
+        mItems.add(new Ingredient("Milk", "ml", 500f));
 
-        mAdapter = new PantryListAdapter(getSherlockActivity(), mItems);
+        mAdapter = new PantryListAdapter();
         setListAdapter(mAdapter);
         setListShown(true);
 
@@ -93,7 +93,8 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     }
 
     private void addEntry() {
-        PantryItem item = new PantryItem(mEdiText.getText().toString());
+        Ingredient item = new Ingredient();
+        item.setName(mEdiText.getText().toString());
         mItems.add(item);
         mAdapter.swapData(mItems);
     }
@@ -105,4 +106,45 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
                 addEntry();
         }
     }
+
+    public class PantryListAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return mItems.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mItems.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final View view;
+            if (convertView == null) {
+                LayoutInflater layoutInflater = (LayoutInflater) getSherlockActivity().
+                        getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = layoutInflater.inflate(R.layout.item_pantry, parent, false);
+            } else {
+                view = (convertView);
+            }
+
+            CheckBox box = (CheckBox) view.findViewById(R.id.checkBox);
+            box.setText(((Ingredient) getItem(position)).getName());
+
+            return view;
+        }
+
+        public void swapData(ArrayList<Ingredient> items) {
+            mItems = items;
+            notifyDataSetChanged();
+        }
+    }
+
 }

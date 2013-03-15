@@ -1,29 +1,27 @@
 /*
  * Copyright 2013 Adam Saturna
- * Copyright 2013 Brian Trinh
- * Copyright 2013 Ethan Mykytiuk
- * Copyright 2013 Prateek Srivastava (@f2prateek)
+ *  Copyright 2013 Brian Trinh
+ *  Copyright 2013 Ethan Mykytiuk
+ *  Copyright 2013 Prateek Srivastava (@f2prateek)
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package com.cmput301.recipebot.ui.fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +32,9 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
+import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.ui.RecipeActivity;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 
@@ -86,7 +86,26 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
      * Start an activity to add a new Recipe
      */
     private void addRecipe() {
-        Toast.makeText(getSherlockActivity(), "TODO : Add New Recipe ", Toast.LENGTH_SHORT).show();
+        Recipe recipe = new Recipe();
+        recipe.setId(89);
+        recipe.setName("Shake and Bake Chicken");
+        recipe.setUser("Colonel Sanders");
+        ArrayList<String> directions = new ArrayList<String>();
+        directions.add("1. First Shake");
+        directions.add("2. Then Bake");
+        recipe.setDirections(directions);
+        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+        ingredients.add(new Ingredient("Chicken", "g", 500f));
+        ingredients.add(new Ingredient("Shake and Bake mix", "packet", 1f));
+        ingredients.add(new Ingredient("Tequila", "bottle", 1f));
+        recipe.setIngredients(ingredients);
+        ArrayList<Uri> photos = new ArrayList<Uri>();
+        photos.add(Uri.parse("http://www.kraftrecipes.com/assets/recipe_images/SHAKE_N_BAKE_Honey_Drummies.jpg"));
+        photos.add(Uri.parse("http://images.media-allrecipes.com/userphotos/250x250/00/68/33/683349.jpg"));
+        recipe.setPhotos(photos);
+        Intent intent = new Intent(getSherlockActivity(), RecipeActivity.class);
+        intent.putExtra(RecipeActivity.EXTRA_RECIPE, recipe);
+        startActivity(intent);
     }
 
     @Override
@@ -96,7 +115,7 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
 
     private static ArrayList<Recipe> getTestRecipes() {
 
-        final String[] IMAGES = new String[] {
+        final String[] IMAGES = new String[]{
                 "https://lh6.googleusercontent.com/-jZgveEqb6pg/T3R4kXScycI/AAAAAAAAAE0/xQ7CvpfXDzc/s1024/sample_image_01.jpg",
                 "https://lh4.googleusercontent.com/-K2FMuOozxU0/T3R4lRAiBTI/AAAAAAAAAE8/a3Eh9JvnnzI/s1024/sample_image_02.jpg",
                 "https://lh5.googleusercontent.com/-SCS5C646rxM/T3R4l7QB6xI/AAAAAAAAAFE/xLcuVv3CUyA/s1024/sample_image_03.jpg",
@@ -122,11 +141,14 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
         };
 
         ArrayList<Recipe> recipes = new ArrayList<Recipe>();
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 150; i++) {
             ArrayList<Uri> photos = new ArrayList<Uri>();
-            photos.add(Uri.parse(IMAGES[i%IMAGES.length]));
-            Recipe r = new Recipe.Builder().setDirections(null).setId(0).setIngredients(null).setName("hi").
-                    setUser("bob").setPhotos(photos).build();
+            photos.add(Uri.parse(IMAGES[i % IMAGES.length]));
+            Recipe r = new Recipe();
+            r.setId(0);
+            r.setName("hi");
+            r.setUser("bob");
+            r.setPhotos(photos);
             recipes.add(r);
         }
 
