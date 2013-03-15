@@ -1,3 +1,22 @@
+/*
+ * Copyright 2013 Adam Saturna
+ *  Copyright 2013 Brian Trinh
+ *  Copyright 2013 Ethan Mykytiuk
+ *  Copyright 2013 Prateek Srivastava (@f2prateek)
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package com.cmput301.recipebot.model;
 //code from: http://www.youtube.com/watch?v=v61A90qlK9s
 
@@ -159,12 +178,12 @@ public class DbHelper extends SQLiteOpenHelper {
             try {
                 do {
                     //SET RECIPE INFO
-                    Recipe.Builder recipeBuilder = new Recipe.Builder();
-                    recipeBuilder.setId(cursor.getInt(0));
-                    recipeBuilder.setUser(cursor.getString(1));
-                    recipeBuilder.setName(cursor.getString(2));
+                    Recipe recipe = new Recipe();
+                    recipe.setId(cursor.getInt(0));
+                    recipe.setUser(cursor.getString(1));
+                    recipe.setName(cursor.getString(2));
                     directions.add(cursor.getString(3));
-                    recipeBuilder.setDirections(directions);
+                    recipe.setDirections(directions);
 
                     //SET INGREDIENTS
                     Cursor cursor2 = db.rawQuery("SELECT " + INGREDIENT + " FROM " + INGREDIENTS_TABLE + " WHERE " +
@@ -180,7 +199,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         }
                     }
                     cursor2.close();
-                    recipeBuilder.setIngredients(ingredients);
+                    recipe.setIngredients(ingredients);
 
                     //SET PHOTOS
                     Cursor cursor3 = db.rawQuery("SELECT " + IMAGE_PATH + " FROM " + HASIMAGES_TABLE + " WHERE " +
@@ -195,10 +214,10 @@ public class DbHelper extends SQLiteOpenHelper {
                         }
                     }
                     cursor3.close();
-                    recipeBuilder.setPhotos(photos);
+                    recipe.setPhotos(photos);
 
 
-                    logList.add(recipeBuilder.build());
+                    logList.add(recipe);
                 } while (cursor.moveToNext());
             } catch (Exception e) {
                 Log.e(TAG, "failed to load all Recipes from: " + RECIPES_TABLE);
