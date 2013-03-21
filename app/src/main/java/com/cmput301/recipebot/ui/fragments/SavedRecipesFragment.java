@@ -39,6 +39,7 @@ import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * A simple fragment that shows a list of {@link Recipe} items.
@@ -87,7 +88,7 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
      */
     private void addRecipe() {
         Recipe recipe = new Recipe();
-        recipe.setId(89);
+        recipe.setId(UUID.randomUUID().toString());
         recipe.setName("Shake and Bake Chicken");
         recipe.setUser("Colonel Sanders");
         ArrayList<String> directions = new ArrayList<String>();
@@ -145,7 +146,7 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
             ArrayList<Uri> photos = new ArrayList<Uri>();
             photos.add(Uri.parse(IMAGES[i % IMAGES.length]));
             Recipe r = new Recipe();
-            r.setId(0);
+            r.setId(UUID.randomUUID().toString());
             r.setName("hi");
             r.setUser("bob");
             r.setPhotos(photos);
