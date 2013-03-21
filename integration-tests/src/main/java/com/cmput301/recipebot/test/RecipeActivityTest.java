@@ -31,6 +31,7 @@ import com.cmput301.recipebot.ui.RecipeActivity;
 import com.squareup.spoon.Spoon;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static org.fest.assertions.api.ANDROID.assertThat;
 
@@ -56,7 +57,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
 
     private Intent getTestIntent() {
         Recipe recipe = new Recipe();
-        recipe.setId(89);
+        recipe.setId(UUID.randomUUID().toString());
         recipe.setName("Shake and Bake Chicken");
         recipe.setUser("Colonel Sanders");
         ArrayList<String> directions = new ArrayList<String>();

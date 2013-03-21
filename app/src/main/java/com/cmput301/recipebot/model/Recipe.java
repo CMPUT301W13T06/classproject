@@ -27,11 +27,11 @@ import java.util.ArrayList;
 
 /**
  * A recipe class.
- * Setter methods undocumented - use {@link Builder} to build objects of this class.
  */
 public class Recipe implements Parcelable {
 
-    private int id;
+    private String id;
+    private String description;
     private String user;
     private String name;
     private ArrayList<Ingredient> ingredients;
@@ -39,7 +39,8 @@ public class Recipe implements Parcelable {
     private ArrayList<Uri> photos;
 
     public Recipe() {
-        this.id = 0;
+        this.id = null;
+        this.description = null;
         this.user = null;
         this.name = null;
         this.directions = new ArrayList<String>();
@@ -47,9 +48,10 @@ public class Recipe implements Parcelable {
         this.photos = new ArrayList<Uri>();
     }
 
-    public Recipe(int id, String user, String name, ArrayList<Ingredient> ingredients,
+    public Recipe(String id, String description, String user, String name, ArrayList<Ingredient> ingredients,
                   ArrayList<String> directions, ArrayList<Uri> photos) {
         this.id = id;
+        this.description = description;
         this.user = user;
         this.name = name;
         this.ingredients = ingredients;
@@ -57,16 +59,29 @@ public class Recipe implements Parcelable {
         this.photos = photos;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Get the description for this Recipe
+     *
+     * @param description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     /**
      * Get the unique id for this recipe.
      *
      * @return id of this recipe.
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -142,8 +157,14 @@ public class Recipe implements Parcelable {
 
     @Override
     public String toString() {
-        return "Recipe [id=" + id + ", user=" + user + ", name=" + name + ", ingredients="
-                + ingredients + ", directions=" + directions + "]";
+        return "Recipe{" +
+                "directions=" + directions +
+                ", id='" + id + '\'' +
+                ", description='" + description + '\'' +
+                ", user='" + user + '\'' +
+                ", name='" + name + '\'' +
+                ", ingredients=" + ingredients +
+                '}';
     }
 
     @Override
@@ -153,7 +174,8 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeString(id);
+        dest.writeString(description);
         dest.writeString(user);
         dest.writeString(name);
         dest.writeStringList(directions);
@@ -163,7 +185,8 @@ public class Recipe implements Parcelable {
 
     protected Recipe(Parcel in) {
         this();
-        id = in.readInt();
+        id = in.readString();
+        description = in.readString();
         user = in.readString();
         name = in.readString();
         in.readStringList(directions);
