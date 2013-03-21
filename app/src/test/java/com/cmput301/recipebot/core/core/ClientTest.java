@@ -160,6 +160,75 @@ public class ClientTest {
     }
 
     /**
+     * Test that a {@link Recipe} can be searched by any one of its ingredients.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testSearchByIndividualIngredient() throws Exception {
+        Recipe recipe = mClient.getRecipe("3df532d5-f141-493b-9cec-dab02d2b3210");
+
+        // Search with the every ingredient individually.
+        for (Ingredient i : recipe.getIngredients()) {
+            ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+            ingredients.add(i);
+            List<Recipe> recipes = mClient.searchRecipes(ingredients);
+            assertThat(recipes.size()).isGreaterThan(0); // We know this exists, but could be multiple (random).
+            assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe);
+        }
+
+        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+        ingredients.add(new Ingredient("dsadsadasdasdasdada", "lb", 2f));
+        List<Recipe> recipes = mClient.searchRecipes(ingredients);
+        recipes = mClient.searchRecipes(ingredients);
+        assertThat(recipes.size()).isEqualTo(0); // We know this doesn't exist.
+    }
+
+    /**
+     * Test that mulitple {@link Recipe} is given by a search.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testSearchByIngredientsReturnsMultipleRecipes() throws Exception {
+        Recipe recipe1 = mClient.getRecipe("3df532d5-f141-493b-9cec-dab02d2b3210");
+        Recipe recipe2 = mClient.getRecipe("e5bb4189-5e5b-4659-9030-ec99983b69b5");
+        Ingredient ingredient = new Ingredient("Bacon", "testing", 2f);
+        assertThat(recipe1).hasIngredient(ingredient);
+        assertThat(recipe2).hasIngredient(ingredient);
+
+        List<Ingredient> ingredients = new ArrayList<Ingredient>();
+        ingredients.add(ingredient);
+        List<Recipe> recipes = mClient.searchRecipes(ingredients);
+        assertThat(recipes.size()).isGreaterThan(1); // We know at least two exist.
+        assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe1);
+        assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe2);
+    }
+
+    /**
+     * Test that mulitple {@link Recipe} is given by a search.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testSearchByMultipleIngredients() throws Exception {
+        Recipe recipe = mClient.getRecipe("268d295f-2829-4d8c-b0fa-d3ffedad03e7");
+        Ingredient vodka = new Ingredient("Vodka", "testing", 2f);
+        Ingredient butter = new Ingredient("Butter", "testing", 2f);
+        Ingredient peas = new Ingredient("Peas", "testing", 2f);
+        Ingredient fish = new Ingredient("Fish", "testing", 2f);
+        assertThat(recipe).hasIngredient(vodka).hasIngredient(butter).hasIngredient(peas).hasIngredient(fish);
+
+        List<Ingredient> ingredients = new ArrayList<Ingredient>();
+        ingredients.add(vodka);
+        ingredients.add(butter);
+        ingredients.add(peas);
+        ingredients.add(fish);
+        List<Recipe> recipes = mClient.searchRecipes(ingredients);
+        assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe);
+    }
+
+    /**
      * Make a new Recipe
      *
      * @return A test recipe.

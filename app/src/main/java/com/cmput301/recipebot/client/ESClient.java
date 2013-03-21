@@ -19,6 +19,7 @@
 
 package com.cmput301.recipebot.client;
 
+import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
@@ -103,7 +104,7 @@ public class ESClient {
      * @return List of recipes that have these ingredients.
      */
     public List<Recipe> searchRecipes(String name) throws IOException {
-        HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", name).accept("application/json");
+        HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", "name:" + name).accept("application/json");
         return getRecipesFromResponse(httpSearch.body());
     }
 
@@ -117,6 +118,24 @@ public class ESClient {
             recipes.add(recipe);
         }
         return recipes;
+    }
+
+    /**
+     * Search for all recipes with the given Ingredients.
+     * It only searches by the name of the ingredient, not its units or quantity.
+     *
+     * @param ingredients The ingredients to search for.
+     * @return List of recipes that have these ingredients.
+     */
+    public List<Recipe> searchRecipes(List<Ingredient> ingredients) {
+        String query = "ingredients.name:";
+        for (Ingredient i : ingredients) {
+            query = query + i.getName() + " OR ";
+        }
+        query = query.substring(0, query.length() - 4);
+        HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", query).accept("application/json");
+        System.out.println(httpSearch.toString());
+        return getRecipesFromResponse(httpSearch.body());
     }
 
     /**
