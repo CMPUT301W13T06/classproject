@@ -179,7 +179,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 do {
                     //SET RECIPE INFO
                     Recipe recipe = new Recipe();
-                    recipe.setId(cursor.getInt(0));
+                    recipe.setId(cursor.getString(0));
                     recipe.setUser(cursor.getString(1));
                     recipe.setName(cursor.getString(2));
                     directions.add(cursor.getString(3));
@@ -231,7 +231,7 @@ public class DbHelper extends SQLiteOpenHelper {
     /*
     * Adds a recipe to the database
     * */
-    public void addRecipe(int id, String writer, String recipe_name, String prep, ArrayList<String> ingr, ArrayList<String> pics) {
+    public void addRecipe(String id, String writer, String recipe_name, String prep, ArrayList<String> ingr, ArrayList<String> pics) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -371,13 +371,13 @@ public class DbHelper extends SQLiteOpenHelper {
     *  Given the recipe id, it removes the recipe and all
     *  corresponding pictures and ingredients
     * */
-    public void removeRecipe(int r_id) {
+    public void removeRecipe(String r_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             Log.d(TAG, "removing recipe and depenencies");
-            db.delete(RECIPES_TABLE, R_ID + " = ?", new String[]{String.valueOf(r_id)});
-            db.delete(INGREDIENTS_TABLE, REC_ID + " = ?", new String[]{String.valueOf(r_id)});
-            db.delete(HASIMAGES_TABLE, RECIPE + " = ?", new String[]{String.valueOf(r_id)});
+            db.delete(RECIPES_TABLE, R_ID + " = ?", new String[]{r_id});
+            db.delete(INGREDIENTS_TABLE, REC_ID + " = ?", new String[]{r_id});
+            db.delete(HASIMAGES_TABLE, RECIPE + " = ?", new String[]{r_id});
         } catch (Exception e) {
             Log.e(TAG, "Couldn't remove a recipe and all db sub trees");
         }

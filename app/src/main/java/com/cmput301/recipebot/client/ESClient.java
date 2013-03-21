@@ -27,16 +27,23 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
+
 /**
  * The client class that communicates with our server.
  */
 public class ESClient {
 
+    private static final String LOGTAG = makeLogTag(ESClient.class);
     private static final String SERVER_URL = "http://cmput301.softwareprocess.es:8080";
-    private static final String TEAM_URL = "/cmput301w13t06";
-    private static final String LAB_URL = "/lab01";
-    private static final String BASE_URL = SERVER_URL + TEAM_URL + LAB_URL;
-    private static final String GET_RECIPE_BASE_URL = BASE_URL + "/%d";
+    private static final String CLIENT_INDEX = "test-cmput301w13t06";// "cmput301w13t06";
+    private static final String TYPE_RECIPE = "recipe";
+
+    private final Gson gson;
+
+    public ESClient() {
+        gson = new Gson();
+    }
 
     /**
      * Get the recipe from the server
@@ -44,10 +51,9 @@ public class ESClient {
      * @param id The id of the recipe to retrieve.
      * @return Recipe with the given id
      */
-    public static Recipe getRecipe(int id) {
-        String response = HttpRequest.get(String.format(GET_RECIPE_BASE_URL, id)).
+    public Recipe getRecipe(String id) {
+        String response = HttpRequest.get(getRecipeUrl(id)).
                 accept("application/json").body();
-        Gson gson = new Gson();
         Type elasticSearchResponseType = new TypeToken<ESResponse<Recipe>>() {
         }.getType();
         ESResponse<Recipe> esResponse = gson.fromJson(response, elasticSearchResponseType);
@@ -61,10 +67,13 @@ public class ESClient {
      * @param recipe The recipe to insert.
      * @return True if operation was successful, false otherwise.
      */
-    public static boolean insertRecipe(Recipe recipe) {
-        Gson gson = new Gson();
-        HttpRequest httpPost = HttpRequest.post(String.format(GET_RECIPE_BASE_URL, recipe.getId())).send(gson.toJson(recipe));
+    public boolean insertRecipe(Recipe recipe) {
+        HttpRequest httpPost = HttpRequest.post(getRecipeUrl(recipe.getId())).send(gson.toJson(recipe));
         return httpPost.code() == HttpURLConnection.HTTP_OK;
+    }
+
+    public static String getRecipeUrl(String id) {
+        return SERVER_URL + "/" + CLIENT_INDEX + "/" + TYPE_RECIPE + "/" + id;
     }
 
 }
