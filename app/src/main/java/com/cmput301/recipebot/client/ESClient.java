@@ -24,8 +24,10 @@ import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
@@ -38,6 +40,7 @@ public class ESClient {
     private static final String SERVER_URL = "http://cmput301.softwareprocess.es:8080";
     private static final String CLIENT_INDEX = "test-cmput301w13t06";// "cmput301w13t06";
     private static final String TYPE_RECIPE = "recipe";
+    private static final String METHOD_SEARCH = "_search";
 
     private final Gson gson;
 
@@ -69,7 +72,7 @@ public class ESClient {
      */
     public boolean insertRecipe(Recipe recipe) {
         HttpRequest httpPost = HttpRequest.post(getRecipeUrl(recipe.getId())).send(gson.toJson(recipe));
-        return httpPost.code() == HttpURLConnection.HTTP_OK;
+        return httpPost.ok();
     }
 
     /**
@@ -89,12 +92,63 @@ public class ESClient {
      * @return True if operation was successful, false otherwise.
      */
     public boolean deleteRecipe(String id) {
-        HttpRequest httpPost = HttpRequest.delete(getRecipeUrl(id));
-        return httpPost.code() == HttpURLConnection.HTTP_OK;
+        HttpRequest httpDelete = HttpRequest.delete(getRecipeUrl(id));
+        return httpDelete.ok();
     }
 
+    /**
+     * Search for all recipes with the given name.
+     *
+     * @param name The name of the recipe to search for.
+     * @return List of recipes that have these ingredients.
+     */
+    public List<Recipe> searchRecipes(String name) throws IOException {
+        HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", name).accept("application/json");
+        return getRecipesFromResponse(httpSearch.body());
+    }
+
+    private List<Recipe> getRecipesFromResponse(String response) {
+        Type esSearchResponseType = new TypeToken<ESSearchResponse<Recipe>>() {
+        }.getType();
+        ESSearchResponse<Recipe> esSearchResponse = gson.fromJson(response, esSearchResponseType);
+        List<Recipe> recipes = new ArrayList<Recipe>();
+        for (ESResponse<Recipe> r : esSearchResponse.getHits()) {
+            Recipe recipe = r.getSource();
+            recipes.add(recipe);
+        }
+        return recipes;
+    }
+
+    /**
+     * URL for a specific URL
+     *
+     * @param id ID whose recipe we need
+     * @return the Recipe's url
+     */
     public static String getRecipeUrl(String id) {
-        return SERVER_URL + "/" + CLIENT_INDEX + "/" + TYPE_RECIPE + "/" + id;
+        return getRecipesUrl() + "/" + id;
+    }
+
+    /**
+     * Get the Recipe URL
+     *
+     * @return Recipe URL
+     */
+    public static String getRecipesUrl() {
+        return getIndexUrl() + "/" + TYPE_RECIPE;
+    }
+
+    public static String getRecipeSearchUrl() {
+        return getRecipesUrl() + "/" + METHOD_SEARCH;
+    }
+
+    /**
+     * Get the url for our index.
+     *
+     * @return Index URL
+     */
+    public static String getIndexUrl() {
+        return SERVER_URL + "/" + CLIENT_INDEX;
     }
 
 }

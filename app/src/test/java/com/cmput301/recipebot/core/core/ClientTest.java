@@ -139,6 +139,27 @@ public class ClientTest {
     }
 
     /**
+     * Test that a {@link Recipe} can be searched by its name.
+     * TODO : add a unique recipe (that will return only one).
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testSearchByName() throws Exception {
+        // Test the initial conditions, verify that the recipe exists on the server.
+        Recipe recipe = mClient.getRecipe("ac864659-9f55-480c-b744-8dbf0c180911");
+        assertThat(recipe).hasName("Cream Soda").hasUser("Batman").hasDirection("Mix").hasDirection("Grill")
+                .hasIngredient(new Ingredient("Butter", "testing", 2f)).hasDescription("Very Healthy");
+
+        List<Recipe> recipes = mClient.searchRecipes("Cream Soda");
+        assertThat(recipes.size()).isGreaterThan(0); // We know this exists, but could be multiple (random).
+        assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe); // confirm that it contains our expected recipe
+
+        recipes = mClient.searchRecipes("dsadssadasdas");
+        assertThat(recipes.size()).isEqualTo(0); // We know this doesn't exist.
+    }
+
+    /**
      * Make a new Recipe
      *
      * @return A test recipe.
@@ -165,7 +186,8 @@ public class ClientTest {
 
     /**
      * A method that generates a dataset that can be pushed to the server.
-     * Our tests are reliant on this dataset.
+     * Our tests are reliant on this dataset. Everytime this function is used to generate a new dataset,
+     * update our expected values.
      */
     private void insertRecipesToServer() {
         List<Recipe> mRecipeList;
