@@ -83,6 +83,16 @@ public class ESClient {
         return insertRecipe(recipe);
     }
 
+    /**
+     * Delete a recipe from the server
+     *
+     * @return True if operation was successful, false otherwise.
+     */
+    public boolean deleteRecipe(String id) {
+        HttpRequest httpPost = HttpRequest.delete(getRecipeUrl(id));
+        return httpPost.code() == HttpURLConnection.HTTP_OK;
+    }
+
     public static String getRecipeUrl(String id) {
         return SERVER_URL + "/" + CLIENT_INDEX + "/" + TYPE_RECIPE + "/" + id;
     }

@@ -122,6 +122,23 @@ public class ClientTest {
     }
 
     /**
+     * Test that a {@link Recipe} object can be inserted.
+     * It also retrieves the object for testing.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testDelete() throws Exception {
+        Recipe r = getTestRecipe();
+        boolean response = mClient.insertRecipe(r);
+        assertThat(response).isTrue();
+        boolean deleteResponse = mClient.deleteRecipe(r.getId());
+        assertThat(deleteResponse).isTrue();
+        Recipe recipe1 = mClient.getRecipe(r.getId());
+        assertThat(recipe1).isNull();
+    }
+
+    /**
      * Make a new Recipe
      *
      * @return A test recipe.
