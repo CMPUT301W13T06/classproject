@@ -125,14 +125,16 @@ public class ESClient {
      * It only searches by the name of the ingredient, not its units or quantity.
      *
      * @param ingredients The ingredients to search for.
+     * @param matchAll    Whether to only show recipes that have every ingredient.
      * @return List of recipes that have these ingredients.
      */
-    public List<Recipe> searchRecipes(List<Ingredient> ingredients) {
+    public List<Recipe> searchRecipes(List<Ingredient> ingredients, boolean matchAll) {
+        String operator = matchAll ? " AND " : " OR ";
         String query = "ingredients.name:";
         for (Ingredient i : ingredients) {
-            query = query + i.getName() + " OR ";
+            query = query + i.getName() + operator;
         }
-        query = query.substring(0, query.length() - 4);
+        query = query.substring(0, query.length() - operator.length());
         HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", query).accept("application/json");
         System.out.println(httpSearch.toString());
         return getRecipesFromResponse(httpSearch.body());

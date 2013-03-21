@@ -172,15 +172,14 @@ public class ClientTest {
         for (Ingredient i : recipe.getIngredients()) {
             ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
             ingredients.add(i);
-            List<Recipe> recipes = mClient.searchRecipes(ingredients);
+            List<Recipe> recipes = mClient.searchRecipes(ingredients, false);
             assertThat(recipes.size()).isGreaterThan(0); // We know this exists, but could be multiple (random).
             assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe);
         }
 
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
         ingredients.add(new Ingredient("dsadsadasdasdasdada", "lb", 2f));
-        List<Recipe> recipes = mClient.searchRecipes(ingredients);
-        recipes = mClient.searchRecipes(ingredients);
+        List<Recipe> recipes = mClient.searchRecipes(ingredients, false);
         assertThat(recipes.size()).isEqualTo(0); // We know this doesn't exist.
     }
 
@@ -199,7 +198,7 @@ public class ClientTest {
 
         List<Ingredient> ingredients = new ArrayList<Ingredient>();
         ingredients.add(ingredient);
-        List<Recipe> recipes = mClient.searchRecipes(ingredients);
+        List<Recipe> recipes = mClient.searchRecipes(ingredients, false);
         assertThat(recipes.size()).isGreaterThan(1); // We know at least two exist.
         assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe1);
         assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe2);
@@ -224,8 +223,14 @@ public class ClientTest {
         ingredients.add(butter);
         ingredients.add(peas);
         ingredients.add(fish);
-        List<Recipe> recipes = mClient.searchRecipes(ingredients);
+
+        // Test that we get at least this one (many recipes with one or more of these ingredients.
+        List<Recipe> recipes = mClient.searchRecipes(ingredients, false);
         assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe);
+
+        // Test that we get only this one (only recipe with all ingredients)
+        recipes = mClient.searchRecipes(ingredients, true);
+        assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe).hasSize(1);
     }
 
     /**
