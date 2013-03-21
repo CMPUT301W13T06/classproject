@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * A fragment that shows a list of items in the pantry.
  */
-public class PantryFragment extends RoboSherlockListFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class PantryFragment extends RoboSherlockListFragment implements View.OnClickListener {
 
     private EditText mEdiText;
     ArrayList<Ingredient> mPantryItems;
@@ -65,20 +65,18 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
 
         LayoutInflater layoutInflater = getSherlockActivity().getLayoutInflater();
 
-        if (getListView().getHeaderViewsCount() == 0) {
-            View header = layoutInflater.inflate(R.layout.fragment_pantry_header, null);
-            header.findViewById(R.id.button_add_pantry).setOnClickListener(this);
-            mEdiText = (EditText) header.findViewById(R.id.editText_pantry);
-            getListView().addHeaderView(header);
-        }
+        View header = layoutInflater.inflate(R.layout.fragment_pantry_header, null);
+        header.findViewById(R.id.button_add_pantry).setOnClickListener(this);
+        mEdiText = (EditText) header.findViewById(R.id.editText_pantry);
+        getListView().addHeaderView(header);
 
         mPantryItems = new ArrayList<Ingredient>();
         mPantryItems.add(new Ingredient("Eggs", "nos.", 2f));
         mPantryItems.add(new Ingredient("Milk", "ml", 500f));
         mPantryItems.add(new Ingredient("Bread", "ml", 500f));
-        mPantryItems.add(new Ingredient("Buter", "ml", 500f));
+        mPantryItems.add(new Ingredient("Butter", "ml", 500f));
 
-        mAdapter = new PantryListAdapter(mPantryItems, this);
+        mAdapter = new PantryListAdapter(mPantryItems);
         setListAdapter(mAdapter);
         setListShown(true);
 
@@ -93,7 +91,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add_pantry:
-                addEntry();
+                // addEntry();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -112,25 +110,6 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         switch (v.getId()) {
             case R.id.button_add_pantry:
                 addEntry();
-        }
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-
-        if (isChecked) {
-            if (mActionMode == null) {
-                selection = new ArrayList<CompoundButton>();
-                mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
-            }
-            selection.add(compoundButton);
-        } else {
-            // Unselected, remove fom items
-            selection.remove(compoundButton);
-            //If no more items, finish the action mode explicitly
-            if (selection.size() == 0 && mActionMode != null) {
-                mActionMode.finish();
-            }
         }
     }
 
@@ -159,19 +138,40 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
 
         // Called when the user exits the action mode
         public void onDestroyActionMode(ActionMode mode) {
+            for (CompoundButton button : selection) {
+                button.setOnCheckedChangeListener(null);
+                button.setChecked(false);
+                button.setOnCheckedChangeListener(onCheckedChangeListener);
+            }
             mActionMode = null;
-            fillView();
+        }
+    };
+
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+            if (isChecked) {
+                if (mActionMode == null) {
+                    selection = new ArrayList<CompoundButton>();
+                    mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
+                }
+                selection.add(compoundButton);
+            } else {
+                selection.remove(compoundButton);
+                //If no more items, finish the action mode explicitly
+                if (selection.size() == 0 && mActionMode != null) {
+                    mActionMode.finish();
+                }
+            }
         }
     };
 
     public class PantryListAdapter extends BaseAdapter {
 
         ArrayList<Ingredient> ingredients;
-        CompoundButton.OnCheckedChangeListener listener;
 
-        public PantryListAdapter(ArrayList<Ingredient> ingredients, CompoundButton.OnCheckedChangeListener listener) {
+        public PantryListAdapter(ArrayList<Ingredient> ingredients) {
             this.ingredients = ingredients;
-            this.listener = listener;
         }
 
         @Override
@@ -204,8 +204,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             CheckBox box = (CheckBox) view.findViewById(R.id.check_box);
             box.setTag(ingredient);
             box.setText(ingredient.getName());
-            box.setOnCheckedChangeListener(listener);
-
+            box.setOnCheckedChangeListener(onCheckedChangeListener);
             return view;
         }
 
