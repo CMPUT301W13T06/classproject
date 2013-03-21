@@ -47,5 +47,6 @@
     <string name="hint_edit_text_pantry">Add Pantry Item</string>
     <string name="description_button">Button</string>
     <string name="recipe_title">Recipe Title</string>
+    <string name="menu_delete">Delete</string>
 
 </resources>
