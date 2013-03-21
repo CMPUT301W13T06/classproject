@@ -22,9 +22,6 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menu_add_pantry"
-          android:icon="@drawable/ic_action_add"
-          android:title="@string/menu_add"
-          android:showAsAction="ifRoom|withText"/>
+    <!-- Select All Button goes here !-->
 
 </menu>

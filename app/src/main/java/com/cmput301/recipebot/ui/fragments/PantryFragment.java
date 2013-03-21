@@ -21,6 +21,7 @@ package com.cmput301.recipebot.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,15 +37,18 @@ import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFra
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
+
 /**
  * A fragment that shows a list of items in the pantry.
  */
 public class PantryFragment extends RoboSherlockListFragment implements View.OnClickListener {
 
+    private static final String LOGTAG = makeLogTag(PantryFragment.class);
+
     private EditText mEdiText;
     ArrayList<Ingredient> mPantryItems;
     List<CompoundButton> selection;
-
     PantryListAdapter mAdapter;
 
     protected ActionMode mActionMode;
@@ -90,15 +94,16 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_add_pantry:
-                // addEntry();
-                return true;
+            //TODO: logic for select all
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void addEntry() {
+    /**
+     * Ad an pantry item
+     */
+    private void addPantryItem() {
         Ingredient item = new Ingredient();
         item.setName(mEdiText.getText().toString());
         mPantryItems.add(item);
@@ -109,7 +114,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_add_pantry:
-                addEntry();
+                addPantryItem();
         }
     }
 
@@ -131,6 +136,10 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
                     Toast.makeText(getSherlockActivity(), "TODO: search for " + selection.size(), Toast.LENGTH_SHORT).show();
                     mode.finish();
                     return true;
+                case R.id.menu_delete_from_pantry:
+                    deleteSelected();
+                    mode.finish();
+                    return true;
                 default:
                     return false;
             }
@@ -146,6 +155,17 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             mActionMode = null;
         }
     };
+
+    private void deleteSelected() {
+        if (selection == null) {
+            Log.e(LOGTAG, "Shouldn't be here!");
+        }
+        for (CompoundButton button : selection) {
+            Ingredient ingredient = (Ingredient) button.getTag();
+            mPantryItems.remove(ingredient);
+        }
+        mAdapter.swapData(mPantryItems);
+    }
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
