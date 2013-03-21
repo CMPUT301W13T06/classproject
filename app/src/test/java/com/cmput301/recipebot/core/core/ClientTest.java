@@ -25,8 +25,7 @@ import com.cmput301.recipebot.model.Recipe;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 import static com.cmput301.recipebot.core.core.RecipeAssert.assertThat;
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -35,6 +34,19 @@ import static org.fest.assertions.api.Assertions.assertThat;
  * Unit tests of client API
  */
 public class ClientTest {
+
+    private static final String[] RECIPE_NAMES = {"Chicken Parmesan", "Kentucky Fried Chicken", "Green Salad", "Kahlua",
+            "Stir Fry", "Fried Rice", "Hamburger", "Mocha", "Cream Soda", "Omelette's", "Chicken Wings", "Caesar Salad",
+            "Steak", "Chilli", "Baked Rice", "Roasted Potatoes", "Chicken Satay", "Ravioli", "Corn on the Cob"};
+    private static final String[] RECIPE_DESCRIPTIONS = {"Very Healthy", "Not so healthy!", "Unhealthy"};
+    private static final String[] RECIPE_INGREDIENTS = {"Chicken", "Butter", "Water", "Fresh Vegetables",
+            "Fresh Greens", "Vodka", "Oil", "Bun", "Salt", "Lamb", "Peas", "Fish", "Beans", "Tofu", "Cream",
+            "Sugar", "Rhubarb", "Milk", "Eggs", "Strawberry", "Honey Garlic", "Corn", "Beans", "Kale", "Bacon"};
+    private static final String[] RECIPE_DIRECTIONS = {"Bake", "Mix", "Shake", "Blend", "Eat", "Heat",
+            "Fry", "Saute", "Mash", "Steam", "Stir", "Whip", "Chop", "Blend", "Boil", "Grill"};
+    private static final String[] RECIPE_USERS = {"Prateek", "Adam", "Ethan", "Brian", "Batman", "Superman",
+            "Spiderman", "Green Lantern", "Bruce", "Clark"};
+    private static final int TEST_SIZES = 50;
 
     private ESClient mClient;
     private Comparator<Recipe> recipeComparator;
@@ -59,6 +71,37 @@ public class ClientTest {
         assertThat(response).isTrue();
         Recipe actual = mClient.getRecipe(r.getId());
         assertThat(r).usingComparator(recipeComparator).isEqualTo(actual);
+    }
+
+    /**
+     * Test that a {@link Recipe} object can be updated.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testUpdate() throws Exception {
+        // Test the inital conditions. The user is randomised between runs.
+        Recipe recipe = mClient.getRecipe("ab3fa2b0-7c52-43b3-9e27-76a7b8959751");
+        assertThat(recipe).hasName("Stir Fry").hasDirection("Boil").hasDirection("Bake")
+                .hasIngredient(new Ingredient("Peas", "testing", 2f)).hasDescription("Not so healthy!");
+
+        // make a new_user that is not the same as the old one.
+        String original_user = recipe.getUser();
+        String new_user = new String(original_user);
+        while (new_user.compareToIgnoreCase(original_user) == 0) {
+            new_user = RECIPE_USERS[new Random().nextInt(RECIPE_USERS.length)];
+        }
+
+        // Change some attribute
+        recipe.setUser(new_user);
+        assertThat(recipe).hasUser(new_user);
+        boolean response = mClient.updateRecipe(recipe);
+        assertThat(response).isTrue();
+
+        //Verify only that attribute has changed in server, other remain same
+        Recipe recipe2 = mClient.getRecipe("ab3fa2b0-7c52-43b3-9e27-76a7b8959751");
+        assertThat(recipe2).hasName("Stir Fry").hasUser(new_user).hasDirection("Boil").hasDirection("Bake")
+                .hasIngredient(new Ingredient("Peas", "testing", 2f)).hasDescription("Not so healthy!");
     }
 
     /**
@@ -101,6 +144,53 @@ public class ClientTest {
         recipe.setDirections(directions);
         recipe.setPhotos(null);
         return recipe;
+    }
+
+    /**
+     * A method that generates a dataset that can be pushed to the server.
+     * Our tests are reliant on this dataset.
+     */
+    private void insertRecipesToServer() {
+        List<Recipe> mRecipeList;
+
+        mRecipeList = generateTestRecipes();
+
+        for (Recipe recipe : mRecipeList) {
+            mClient.insertRecipe(recipe);
+        }
+    }
+
+    /**
+     * Generate some random recipes.
+     */
+    private List<Recipe> generateTestRecipes() {
+        List<Recipe> recipeList = new ArrayList<Recipe>();
+
+        Random random = new Random();
+
+        for (int i = 0; i < TEST_SIZES; i++) {
+            Recipe r = new Recipe();
+            r.setId(UUID.randomUUID().toString());
+            r.setDescription(RECIPE_DESCRIPTIONS[random.nextInt(RECIPE_DESCRIPTIONS.length)]);
+            r.setUser(RECIPE_USERS[random.nextInt(RECIPE_USERS.length)]);
+            r.setName(RECIPE_NAMES[random.nextInt(RECIPE_NAMES.length)]);
+            ArrayList<String> directions = new ArrayList<String>();
+            for (int j = 0; j < random.nextInt(3) + 1; j++) {
+                directions.add(RECIPE_DIRECTIONS[random.nextInt(RECIPE_DIRECTIONS.length)]);
+            }
+            r.setDirections(directions);
+            ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+            for (int j = 0; j < random.nextInt(6) + 1; j++) {
+                String name = RECIPE_INGREDIENTS[random.nextInt(RECIPE_INGREDIENTS.length)];
+                Ingredient ingredient = new Ingredient(name, "testing", 4f);
+                ingredients.add(ingredient);
+            }
+            r.setIngredients(ingredients);
+            r.setPhotos(null);
+            recipeList.add(r);
+        }
+
+        return recipeList;
     }
 
     private class RecipeComparator implements Comparator<Recipe> {

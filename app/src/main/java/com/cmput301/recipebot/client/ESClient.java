@@ -72,6 +72,17 @@ public class ESClient {
         return httpPost.code() == HttpURLConnection.HTTP_OK;
     }
 
+    /**
+     * Update a recipe to the server.
+     * TODO : Actually do an update, right now it just does a force pushe.
+     *
+     * @param recipe The recipe to insert.
+     * @return True if operation was successful, false otherwise.
+     */
+    public boolean updateRecipe(Recipe recipe) {
+        return insertRecipe(recipe);
+    }
+
     public static String getRecipeUrl(String id) {
         return SERVER_URL + "/" + CLIENT_INDEX + "/" + TYPE_RECIPE + "/" + id;
     }
