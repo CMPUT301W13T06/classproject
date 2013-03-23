@@ -49,4 +49,7 @@
     <string name="recipe_title">Recipe Title</string>
     <string name="menu_delete">Delete</string>
 
+    <!-- Recipe Activity !-->
+    <string name="menu_camera">Camera</string>
+
 </resources>

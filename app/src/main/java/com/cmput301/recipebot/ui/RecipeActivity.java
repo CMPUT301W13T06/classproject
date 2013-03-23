@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -33,6 +34,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
@@ -41,6 +44,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -50,6 +54,8 @@ public class RecipeActivity extends BaseActivity {
 
     public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
     private static final int RESULT_LOAD_IMAGE = 458;
+    private static final int TAKE_PICTURE = 531;
+    private Uri imageUri;
 
     @InjectView(R.id.pager_recipe_images)
     ViewPager mRecipePhotos;
@@ -163,6 +169,64 @@ public class RecipeActivity extends BaseActivity {
             ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
         }
 
+        else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK){
+            System.out.println("INSIDE TAKE_PICTURE else if");
+            Uri selectedImage = imageUri;
+            mRecipe.addPhoto(selectedImage);
+            ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+
+        inflater.inflate(R.menu.activity_recipe, menu);
+
+        return super.onCreateOptionsMenu(menu);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+//    @Override
+//    public boolean onPepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+//
+//        MenuInflater inflater = getSupportMenuInflater();
+//
+//        inflater.inflate(R.menu.activity_recipe, menu);
+//             return super.onPrepareOptionsMenu(menu);
+//    }
+
+//    @Override
+//    public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+//        return super.onPrepareOptionsMenu(menu);    //To change body of overridden methods use File | Settings | File Templates.
+//
+//    }
+
+    @Override
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_camera:
+                takePhoto();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void takePhoto() {
+
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+        i.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(photo));
+        imageUri = Uri.fromFile(photo);
+
+        startActivityForResult(i,TAKE_PICTURE);
+
+
+
     }
 
 }
+
+

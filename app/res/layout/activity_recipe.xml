@@ -31,14 +31,15 @@
         <android.support.v4.view.ViewPager
                 android:id="@+id/pager_recipe_images"
                 android:layout_width="fill_parent"
-                android:layout_height="100dp"
+                android:layout_height="180dp"
                 />
 
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_recipe_title"
-                android:layout_gravity="left|center_vertical"/>
+                android:layout_gravity="left|center_vertical"
+                />
 
         <LinearLayout android:orientation="horizontal"
                       android:layout_width="match_parent"
@@ -49,11 +50,13 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/editText_ingredients"
-                    android:layout_gravity="left|center_vertical"/>
+                    android:hint="Enter Ingredients"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginTop="10dp"/>
 
             <ImageButton
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:src="@android:drawable/ic_input_add"
                     android:id="@+id/button_add_ingredient"
                     android:layout_gravity="right|center_vertical"/>
@@ -63,22 +66,26 @@
         <ListView android:layout_width="match_parent"
                   android:id="@+id/list_ingredients"
                   android:layout_weight="1"
-                  android:layout_height="0dp"/>
+                  android:layout_height="100dp"
+                  android:layout_marginBottom="10dp"/>
 
         <LinearLayout android:orientation="horizontal"
                       android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
+                      android:layout_height="wrap_content"
+                      >
 
             <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/editText_directions"
-                    android:layout_gravity="left|center_vertical"/>
+                    android:hint="Enter Instructions"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginTop="10dp"/>
 
             <ImageButton
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:src="@android:drawable/ic_input_add"
                     android:id="@+id/button_add_direction"
                     android:layout_gravity="right|center_vertical"/>
@@ -88,7 +95,7 @@
         <ListView android:layout_width="match_parent"
                   android:id="@+id/list_directions"
                   android:layout_weight="1"
-                  android:layout_height="0dp"/>
+                  android:layout_height="100dp"/>
 
     </LinearLayout>
 
