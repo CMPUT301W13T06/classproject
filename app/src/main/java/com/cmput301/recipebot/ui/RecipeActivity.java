@@ -50,7 +50,7 @@ import java.util.List;
 /**
  * An Activity that allows user to add a recipe.
  */
-public class RecipeActivity extends BaseActivity implements View.OnLongClickListener {
+public class RecipeActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
     public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
     private static final int RESULT_LOAD_IMAGE = 458;
@@ -80,7 +80,7 @@ public class RecipeActivity extends BaseActivity implements View.OnLongClickList
 
     protected ActionMode mActionMode;
 
-    Object selected_data;
+    CompoundButton selectedCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,28 +107,17 @@ public class RecipeActivity extends BaseActivity implements View.OnLongClickList
      */
     private void fillListLayout(LinearLayout listDirections, List data) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //sanitize the view
+        //Sanitize the view
         listDirections.removeAllViews();
 
         for (int i = 0; i < data.size(); i++) {
             Object item = data.get(i);
-            TextView textView = (TextView) layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-            textView.setText(item.toString());
-            textView.setTag(item);
-            textView.setOnLongClickListener(this);
-            listDirections.addView(textView, i);
+            CheckBox checkBox = (CheckBox) layoutInflater.inflate(R.layout.checkbox_view, null);
+            checkBox.setText(item.toString());
+            checkBox.setTag(item);
+            checkBox.setOnCheckedChangeListener(this);
+            listDirections.addView(checkBox, i);
         }
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        selected_data = v.getTag();
-        v.setSelected(true);
-        if (mActionMode != null) {
-            mActionMode.finish();
-        }
-        mActionMode = startActionMode(mActionModeCallback);
-        return true;
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -167,11 +156,12 @@ public class RecipeActivity extends BaseActivity implements View.OnLongClickList
     private void deleteSelectedItem() {
         Ingredient ingredient = null;
         String direction = null;
+        Object data = selectedCheckBox.getTag();
         try {
-            ingredient = (Ingredient) selected_data;
+            ingredient = (Ingredient) data;
         } catch (ClassCastException e1) {
             try {
-                direction = (String) selected_data;
+                direction = (String) data;
             } catch (ClassCastException e2) {
             }
         }
@@ -183,6 +173,25 @@ public class RecipeActivity extends BaseActivity implements View.OnLongClickList
         if (direction != null) {
             mRecipe.getDirections().remove(direction);
             fillListLayout(mListDirections, mRecipe.getDirections());
+        }
+
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (!isChecked) {
+            if (mActionMode != null) {
+                mActionMode.finish();
+            }
+        } else {
+            if (selectedCheckBox != null) {
+                selectedCheckBox.setChecked(false);
+            }
+            selectedCheckBox = buttonView;
+            if (mActionMode != null) {
+                mActionMode.finish();
+            }
+            mActionMode = startActionMode(mActionModeCallback);
         }
 
     }

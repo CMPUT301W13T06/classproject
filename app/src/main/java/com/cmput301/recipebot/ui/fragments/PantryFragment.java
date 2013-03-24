@@ -215,7 +215,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             if (convertView == null) {
                 LayoutInflater layoutInflater = (LayoutInflater) getSherlockActivity().
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = layoutInflater.inflate(R.layout.item_pantry, parent, false);
+                view = layoutInflater.inflate(R.layout.checkbox_view, parent, false);
             } else {
                 view = (convertView);
             }
