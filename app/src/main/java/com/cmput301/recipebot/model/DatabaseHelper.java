@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "recipebot.db";
@@ -40,6 +43,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Insert a recipe into the database.
+     *
+     * @param recipe Recipe to insert.
+     */
     public void insertRecipe(Recipe recipe) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -49,15 +57,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Get a recipe from the database.
+     *
+     * @param id ID of recipe we want.
+     */
     public Recipe getRecipe(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.query(TABLE_RECIPES, null, COLUMN_RECIPE_ID + "=?",
                 new String[]{id}, null, null, null, null);
 
-        if (cursor == null) {
-            return null;
-        }
         cursor.moveToFirst();
         int index = cursor.getColumnIndexOrThrow(COLUMN_RECIPE_DATA);
         String json = cursor.getString(index);
@@ -68,4 +78,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return recipe;
     }
+
+    /**
+     * Get all recipes from the database.
+     *
+     * @return All recipes in the database.
+     */
+    public List<Recipe> getAllRecipes() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.query(TABLE_RECIPES, null, null,
+                null, null, null, null, null);
+
+        if (cursor == null) {
+            return null;
+        }
+        cursor.moveToFirst();
+
+        List<Recipe> recipes = new ArrayList<Recipe>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            int index = cursor.getColumnIndexOrThrow(COLUMN_RECIPE_DATA);
+            String json = cursor.getString(index);
+            Recipe recipe = mGson.fromJson(json, Recipe.class);
+            recipes.add(recipe);
+            cursor.moveToNext();
+        }
+
+        db.close();
+        cursor.close();
+
+        return recipes;
+    }
+
+    /**
+     * Delete a recipe from the database.
+     *
+     * @param id ID of the recipe to delete.
+     */
+    public void deleteRecipe(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_RECIPES, COLUMN_RECIPE_ID + "=?", new String[]{id});
+        db.close();
+    }
+
+    /**
+     * Update a recipe in the database.
+     * @param recipe Recipe to update.
+     */
+    public void updateRecipe(Recipe recipe) {
+        deleteRecipe(recipe.getId());
+        insertRecipe(recipe);
+    }
+
+
 }
