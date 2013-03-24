@@ -51,5 +51,7 @@
 
     <!-- Recipe Activity !-->
     <string name="menu_camera">Camera</string>
+    <string name="enter_ingredients">Enter Ingredients</string>
+    <string name="enter_instructions">Enter Instructions</string>
 
 </resources>

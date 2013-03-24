@@ -76,6 +76,5 @@ public class TextViewListAdapter<T> extends BaseAdapter {
 
     public void swapData(List<T> data) {
         this.data = data;
-        notifyDataSetChanged();
     }
 }

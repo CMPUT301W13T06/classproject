@@ -33,7 +33,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.cmput301.recipebot.R;
@@ -60,9 +60,9 @@ public class RecipeActivity extends BaseActivity {
     @InjectView(R.id.pager_recipe_images)
     ViewPager mRecipePhotos;
     @InjectView(R.id.list_directions)
-    ListView mListDirections;
+    LinearLayout mListDirections;
     @InjectView(R.id.list_ingredients)
-    ListView mListIngredient;
+    LinearLayout mListIngredients;
 
     @InjectView(R.id.editText_recipe_title)
     EditText mEditTextRecipeTitle;
@@ -74,6 +74,9 @@ public class RecipeActivity extends BaseActivity {
     EditText mEditTextIngredients;
     @InjectView(R.id.button_add_ingredient)
     ImageButton mButtonAddIngredient;
+
+    private TextViewListAdapter mListDirectionsAdapter;
+    private TextViewListAdapter mListIngredientsAdapter;
 
     @InjectExtra(EXTRA_RECIPE)
     public Recipe mRecipe;
@@ -87,9 +90,24 @@ public class RecipeActivity extends BaseActivity {
 
     private void fillView() {
         mRecipePhotos.setAdapter(new ImagePagerAdapter(mRecipe.getPhotos()));
-        mListDirections.setAdapter(new TextViewListAdapter<String>(this, mRecipe.getDirections()));
-        mListIngredient.setAdapter(new TextViewListAdapter<Ingredient>(this, mRecipe.getIngredients()));
+        mListDirectionsAdapter = new TextViewListAdapter<String>(this, mRecipe.getDirections());
+        mListIngredientsAdapter = new TextViewListAdapter<Ingredient>(this, mRecipe.getIngredients());
         mEditTextRecipeTitle.setText(mRecipe.getUser());
+        fillListLayout(mListDirections, mListDirectionsAdapter);
+        fillListLayout(mListIngredients, mListIngredientsAdapter);
+    }
+
+    /**
+     * A method that fills a {@link LinearLayout} with data from a {@link TextViewListAdapter}.
+     *
+     * @param listDirections the layout to fill
+     * @param listAdapter    the adapter that provides the data.
+     */
+    private void fillListLayout(LinearLayout listDirections, TextViewListAdapter listAdapter) {
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View v = listAdapter.getView(i, null, listDirections);
+            listDirections.addView(v, i);
+        }
     }
 
     private class ImagePagerAdapter extends PagerAdapter {
@@ -167,9 +185,7 @@ public class RecipeActivity extends BaseActivity {
             mRecipe.addPhoto(uri);
 
             ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
-        }
-
-        else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK){
+        } else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK) {
             System.out.println("INSIDE TAKE_PICTURE else if");
             Uri selectedImage = imageUri;
             mRecipe.addPhoto(selectedImage);
@@ -216,13 +232,12 @@ public class RecipeActivity extends BaseActivity {
     public void takePhoto() {
 
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+        File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
         i.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(photo));
         imageUri = Uri.fromFile(photo);
 
-        startActivityForResult(i,TAKE_PICTURE);
-
+        startActivityForResult(i, TAKE_PICTURE);
 
 
     }

@@ -19,19 +19,20 @@
   ~  limitations under the License.
   -->
 
-<com.cmput301.recipebot.ui.views.VerticalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                                                    android:orientation="vertical"
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <LinearLayout android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <android.support.v4.view.ViewPager
                 android:id="@+id/pager_recipe_images"
                 android:layout_width="fill_parent"
-                android:layout_height="180dp"
+                android:layout_height="wrap_content"
                 />
 
         <EditText
@@ -50,53 +51,50 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/editText_ingredients"
-                    android:hint="Enter Ingredients"
+                    android:hint="@string/enter_ingredients"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginTop="10dp"/>
 
             <ImageButton
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:src="@android:drawable/ic_input_add"
                     android:id="@+id/button_add_ingredient"
                     android:layout_gravity="right|center_vertical"/>
 
         </LinearLayout>
 
-        <ListView android:layout_width="match_parent"
-                  android:id="@+id/list_ingredients"
-                  android:layout_weight="1"
-                  android:layout_height="100dp"
-                  android:layout_marginBottom="10dp"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:id="@+id/list_ingredients"
+                      android:orientation="vertical"
+                      android:layout_height="wrap_content"/>
 
         <LinearLayout android:orientation="horizontal"
                       android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      >
+                      android:layout_height="wrap_content">
 
             <EditText
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:id="@+id/editText_directions"
-                    android:hint="Enter Instructions"
+                    android:hint="@string/enter_instructions"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginTop="10dp"/>
 
             <ImageButton
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:src="@android:drawable/ic_input_add"
                     android:id="@+id/button_add_direction"
                     android:layout_gravity="right|center_vertical"/>
 
         </LinearLayout>
 
-        <ListView android:layout_width="match_parent"
-                  android:id="@+id/list_directions"
-                  android:layout_weight="1"
-                  android:layout_height="100dp"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:id="@+id/list_directions"
+                      android:orientation="vertical"
+                      android:layout_height="wrap_content"/>
 
     </LinearLayout>
-
-</com.cmput301.recipebot.ui.views.VerticalScrollView>
+</ScrollView>
