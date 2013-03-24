@@ -38,6 +38,7 @@ import com.actionbarsherlock.widget.SearchView;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.User;
 import com.cmput301.recipebot.ui.RecipeActivity;
 import com.cmput301.recipebot.ui.SearchRecipeActivity;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
@@ -116,23 +117,23 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
      * Start an activity to add a new Recipe
      */
     private void addRecipe() {
-        Recipe recipe = new Recipe();
-        recipe.setId(UUID.randomUUID().toString());
-        recipe.setName("Shake and Bake Chicken");
-        recipe.setUser("Colonel Sanders");
+        String id = UUID.randomUUID().toString();
+        String name = "Shake and Bake Chicken";
+        String description = "Fried Chicken";
+        User user = new User("colonel@kfc.com", "Colonel Sanders");
         ArrayList<String> directions = new ArrayList<String>();
         directions.add("1. First Shake");
         directions.add("2. Then Bake");
-        recipe.setDirections(directions);
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
         ingredients.add(new Ingredient("Chicken", "g", 500f));
         ingredients.add(new Ingredient("Shake and Bake mix", "packet", 1f));
         ingredients.add(new Ingredient("Tequila", "bottle", 1f));
-        recipe.setIngredients(ingredients);
-        ArrayList<Uri> photos = new ArrayList<Uri>();
-        photos.add(Uri.parse("http://www.kraftrecipes.com/assets/recipe_images/SHAKE_N_BAKE_Honey_Drummies.jpg"));
-        photos.add(Uri.parse("http://images.media-allrecipes.com/userphotos/250x250/00/68/33/683349.jpg"));
-        recipe.setPhotos(photos);
+        ArrayList<String> photos = new ArrayList<String>();
+        photos.add("http://www.kraftrecipes.com/assets/recipe_images/SHAKE_N_BAKE_Honey_Drummies.jpg");
+        photos.add("http://images.media-allrecipes.com/userphotos/250x250/00/68/33/683349.jpg");
+        ArrayList<String> tags = new ArrayList<String>();
+        tags.add("chicken, fried, southern");
+        Recipe recipe = new Recipe(id, name, description, user, ingredients, directions, photos, tags);
         Intent intent = new Intent(getSherlockActivity(), RecipeActivity.class);
         intent.putExtra(RecipeActivity.EXTRA_RECIPE, recipe);
         startActivity(intent);
@@ -172,14 +173,23 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
 
         ArrayList<Recipe> recipes = new ArrayList<Recipe>();
         for (int i = 0; i < 150; i++) {
-            ArrayList<Uri> photos = new ArrayList<Uri>();
-            photos.add(Uri.parse(IMAGES[i % IMAGES.length]));
-            Recipe r = new Recipe();
-            r.setId(UUID.randomUUID().toString());
-            r.setName("hi");
-            r.setUser("bob");
-            r.setPhotos(photos);
-            recipes.add(r);
+            String id = UUID.randomUUID().toString();
+            String name = "Shake and Bake Chicken";
+            String description = "Fried Chicken";
+            User user = new User("colonel@kfc.com", "Colonel Sanders");
+            ArrayList<String> directions = new ArrayList<String>();
+            directions.add("1. First Shake");
+            directions.add("2. Then Bake");
+            ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+            ingredients.add(new Ingredient("Chicken", "g", 500f));
+            ingredients.add(new Ingredient("Shake and Bake mix", "packet", 1f));
+            ingredients.add(new Ingredient("Tequila", "bottle", 1f));
+            ArrayList<String> photos = new ArrayList<String>();
+            photos.add(IMAGES[i % IMAGES.length]);
+            ArrayList<String> tags = new ArrayList<String>();
+            tags.add("chicken, fried, southern");
+            Recipe recipe = new Recipe(id, name, description, user, ingredients, directions, photos, tags);
+            recipes.add(recipe);
         }
 
         return recipes;

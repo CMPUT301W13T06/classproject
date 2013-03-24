@@ -28,6 +28,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,15 +48,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
+
 /**
  * An Activity that allows user to add a recipe.
  */
 public class RecipeActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
+    private static final String LOGTAG = makeLogTag(RecipeActivity.class);
     public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
     private static final int RESULT_LOAD_IMAGE = 458;
     private static final int TAKE_PICTURE = 531;
-    private Uri imageUri;
+    private Uri cameraImageUri;
 
     @InjectView(R.id.pager_recipe_images)
     ViewPager mRecipePhotos;
@@ -94,7 +98,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
      */
     private void fillView() {
         mRecipePhotos.setAdapter(new ImagePagerAdapter(mRecipe.getPhotos()));
-        mEditTextRecipeTitle.setText(mRecipe.getUser());
+        mEditTextRecipeTitle.setText(mRecipe.getName());
         fillListLayout(mListDirections, mRecipe.getDirections());
         fillListLayout(mListIngredients, mRecipe.getIngredients());
     }
@@ -200,10 +204,10 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
     private class ImagePagerAdapter extends PagerAdapter {
 
-        private ArrayList<Uri> images;
+        private ArrayList<String> images;
         private LayoutInflater inflater;
 
-        ImagePagerAdapter(ArrayList<Uri> images) {
+        ImagePagerAdapter(ArrayList<String> images) {
             this.images = images;
             this.inflater = getLayoutInflater();
         }
@@ -222,7 +226,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         public Object instantiateItem(ViewGroup view, int position) {
             final ImageView imageView = (ImageView) inflater.inflate(R.layout.pager_item_recipe_image, view, false);
             if (position < images.size()) {
-                ImageLoader.getInstance().displayImage(images.get(position).toString(), imageView);
+                ImageLoader.getInstance().displayImage(images.get(position), imageView);
             } else {
                 // Set up an add button
                 imageView.setImageResource(R.drawable.ic_action_add);
@@ -246,7 +250,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
             }
         };
 
-        public void swapData(ArrayList<Uri> images) {
+        public void swapData(ArrayList<String> images) {
             this.images = images;
             notifyDataSetChanged();
         }
@@ -267,12 +271,11 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
-            Uri uri = Uri.parse("file:///" + picturePath);
-            mRecipe.addPhoto(uri);
+            mRecipe.getPhotos().add("file:///" + picturePath);
             ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
         } else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK) {
-            Uri selectedImage = imageUri;
-            mRecipe.addPhoto(selectedImage);
+            Uri selectedImage = cameraImageUri;
+            mRecipe.getPhotos().add("file:///" + selectedImage);
             ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
         }
 
@@ -304,7 +307,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
         i.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
+        cameraImageUri = Uri.fromFile(photo);
         startActivityForResult(i, TAKE_PICTURE);
     }
 

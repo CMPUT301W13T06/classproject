@@ -65,8 +65,6 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     private void fillView() {
         setListShown(false);
 
-        setEmptyText(getSherlockActivity().getResources().getString(R.string.no_pantry_items));
-
         LayoutInflater layoutInflater = getSherlockActivity().getLayoutInflater();
 
         View header = layoutInflater.inflate(R.layout.fragment_pantry_header, null);
@@ -83,7 +81,6 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         mAdapter = new PantryListAdapter(mPantryItems);
         setListAdapter(mAdapter);
         setListShown(true);
-
     }
 
     @Override
@@ -180,6 +177,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
                 mActionMode.setTitle(getResources().getString(R.string.count_items_selected, selection.size()));
             } else {
                 selection.remove(compoundButton);
+                mActionMode.setTitle(getResources().getString(R.string.count_items_selected, selection.size()));
                 if (selection.size() == 0 && mActionMode != null) {
                     // No more items, finish the action mode explicitly
                     mActionMode.finish();

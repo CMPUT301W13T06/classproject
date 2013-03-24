@@ -69,7 +69,7 @@ public class RecipeGridAdapter extends BaseAdapter {
         Recipe recipe = mRecipes.get(position);
         if (recipe.getPhotos() != null && recipe.getPhotos().size() != 0) {
             final ImageView imageView = (ImageView) layoutInflater.inflate(R.layout.item_recipe_image, parent, false);
-            ImageLoader.getInstance().displayImage(recipe.getPhotos().get(0).toString(), imageView);
+            ImageLoader.getInstance().displayImage(recipe.getPhotos().get(0), imageView);
             imageView.setTag(recipe);
             return imageView;
         } else {
