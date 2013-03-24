@@ -37,19 +37,23 @@ import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFra
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
+// import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
  * A fragment that shows a list of items in the pantry.
  */
 public class PantryFragment extends RoboSherlockListFragment implements View.OnClickListener {
 
-    private static final String LOGTAG = makeLogTag(PantryFragment.class);
+//    private static final String LOGTAG = makeLogTag(PantryFragment.class);
 
     private EditText mEdiText;
+    private EditText qtyText;
+
     ArrayList<Ingredient> mPantryItems;
+    private ArrayList<String> pantry_items = new ArrayList<String>();
     List<CompoundButton> selection;
     PantryListAdapter mAdapter;
+    private boolean select_all_clicked = true;
 
     protected ActionMode mActionMode;
 
@@ -65,11 +69,14 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     private void fillView() {
         setListShown(false);
 
+        // setEmptyText(getSherlockActivity().getResources().getString(R.string.no_pantry_items));
+
         LayoutInflater layoutInflater = getSherlockActivity().getLayoutInflater();
 
         View header = layoutInflater.inflate(R.layout.fragment_pantry_header, null);
         header.findViewById(R.id.button_add_pantry).setOnClickListener(this);
         mEdiText = (EditText) header.findViewById(R.id.editText_pantry);
+        qtyText = (EditText) header.findViewById(R.id.qty_editText);
         getListView().addHeaderView(header);
 
         mPantryItems = new ArrayList<Ingredient>();
@@ -81,6 +88,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         mAdapter = new PantryListAdapter(mPantryItems);
         setListAdapter(mAdapter);
         setListShown(true);
+
     }
 
     @Override
@@ -92,19 +100,50 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             //TODO: logic for select all
+            case R.id.menu_select_all:
+                selectAll();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     /**
-     * Ad an pantry item
+     * Add an pantry item
      */
     private void addPantryItem() {
+        /*
         Ingredient item = new Ingredient();
         item.setName(mEdiText.getText().toString());
         mPantryItems.add(item);
         mAdapter.swapData(mPantryItems);
+        */
+        if(!mEdiText.getText().toString().isEmpty()){
+
+            // Checks if entry is empty. If so it alerts the user
+            if(!isDuplicate(mEdiText.getText().toString().toUpperCase())){
+
+                pantry_items.add(mEdiText.getText().toString().toUpperCase());
+
+                Ingredient item = new Ingredient();
+                item.setName(mEdiText.getText().toString().toUpperCase());
+                item.setUnit("nothing");
+                // If no quantity is entered it is set to one
+                if(qtyText.getText().toString().isEmpty()){
+                    item.setQuantity(0.0f);
+                } else {
+                    item.setQuantity(Float.parseFloat(qtyText.getText().toString()));
+                }
+                mPantryItems.add(item);
+                mAdapter.swapData(mPantryItems);
+
+                mEdiText.getText().clear();
+                qtyText.getText().clear();
+
+            }
+        }  else {
+            Toast.makeText(getActivity().getApplicationContext(), "Entry is blank. Nothing added to pantry.",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -155,13 +194,39 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
 
     private void deleteSelected() {
         if (selection == null) {
-            Log.e(LOGTAG, "Shouldn't be here!");
+            //Log.e(LOGTAG, "Shouldn't be here!");
         }
         for (CompoundButton button : selection) {
             Ingredient ingredient = (Ingredient) button.getTag();
             mPantryItems.remove(ingredient);
         }
         mAdapter.swapData(mPantryItems);
+    }
+
+    public void selectAll(){
+
+        final ListView listView = getListView();
+
+        for(int i = 1; i < listView.getChildCount(); i++){
+            CheckBox cb = (CheckBox) listView.getChildAt(i);
+            cb.setChecked(true);
+        }
+
+    }
+
+    public boolean isDuplicate(String item){
+        // go through entire pantry list
+        for (int i = 0; i < mPantryItems.size(); i++) {
+            Ingredient ingredient = mPantryItems.get(i);
+            Log.v("Pantry item", ingredient.getName());
+
+            if (item.equalsIgnoreCase(ingredient.getName())) {
+                Toast.makeText(getActivity().getApplicationContext(), "Item is already in your pantry.",
+                        Toast.LENGTH_LONG).show();
+                return true;
+            }
+        }
+        return false;
     }
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -172,14 +237,11 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
                     selection = new ArrayList<CompoundButton>();
                     mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
                 }
-                // Add it to our selection
                 selection.add(compoundButton);
-                mActionMode.setTitle(getResources().getString(R.string.count_items_selected, selection.size()));
             } else {
                 selection.remove(compoundButton);
-                mActionMode.setTitle(getResources().getString(R.string.count_items_selected, selection.size()));
+                //If no more items, finish the action mode explicitly
                 if (selection.size() == 0 && mActionMode != null) {
-                    // No more items, finish the action mode explicitly
                     mActionMode.finish();
                 }
             }
