@@ -19,6 +19,7 @@
 
 package com.cmput301.recipebot.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -30,27 +31,26 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.*;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
-import com.cmput301.recipebot.ui.adapters.TextViewListAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An Activity that allows user to add a recipe.
  */
-public class RecipeActivity extends BaseActivity {
+public class RecipeActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
     public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
     private static final int RESULT_LOAD_IMAGE = 458;
@@ -60,9 +60,9 @@ public class RecipeActivity extends BaseActivity {
     @InjectView(R.id.pager_recipe_images)
     ViewPager mRecipePhotos;
     @InjectView(R.id.list_directions)
-    ListView mListDirections;
+    LinearLayout mListDirections;
     @InjectView(R.id.list_ingredients)
-    ListView mListIngredient;
+    LinearLayout mListIngredients;
 
     @InjectView(R.id.editText_recipe_title)
     EditText mEditTextRecipeTitle;
@@ -78,6 +78,10 @@ public class RecipeActivity extends BaseActivity {
     @InjectExtra(EXTRA_RECIPE)
     public Recipe mRecipe;
 
+    protected ActionMode mActionMode;
+
+    CompoundButton selectedCheckBox;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,11 +89,113 @@ public class RecipeActivity extends BaseActivity {
         fillView();
     }
 
+    /**
+     * Fill our Views.
+     */
     private void fillView() {
         mRecipePhotos.setAdapter(new ImagePagerAdapter(mRecipe.getPhotos()));
-        mListDirections.setAdapter(new TextViewListAdapter<String>(this, mRecipe.getDirections()));
-        mListIngredient.setAdapter(new TextViewListAdapter<Ingredient>(this, mRecipe.getIngredients()));
         mEditTextRecipeTitle.setText(mRecipe.getUser());
+        fillListLayout(mListDirections, mRecipe.getDirections());
+        fillListLayout(mListIngredients, mRecipe.getIngredients());
+    }
+
+    /**
+     * A method that fills a {@link LinearLayout} with data from a List of data.
+     *
+     * @param listDirections the layout to fill
+     * @param data           the data that should be displayed.
+     */
+    private void fillListLayout(LinearLayout listDirections, List data) {
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //Sanitize the view
+        listDirections.removeAllViews();
+
+        for (int i = 0; i < data.size(); i++) {
+            Object item = data.get(i);
+            CheckBox checkBox = (CheckBox) layoutInflater.inflate(R.layout.checkbox_view, null);
+            checkBox.setText(item.toString());
+            checkBox.setTag(item);
+            checkBox.setOnCheckedChangeListener(this);
+            listDirections.addView(checkBox, i);
+        }
+    }
+
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.activity_recipe_cab, menu);
+            return true;
+        }
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_delete_item_from_list:
+                    deleteSelectedItem();
+                    mode.finish();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // Called when the user exits the action mode
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+        }
+    };
+
+    /**
+     * This deletes an item from our list.
+     * Uses selected_data, a global variable to know which item to delete.
+     */
+    private void deleteSelectedItem() {
+        Ingredient ingredient = null;
+        String direction = null;
+        Object data = selectedCheckBox.getTag();
+        try {
+            ingredient = (Ingredient) data;
+        } catch (ClassCastException e1) {
+            try {
+                direction = (String) data;
+            } catch (ClassCastException e2) {
+            }
+        }
+
+        if (ingredient != null) {
+            mRecipe.getIngredients().remove(ingredient);
+            fillListLayout(mListIngredients, mRecipe.getIngredients());
+        }
+        if (direction != null) {
+            mRecipe.getDirections().remove(direction);
+            fillListLayout(mListDirections, mRecipe.getDirections());
+        }
+
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (!isChecked) {
+            if (mActionMode != null) {
+                // Unchecked, so stop the action mode
+                mActionMode.finish();
+            }
+        } else {
+            if (selectedCheckBox != null) {
+                // Disable the old checkbox
+                selectedCheckBox.setChecked(false);
+            }
+            selectedCheckBox = buttonView;
+            if (mActionMode != null) {
+                mActionMode.finish();
+            }
+            mActionMode = startActionMode(mActionModeCallback);
+        }
+
     }
 
     private class ImagePagerAdapter extends PagerAdapter {
@@ -155,22 +261,16 @@ public class RecipeActivity extends BaseActivity {
 
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
-
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
-
             Uri uri = Uri.parse("file:///" + picturePath);
             mRecipe.addPhoto(uri);
-
             ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
-        }
-
-        else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK){
-            System.out.println("INSIDE TAKE_PICTURE else if");
+        } else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK) {
             Uri selectedImage = imageUri;
             mRecipe.addPhoto(selectedImage);
             ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
@@ -181,26 +281,9 @@ public class RecipeActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
-
         inflater.inflate(R.menu.activity_recipe, menu);
-
-        return super.onCreateOptionsMenu(menu);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.onCreateOptionsMenu(menu);
     }
-
-//    @Override
-//    public boolean onPepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-//
-//        MenuInflater inflater = getSupportMenuInflater();
-//
-//        inflater.inflate(R.menu.activity_recipe, menu);
-//             return super.onPrepareOptionsMenu(menu);
-//    }
-
-//    @Override
-//    public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-//        return super.onPrepareOptionsMenu(menu);    //To change body of overridden methods use File | Settings | File Templates.
-//
-//    }
 
     @Override
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
@@ -213,18 +296,16 @@ public class RecipeActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Take a photo. Launches the camera app.
+     */
     public void takePhoto() {
-
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+        File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
         i.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(photo));
         imageUri = Uri.fromFile(photo);
-
-        startActivityForResult(i,TAKE_PICTURE);
-
-
-
+        startActivityForResult(i, TAKE_PICTURE);
     }
 
 }
