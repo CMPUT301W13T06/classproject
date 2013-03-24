@@ -88,6 +88,9 @@ public class RecipeActivity extends BaseActivity {
         fillView();
     }
 
+    /**
+     * Fill our Views.
+     */
     private void fillView() {
         mRecipePhotos.setAdapter(new ImagePagerAdapter(mRecipe.getPhotos()));
         mListDirectionsAdapter = new TextViewListAdapter<String>(this, mRecipe.getDirections());
@@ -173,20 +176,16 @@ public class RecipeActivity extends BaseActivity {
 
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
-
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
-
             Uri uri = Uri.parse("file:///" + picturePath);
             mRecipe.addPhoto(uri);
-
             ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
         } else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK) {
-            System.out.println("INSIDE TAKE_PICTURE else if");
             Uri selectedImage = imageUri;
             mRecipe.addPhoto(selectedImage);
             ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
@@ -197,26 +196,9 @@ public class RecipeActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
-
         inflater.inflate(R.menu.activity_recipe, menu);
-
-        return super.onCreateOptionsMenu(menu);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.onCreateOptionsMenu(menu);
     }
-
-//    @Override
-//    public boolean onPepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-//
-//        MenuInflater inflater = getSupportMenuInflater();
-//
-//        inflater.inflate(R.menu.activity_recipe, menu);
-//             return super.onPrepareOptionsMenu(menu);
-//    }
-
-//    @Override
-//    public boolean onPrepareOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-//        return super.onPrepareOptionsMenu(menu);    //To change body of overridden methods use File | Settings | File Templates.
-//
-//    }
 
     @Override
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
@@ -229,17 +211,16 @@ public class RecipeActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Take a photo.
+     */
     public void takePhoto() {
-
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
         i.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(photo));
         imageUri = Uri.fromFile(photo);
-
         startActivityForResult(i, TAKE_PICTURE);
-
-
     }
 
 }
