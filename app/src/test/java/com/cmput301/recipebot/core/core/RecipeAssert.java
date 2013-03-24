@@ -21,6 +21,7 @@ package com.cmput301.recipebot.core.core;
 
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.User;
 import org.fest.assertions.api.AbstractAssert;
 import org.fest.assertions.api.Assertions;
 
@@ -52,11 +53,10 @@ public class RecipeAssert extends AbstractAssert<RecipeAssert, Recipe> {
         return this;
     }
 
-    public RecipeAssert hasUser(String user) {
+    public RecipeAssert hasUser(User user) {
         isNotNull();
-        Assertions.assertThat(actual.getUser())
-                .overridingErrorMessage("Expected recipe's user to be <%s> but was <%s>", user, actual.getUser())
-                .isEqualTo(user);
+        Assertions.assertThat(actual.getUser().getId())
+                .overridingErrorMessage("Expected recipe's user's id to be <%s> but was <%s>", user.getId(), actual.getUser().getId());
         return this;
     }
 
@@ -73,6 +73,22 @@ public class RecipeAssert extends AbstractAssert<RecipeAssert, Recipe> {
         Assertions.assertThat(actual.getDirections())
                 .overridingErrorMessage("Expected recipe's directions to have <%s> but had <%s>", direction, actual.getDirections())
                 .contains(direction);
+        return this;
+    }
+
+    public RecipeAssert hasTag(String tag) {
+        isNotNull();
+        Assertions.assertThat(actual.getTags())
+                .overridingErrorMessage("Expected recipe's tag to have <%s> but had <%s>", tag, actual.getTags())
+                .contains(tag);
+        return this;
+    }
+
+    public RecipeAssert hasPhoto(String photo) {
+        isNotNull();
+        Assertions.assertThat(actual.getPhotos())
+                .overridingErrorMessage("Expected recipe's photo to contain <%s> but had <%s>", photo, actual.getPhotos())
+                .contains(photo);
         return this;
     }
 
