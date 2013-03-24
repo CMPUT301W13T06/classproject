@@ -19,6 +19,7 @@
 
 package com.cmput301.recipebot.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -30,27 +31,26 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.*;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
-import com.cmput301.recipebot.ui.adapters.TextViewListAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An Activity that allows user to add a recipe.
  */
-public class RecipeActivity extends BaseActivity {
+public class RecipeActivity extends BaseActivity implements View.OnLongClickListener {
 
     public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
     private static final int RESULT_LOAD_IMAGE = 458;
@@ -75,11 +75,12 @@ public class RecipeActivity extends BaseActivity {
     @InjectView(R.id.button_add_ingredient)
     ImageButton mButtonAddIngredient;
 
-    private TextViewListAdapter mListDirectionsAdapter;
-    private TextViewListAdapter mListIngredientsAdapter;
-
     @InjectExtra(EXTRA_RECIPE)
     public Recipe mRecipe;
+
+    protected ActionMode mActionMode;
+
+    Object selected_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,24 +94,97 @@ public class RecipeActivity extends BaseActivity {
      */
     private void fillView() {
         mRecipePhotos.setAdapter(new ImagePagerAdapter(mRecipe.getPhotos()));
-        mListDirectionsAdapter = new TextViewListAdapter<String>(this, mRecipe.getDirections());
-        mListIngredientsAdapter = new TextViewListAdapter<Ingredient>(this, mRecipe.getIngredients());
         mEditTextRecipeTitle.setText(mRecipe.getUser());
-        fillListLayout(mListDirections, mListDirectionsAdapter);
-        fillListLayout(mListIngredients, mListIngredientsAdapter);
+        fillListLayout(mListDirections, mRecipe.getDirections());
+        fillListLayout(mListIngredients, mRecipe.getIngredients());
     }
 
     /**
-     * A method that fills a {@link LinearLayout} with data from a {@link TextViewListAdapter}.
+     * A method that fills a {@link LinearLayout} with data from a List of data.
      *
      * @param listDirections the layout to fill
-     * @param listAdapter    the adapter that provides the data.
+     * @param data           the data that should be displayed.
      */
-    private void fillListLayout(LinearLayout listDirections, TextViewListAdapter listAdapter) {
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View v = listAdapter.getView(i, null, listDirections);
-            listDirections.addView(v, i);
+    private void fillListLayout(LinearLayout listDirections, List data) {
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //sanitize the view
+        listDirections.removeAllViews();
+
+        for (int i = 0; i < data.size(); i++) {
+            Object item = data.get(i);
+            TextView textView = (TextView) layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+            textView.setText(item.toString());
+            textView.setTag(item);
+            textView.setOnLongClickListener(this);
+            listDirections.addView(textView, i);
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        selected_data = v.getTag();
+        v.setSelected(true);
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
+        mActionMode = startActionMode(mActionModeCallback);
+        return true;
+    }
+
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.activity_recipe_cab, menu);
+            return true;
+        }
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_delete_item_from_list:
+                    deleteSelectedItem();
+                    mode.finish();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // Called when the user exits the action mode
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+        }
+    };
+
+    /**
+     * This deletes an item from our list.
+     * Uses selected_data, a global variable to know which item to delete.
+     */
+    private void deleteSelectedItem() {
+        Ingredient ingredient = null;
+        String direction = null;
+        try {
+            ingredient = (Ingredient) selected_data;
+        } catch (ClassCastException e1) {
+            try {
+                direction = (String) selected_data;
+            } catch (ClassCastException e2) {
+            }
+        }
+
+        if (ingredient != null) {
+            mRecipe.getIngredients().remove(ingredient);
+            fillListLayout(mListIngredients, mRecipe.getIngredients());
+        }
+        if (direction != null) {
+            mRecipe.getDirections().remove(direction);
+            fillListLayout(mListDirections, mRecipe.getDirections());
+        }
+
     }
 
     private class ImagePagerAdapter extends PagerAdapter {
@@ -212,7 +286,7 @@ public class RecipeActivity extends BaseActivity {
     }
 
     /**
-     * Take a photo.
+     * Take a photo. Launches the camera app.
      */
     public void takePhoto() {
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
