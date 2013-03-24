@@ -19,10 +19,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_RECIPE_ID = "_id";
     public static final String COLUMN_RECIPE_DATA = "data";
 
-    // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table "
+    public static final String TABLE_PANTRY = "pantry";
+    public static final String COLUMN_PANTRY_ID = "_id";
+    public static final String COLUMN_PANTRY_DATA = "data";
+
+    private static final String CREATE_TABLE_RECIPES = "create table "
             + TABLE_RECIPES + "(" + COLUMN_RECIPE_ID
             + " text primary key, " + COLUMN_RECIPE_DATA
+            + " text not null);";
+
+    private static final String CREATE_TABLE_PANTRY = "create table "
+            + TABLE_PANTRY + "(" + COLUMN_PANTRY_ID
+            + " text primary key, " + COLUMN_PANTRY_DATA
             + " text not null);";
 
     Gson mGson;
@@ -34,12 +42,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(DATABASE_CREATE);
+        sqLiteDatabase.execSQL(CREATE_TABLE_RECIPES);
+        sqLiteDatabase.execSQL(CREATE_TABLE_PANTRY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PANTRY);
         onCreate(db);
     }
 
@@ -125,6 +135,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Update a recipe in the database.
+     *
      * @param recipe Recipe to update.
      */
     public void updateRecipe(Recipe recipe) {
@@ -132,5 +143,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertRecipe(recipe);
     }
 
+    /**
+     * Get a list of all items in our pantry.
+     *
+     * @return All Ingredient in the Pantry
+     */
+    public List<Ingredient> loadPantry() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.query(TABLE_PANTRY, null, null,
+                null, null, null, null, null);
+
+        if (cursor == null) {
+            return null;
+        }
+        cursor.moveToFirst();
+
+        List<Ingredient> pantry = new ArrayList<Ingredient>();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            int index = cursor.getColumnIndexOrThrow(COLUMN_PANTRY_DATA);
+            String json = cursor.getString(index);
+            Ingredient item = mGson.fromJson(json, Ingredient.class);
+            pantry.add(item);
+            cursor.moveToNext();
+        }
+
+        db.close();
+        cursor.close();
+
+        return pantry;
+
+    }
+
+    /**
+     * Insert an item into the pantry.
+     */
+    public void insertPantryItem(Ingredient ingredient) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PANTRY_ID, ingredient.getName());
+        values.put(COLUMN_PANTRY_DATA, mGson.toJson(ingredient));
+        db.insert(TABLE_PANTRY, null, values);
+        db.close();
+    }
+
+    /**
+     * Delete a recipe from the database.
+     *
+     * @param name name of the ingredient to delete.
+     */
+    public void deletePantryItem(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PANTRY, COLUMN_PANTRY_ID + "=?", new String[]{name});
+        db.close();
+    }
 
 }
