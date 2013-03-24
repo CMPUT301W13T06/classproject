@@ -28,6 +28,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,15 +48,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
+
 /**
  * An Activity that allows user to add a recipe.
  */
 public class RecipeActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
+    private static final String LOGTAG = makeLogTag(RecipeActivity.class);
     public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
     private static final int RESULT_LOAD_IMAGE = 458;
     private static final int TAKE_PICTURE = 531;
-    private Uri imageUri;
+    private Uri cameraImageUri;
 
     @InjectView(R.id.pager_recipe_images)
     ViewPager mRecipePhotos;
@@ -270,7 +274,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
             mRecipe.getPhotos().add("file:///" + picturePath);
             ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
         } else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK) {
-            Uri selectedImage = imageUri;
+            Uri selectedImage = cameraImageUri;
             mRecipe.getPhotos().add("file:///" + selectedImage);
             ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
         }
@@ -303,7 +307,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
         i.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
+        cameraImageUri = Uri.fromFile(photo);
         startActivityForResult(i, TAKE_PICTURE);
     }
 

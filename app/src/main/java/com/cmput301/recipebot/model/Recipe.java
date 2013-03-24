@@ -190,13 +190,13 @@ public class Recipe implements Parcelable {
         name = in.readString();
         description = in.readString();
         user = in.readParcelable(User.class.getClassLoader());
-        ArrayList<String> directions = new ArrayList<String>();
+        directions = new ArrayList<String>();
         in.readStringList(directions);
-        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+        ingredients = new ArrayList<Ingredient>();
         in.readTypedList(ingredients, Ingredient.CREATOR);
-        ArrayList<String> photos = new ArrayList<String>();
+        photos = new ArrayList<String>();
         in.readStringList(photos);
-        ArrayList<String> tags = new ArrayList<String>();
+        tags = new ArrayList<String>();
         in.readStringList(tags);
     }
 
