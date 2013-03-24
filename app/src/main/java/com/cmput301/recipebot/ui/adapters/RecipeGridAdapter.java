@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Recipe;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -43,8 +44,8 @@ public class RecipeGridAdapter extends BaseAdapter {
      * @param recipes List of {@link Recipe} to display
      */
     public RecipeGridAdapter(Context context, List<Recipe> recipes) {
-        mRecipes = recipes;
         mContext = context;
+        mRecipes = recipes;
     }
 
     @Override
@@ -64,16 +65,23 @@ public class RecipeGridAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final ImageView imageView;
-        if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            imageView = (ImageView) layoutInflater.inflate(R.layout.item_recipe_image, parent, false);
+        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Recipe recipe = mRecipes.get(position);
+        if (recipe.getPhotos() != null && recipe.getPhotos().size() != 0) {
+            final ImageView imageView = (ImageView) layoutInflater.inflate(R.layout.item_recipe_image, parent, false);
+            ImageLoader.getInstance().displayImage(recipe.getPhotos().get(0).toString(), imageView);
+            imageView.setTag(recipe);
+            return imageView;
         } else {
-            imageView = (ImageView) convertView;
+            final TextView textView = (TextView) layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            textView.setText(recipe.getName());
+            textView.setTag(recipe);
+            return textView;
         }
+    }
 
-        ImageLoader.getInstance().displayImage(mRecipes.get(position).getPhotos().get(0).toString(), imageView);
-
-        return imageView;
+    public void swapData(List<Recipe> recipes) {
+        mRecipes = recipes;
+        notifyDataSetChanged();
     }
 }

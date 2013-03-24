@@ -8,4 +8,4 @@
           android:numColumns="3"
           android:stretchMode="columnWidth"
           android:verticalSpacing="4dip"
-          android:padding="4dip" />
+          android:padding="4dip"/>

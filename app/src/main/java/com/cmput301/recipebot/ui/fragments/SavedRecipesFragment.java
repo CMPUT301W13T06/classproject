@@ -19,6 +19,9 @@
 
 package com.cmput301.recipebot.ui.fragments;
 
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,22 +34,28 @@ import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.SearchView;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.ui.RecipeActivity;
+import com.cmput301.recipebot.ui.SearchRecipeActivity;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
  * A simple fragment that shows a list of {@link Recipe} items.
  */
-public class SavedRecipesFragment extends RoboSherlockFragment implements AdapterView.OnItemClickListener {
+public class SavedRecipesFragment extends RoboSherlockFragment implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
 
-    private static final String LOGTAG = "SavedRecipesFragment";
+    private static final String LOGTAG = makeLogTag(SavedRecipesFragment.class);
+    private SearchView mSearchView;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -56,7 +65,7 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_saved_recipes, container, false);
+        View v = inflater.inflate(R.layout.saved_recipes_grid, container, false);
         GridView gridview = (GridView) v.findViewById(R.id.gridview);
         gridview.setAdapter(new RecipeGridAdapter(getSherlockActivity(), getTestRecipes()));
         gridview.setOnItemClickListener(this);
@@ -66,6 +75,30 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.fragment_saved_recipes, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search_saved_recipes);
+        mSearchView = (SearchView) searchItem.getActionView();
+        setupSearchView(searchItem);
+    }
+
+    private void setupSearchView(MenuItem searchItem) {
+        searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM
+                | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+
+        SearchManager searchManager = (SearchManager) getSherlockActivity().getSystemService(Context.SEARCH_SERVICE);
+        if (searchManager != null) {
+            List<SearchableInfo> searchables = searchManager.getSearchablesInGlobalSearch();
+
+            SearchableInfo info = searchManager.getSearchableInfo(getSherlockActivity().getComponentName());
+            for (SearchableInfo inf : searchables) {
+                if (inf.getSuggestAuthority() != null
+                        && inf.getSuggestAuthority().startsWith("applications")) {
+                    info = inf;
+                }
+            }
+            mSearchView.setSearchableInfo(info);
+        }
+
+        mSearchView.setOnQueryTextListener(this);
     }
 
     @Override
@@ -73,10 +106,6 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
         switch (item.getItemId()) {
             case R.id.menu_add_recipe:
                 addRecipe();
-                return true;
-            case R.id.menu_search_saved_recipes:
-                // TODO : search recipes
-                Toast.makeText(getSherlockActivity(), "TODO: Search Recipe", Toast.LENGTH_LONG).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -154,5 +183,18 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
         }
 
         return recipes;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Intent intent = new Intent(getSherlockActivity(), SearchRecipeActivity.class);
+        intent.putExtra(SearchRecipeActivity.EXTRA_RECIPE_NAME, query);
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }
