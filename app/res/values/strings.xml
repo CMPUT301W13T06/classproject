@@ -53,6 +53,6 @@
     <string name="menu_camera">Camera</string>
     <string name="enter_ingredients">Enter Ingredients</string>
     <string name="enter_instructions">Enter Instructions</string>
-    <string name="count_items_selected">%d selected.</string>
+    <string name="count_items_selected">%d selected.</string><string name="ingredient">INGREDIENT</string><string name="qty">QUANTITY</string>
 
 </resources>
