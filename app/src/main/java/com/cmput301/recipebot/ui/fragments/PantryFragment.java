@@ -175,11 +175,13 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
                     selection = new ArrayList<CompoundButton>();
                     mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
                 }
+                // Add it to our selection
                 selection.add(compoundButton);
+                mActionMode.setTitle(getResources().getString(R.string.count_items_selected, selection.size()));
             } else {
                 selection.remove(compoundButton);
-                //If no more items, finish the action mode explicitly
                 if (selection.size() == 0 && mActionMode != null) {
+                    // No more items, finish the action mode explicitly
                     mActionMode.finish();
                 }
             }

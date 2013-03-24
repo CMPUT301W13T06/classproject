@@ -181,10 +181,12 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!isChecked) {
             if (mActionMode != null) {
+                // Unchecked, so stop the action mode
                 mActionMode.finish();
             }
         } else {
             if (selectedCheckBox != null) {
+                // Disable the old checkbox
                 selectedCheckBox.setChecked(false);
             }
             selectedCheckBox = buttonView;
