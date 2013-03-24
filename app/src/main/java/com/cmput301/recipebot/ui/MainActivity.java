@@ -30,6 +30,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.ui.fragments.PantryFragment;
 import com.cmput301.recipebot.ui.fragments.SavedRecipesFragment;
+import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,7 @@ import java.util.ArrayList;
  */
 public class MainActivity extends BaseActivity {
 
+    @InjectView(R.id.pager)
     ViewPager mViewPager;
     TabsAdapter mTabsAdapter;
 
@@ -46,7 +48,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        mViewPager = (ViewPager) findViewById(R.id.pager);
 
         setupTabs(savedInstanceState);
     }
