@@ -30,13 +30,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/editText_pantry"
             android:layout_gravity="center" android:hint="@string/ingredient" android:singleLine="true"
-            android:inputType="text" android:text="@string/ingredient"/>
+            android:inputType="text"/>
 
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/qty_editText" android:layout_gravity="center" android:hint="@string/qty"
-            android:singleLine="true" android:inputType="numberDecimal" android:text="@string/qty"/>
+            android:singleLine="true" android:inputType="numberDecimal"/>
 
     <ImageButton
             android:layout_width="wrap_content"
