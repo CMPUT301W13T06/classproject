@@ -29,7 +29,10 @@
 
     <!-- Pantry Fragment !-->
     <string name="fragment_pantry_title">Pantry</string>
-    <string name="select_all">SELECT ALL</string>
+    <string name="select_all">Select All</string>
+    <string name="count_items_selected">%d selected.</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="quantity">Quantity</string>
 
     <!-- Saved Recipes Fragment !-->
     <string name="fragment_saved_recipes_title">Saved Recipes</string>
@@ -53,6 +56,5 @@
     <string name="menu_camera">Camera</string>
     <string name="enter_ingredients">Enter Ingredients</string>
     <string name="enter_instructions">Enter Instructions</string>
-    <string name="count_items_selected">%d selected.</string><string name="ingredient">INGREDIENT</string><string name="qty">QUANTITY</string>
 
 </resources>

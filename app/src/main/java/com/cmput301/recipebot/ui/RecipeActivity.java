@@ -149,6 +149,9 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
         // Called when the user exits the action mode
         public void onDestroyActionMode(ActionMode mode) {
+            if (selectedCheckBox != null) {
+                selectedCheckBox.setChecked(false);
+            }
             mActionMode = null;
         }
     };
@@ -229,6 +232,8 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
                 ImageLoader.getInstance().displayImage(images.get(position), imageView);
             } else {
                 // Set up an add button
+                ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                imageView.setLayoutParams(lp);
                 imageView.setImageResource(R.drawable.ic_action_add);
                 imageView.setOnClickListener(addImageListener);
             }

@@ -35,7 +35,7 @@
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/qty_editText" android:layout_gravity="center" android:hint="@string/qty"
+            android:id="@+id/qty_editText" android:layout_gravity="center" android:hint="@string/quantity"
             android:singleLine="true" android:inputType="numberDecimal"/>
 
     <ImageButton
