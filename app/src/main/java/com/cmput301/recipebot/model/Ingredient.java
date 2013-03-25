@@ -31,12 +31,6 @@ public class Ingredient implements Parcelable {
     private String unit;
     private float quantity;
 
-    public Ingredient() {
-        this.name = null;
-        this.unit = null;
-        this.quantity = 0f;
-    }
-
     public Ingredient(String name, String unit, float quantity) {
         this.name = name;
         this.unit = unit;
@@ -97,7 +91,6 @@ public class Ingredient implements Parcelable {
 
     //Parcel code
     protected Ingredient(Parcel in) {
-        this();
         name = in.readString();
         unit = in.readString();
         quantity = in.readFloat();

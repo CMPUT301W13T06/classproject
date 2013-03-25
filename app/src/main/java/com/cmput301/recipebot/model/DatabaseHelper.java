@@ -5,12 +5,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    private static final String LOGTAG = makeLogTag(DatabaseHelper.class);
 
     private static final String DATABASE_NAME = "recipebot.db";
     private static final int DATABASE_VERSION = 1;
@@ -42,6 +47,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        Log.d(LOGTAG, CREATE_TABLE_RECIPES);
+        Log.d(LOGTAG, CREATE_TABLE_PANTRY);
         sqLiteDatabase.execSQL(CREATE_TABLE_RECIPES);
         sqLiteDatabase.execSQL(CREATE_TABLE_PANTRY);
     }
@@ -148,7 +155,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return All Ingredient in the Pantry
      */
-    public List<Ingredient> loadPantry() {
+    public List<Ingredient> getAllPantryItems() {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.query(TABLE_PANTRY, null, null,

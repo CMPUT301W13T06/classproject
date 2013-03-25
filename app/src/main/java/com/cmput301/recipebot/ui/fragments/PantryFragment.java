@@ -32,63 +32,61 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
+import com.cmput301.recipebot.model.RecipeBotController;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
  * A fragment that shows a list of items in the pantry.
  */
 public class PantryFragment extends RoboSherlockListFragment implements View.OnClickListener {
 
-//    private static final String LOGTAG = makeLogTag(PantryFragment.class);
+    private static final String LOGTAG = makeLogTag(PantryFragment.class);
 
-    private EditText mEdiText;
-    private EditText qtyText;
+    private EditText mEditTextName;
+    private EditText mEditTextQty;
 
-    ArrayList<Ingredient> mPantryItems;
-    private ArrayList<String> pantry_items = new ArrayList<String>();
+    List<Ingredient> mPantryItems;
     List<CompoundButton> selection;
     PantryListAdapter mAdapter;
-    private boolean select_all_clicked = true;
-
-    protected ActionMode mActionMode;
+    ActionMode mActionMode;
+    RecipeBotController mController;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         setHasOptionsMenu(true);
+        setListShown(false);
+        mController = new RecipeBotController(getSherlockActivity());
+
         fillView();
 
     }
 
     private void fillView() {
-        setListShown(false);
-
-        // setEmptyText(getSherlockActivity().getResources().getString(R.string.no_pantry_items));
-
+        mPantryItems = mController.loadPantry();
         LayoutInflater layoutInflater = getSherlockActivity().getLayoutInflater();
-
         View header = layoutInflater.inflate(R.layout.fragment_pantry_header, null);
         header.findViewById(R.id.button_add_pantry).setOnClickListener(this);
-        mEdiText = (EditText) header.findViewById(R.id.editText_pantry);
-        qtyText = (EditText) header.findViewById(R.id.qty_editText);
+        mEditTextName = (EditText) header.findViewById(R.id.editText_pantry);
+        mEditTextQty = (EditText) header.findViewById(R.id.qty_editText);
         getListView().addHeaderView(header);
-
-        mPantryItems = new ArrayList<Ingredient>();
-        mPantryItems.add(new Ingredient("Eggs", "nos.", 2f));
-        mPantryItems.add(new Ingredient("Milk", "ml", 500f));
-        mPantryItems.add(new Ingredient("Bread", "ml", 500f));
-        mPantryItems.add(new Ingredient("Butter", "ml", 500f));
-
         mAdapter = new PantryListAdapter(mPantryItems);
         setListAdapter(mAdapter);
         setListShown(true);
+    }
 
+    /**
+     * Update our view, after insert or delete.
+     */
+    private void updateView() {
+        mPantryItems = mController.loadPantry();
+        mAdapter.swapData(mPantryItems);
     }
 
     @Override
@@ -99,50 +97,10 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            //TODO: logic for select all
             case R.id.menu_select_all:
                 selectAll();
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * Add an pantry item
-     */
-    private void addPantryItem() {
-        /*
-        Ingredient item = new Ingredient();
-        item.setName(mEdiText.getText().toString());
-        mPantryItems.add(item);
-        mAdapter.swapData(mPantryItems);
-        */
-        if(!mEdiText.getText().toString().isEmpty()){
-
-            // Checks if entry is empty. If so it alerts the user
-            if(!isDuplicate(mEdiText.getText().toString().toUpperCase())){
-
-                pantry_items.add(mEdiText.getText().toString().toUpperCase());
-
-                Ingredient item = new Ingredient();
-                item.setName(mEdiText.getText().toString().toUpperCase());
-                item.setUnit("nothing");
-                // If no quantity is entered it is set to one
-                if(qtyText.getText().toString().isEmpty()){
-                    item.setQuantity(0.0f);
-                } else {
-                    item.setQuantity(Float.parseFloat(qtyText.getText().toString()));
-                }
-                mPantryItems.add(item);
-                mAdapter.swapData(mPantryItems);
-
-                mEdiText.getText().clear();
-                qtyText.getText().clear();
-
-            }
-        }  else {
-            Toast.makeText(getActivity().getApplicationContext(), "Entry is blank. Nothing added to pantry.",
-                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -153,6 +111,30 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
                 addPantryItem();
         }
     }
+
+    /**
+     * Add an pantry item to the database.
+     */
+    private void addPantryItem() {
+        String name = mEditTextName.getText().toString();
+        String quantity = mEditTextQty.getText().toString();
+
+        if (name.isEmpty()) {
+            Toast.makeText(getActivity().getApplicationContext(), "Entry is blank. Nothing added to pantry.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //Sanitize the input
+        mEditTextName.setText(null);
+        mEditTextQty.setText(null);
+
+        Ingredient item = new Ingredient(name, null, Float.parseFloat(quantity));
+        mController.insertPantryItem(item);
+        updateView();
+
+    }
+
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -194,39 +176,24 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
 
     private void deleteSelected() {
         if (selection == null) {
-            //Log.e(LOGTAG, "Shouldn't be here!");
+            Log.e(LOGTAG, "Shouldn't be here!");
         }
         for (CompoundButton button : selection) {
             Ingredient ingredient = (Ingredient) button.getTag();
-            mPantryItems.remove(ingredient);
+            mController.deletePantryItem(ingredient.getName());
         }
-        mAdapter.swapData(mPantryItems);
+        updateView();
     }
 
-    public void selectAll(){
-
+    /**
+     * Select all ingredients.
+     */
+    public void selectAll() {
         final ListView listView = getListView();
-
-        for(int i = 1; i < listView.getChildCount(); i++){
+        for (int i = 1; i < listView.getChildCount(); i++) {
             CheckBox cb = (CheckBox) listView.getChildAt(i);
             cb.setChecked(true);
         }
-
-    }
-
-    public boolean isDuplicate(String item){
-        // go through entire pantry list
-        for (int i = 0; i < mPantryItems.size(); i++) {
-            Ingredient ingredient = mPantryItems.get(i);
-            Log.v("Pantry item", ingredient.getName());
-
-            if (item.equalsIgnoreCase(ingredient.getName())) {
-                Toast.makeText(getActivity().getApplicationContext(), "Item is already in your pantry.",
-                        Toast.LENGTH_LONG).show();
-                return true;
-            }
-        }
-        return false;
     }
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -250,9 +217,9 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
 
     public class PantryListAdapter extends BaseAdapter {
 
-        ArrayList<Ingredient> ingredients;
+        List<Ingredient> ingredients;
 
-        public PantryListAdapter(ArrayList<Ingredient> ingredients) {
+        public PantryListAdapter(List<Ingredient> ingredients) {
             this.ingredients = ingredients;
         }
 
@@ -285,15 +252,24 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             Ingredient ingredient = (Ingredient) getItem(position);
             CheckBox box = (CheckBox) view.findViewById(R.id.check_box);
             box.setTag(ingredient);
-            box.setText(ingredient.getName());
+            if (ingredient.getQuantity() == 0.0f) {
+                box.setText(ingredient.getName());
+            } else {
+                // Don't want to show a trailing zero. 6.0 should be shown as 6
+                if (ingredient.getQuantity() == (int) (Math.round(ingredient.getQuantity()))) {
+                    box.setText(ingredient.getName() + " " + (int) ingredient.getQuantity());
+                } else {
+                    box.setText(ingredient.getName() + " " + ingredient.getQuantity());
+                }
+            }
+
             box.setOnCheckedChangeListener(onCheckedChangeListener);
             return view;
         }
 
-        public void swapData(ArrayList<Ingredient> ingredients) {
+        public void swapData(List<Ingredient> ingredients) {
             this.ingredients = ingredients;
             notifyDataSetChanged();
         }
     }
-
 }
