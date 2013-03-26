@@ -21,7 +21,6 @@ package com.cmput301.recipebot.test;
 
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
 import com.cmput301.recipebot.R;
@@ -32,7 +31,6 @@ import com.cmput301.recipebot.ui.RecipeActivity;
 import com.squareup.spoon.Spoon;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import static org.fest.assertions.api.ANDROID.assertThat;
 
@@ -91,7 +89,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     }
 
     /**
-     * Verify that {@link RecipeActivity} exists
+     * Verify that {@link RecipeActivity} shows all images.
      */
     public void testVPShowsAllContent() {
         assertThat(activity).isNotNull();

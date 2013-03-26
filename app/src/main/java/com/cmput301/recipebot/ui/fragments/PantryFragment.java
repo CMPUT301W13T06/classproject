@@ -310,7 +310,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
      * @param d Float to display.
      * @return String representation of the ingredient.
      */
-    public static String formatFloat(float d) {
+    private static String formatFloat(float d) {
         if (d == 0) {
             return null;
         }
