@@ -74,8 +74,12 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     EditText mEditTextDirections;
     @InjectView(R.id.button_add_direction)
     ImageButton mButtonAddDirection;
-    @InjectView(R.id.editText_ingredients)
-    EditText mEditTextIngredients;
+    @InjectView(R.id.editText_ingredient_name)
+    EditText mEditTextName;
+    @InjectView(R.id.editText_ingredient_quantity)
+    EditText mEditTextQuantity;
+    @InjectView(R.id.editText_ingredient_unit)
+    EditText mEditTextUnit;
     @InjectView(R.id.button_add_ingredient)
     ImageButton mButtonAddIngredient;
 
@@ -105,6 +109,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
     /**
      * A method that fills a {@link LinearLayout} with data from a List of data.
+     * We don't use {@link ListView} since we don't need scrolling, our {@link ScrollView} handles that for us.
      *
      * @param listDirections the layout to fill
      * @param data           the data that should be displayed.
@@ -170,6 +175,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
             try {
                 direction = (String) data;
             } catch (ClassCastException e2) {
+                Log.e(LOGTAG, "Uh oh, should be either ingredient or direction!");
             }
         }
 

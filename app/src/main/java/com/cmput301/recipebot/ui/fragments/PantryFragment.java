@@ -69,8 +69,8 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     private void fillView() {
         mPantryItems = mController.loadPantry();
         LayoutInflater layoutInflater = getSherlockActivity().getLayoutInflater();
-        View header = layoutInflater.inflate(R.layout.add_ingredient_header, null);
-        header.findViewById(R.id.button_add_pantry).setOnClickListener(this);
+        View header = layoutInflater.inflate(R.layout.add_ingredient_widget, null);
+        header.findViewById(R.id.button_add_ingredient).setOnClickListener(this);
         mEditTextName = (EditText) header.findViewById(R.id.editText_ingredient_name);
         mEditTextQuantity = (EditText) header.findViewById(R.id.editText_ingredient_quantity);
         mEditTextUnit = (EditText) header.findViewById(R.id.editText_ingredient_unit);
@@ -106,7 +106,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_add_pantry:
+            case R.id.button_add_ingredient:
                 addPantryItem();
         }
     }
@@ -145,7 +145,6 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     private boolean isEditTextEmpty(EditText editText) {
         return editText.getText().toString().isEmpty();
     }
-
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -270,7 +269,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             Ingredient ingredient = (Ingredient) getItem(position);
             CheckBox box = (CheckBox) view.findViewById(R.id.check_box);
             box.setTag(ingredient);
-            box.setText(ingredientToString(ingredient));
+            box.setText(ingredient.toString());
             box.setOnCheckedChangeListener(onCheckedChangeListener);
             return view;
         }
@@ -281,42 +280,5 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         }
     }
 
-    /**
-     * Get a text representation of the ingredient to display.
-     *
-     * @param ingredient Ingredient to show.
-     * @return String representation of the ingredient.
-     */
-    private static String ingredientToString(Ingredient ingredient) {
-        String name = ingredient.getName();
-        String quantity = formatFloat(ingredient.getQuantity());
-        String unit = ingredient.getUnit();
-        String text = name;
-        if (quantity != null) {
-            text = text.concat(" " + quantity);
-        }
-        if (unit != null) {
-            text = text.concat(" " + unit);
-        }
-        return text;
-    }
 
-    /**
-     * Get a clean version of the float to display.
-     * 232.00000000 = 232
-     * 0.18000000000 = 0.18
-     * 1237875192
-     *
-     * @param d Float to display.
-     * @return String representation of the ingredient.
-     */
-    private static String formatFloat(float d) {
-        if (d == 0) {
-            return null;
-        }
-        if (d == (int) d)
-            return String.format("%d", (int) d);
-        else
-            return String.format("%s", d);
-    }
 }

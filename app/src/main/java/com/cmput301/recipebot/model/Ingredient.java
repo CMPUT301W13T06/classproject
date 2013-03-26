@@ -83,6 +83,9 @@ public class Ingredient implements Parcelable {
 
     @Override
     public String toString() {
+        if (unit == null || quantity == 0.0f) {
+            return name;
+        }
         if (quantity == (int) quantity)
             return String.format("%d %s of %s", (int) quantity, unit, name);
         else
