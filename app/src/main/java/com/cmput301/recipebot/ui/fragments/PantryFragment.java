@@ -48,7 +48,8 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     private static final String LOGTAG = makeLogTag(PantryFragment.class);
 
     private EditText mEditTextName;
-    private EditText mEditTextQty;
+    private EditText mEditTextQuantity;
+    private EditText mEditTextUnit;
 
     List<Ingredient> mPantryItems;
     List<CompoundButton> selection;
@@ -59,22 +60,20 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         setHasOptionsMenu(true);
         setListShown(false);
         mController = new RecipeBotController(getSherlockActivity());
-
         fillView();
-
     }
 
     private void fillView() {
         mPantryItems = mController.loadPantry();
         LayoutInflater layoutInflater = getSherlockActivity().getLayoutInflater();
-        View header = layoutInflater.inflate(R.layout.fragment_pantry_header, null);
+        View header = layoutInflater.inflate(R.layout.add_ingredient_header, null);
         header.findViewById(R.id.button_add_pantry).setOnClickListener(this);
-        mEditTextName = (EditText) header.findViewById(R.id.editText_pantry);
-        mEditTextQty = (EditText) header.findViewById(R.id.qty_editText);
+        mEditTextName = (EditText) header.findViewById(R.id.editText_ingredient_name);
+        mEditTextQuantity = (EditText) header.findViewById(R.id.editText_ingredient_quantity);
+        mEditTextUnit = (EditText) header.findViewById(R.id.editText_ingredient_unit);
         getListView().addHeaderView(header);
         mAdapter = new PantryListAdapter(mPantryItems);
         setListAdapter(mAdapter);
@@ -116,23 +115,35 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
      * Add an pantry item to the database.
      */
     private void addPantryItem() {
-        String name = mEditTextName.getText().toString();
-        String quantity = mEditTextQty.getText().toString();
-
-        if (name.isEmpty()) {
-            Toast.makeText(getActivity().getApplicationContext(), "Entry is blank. Nothing added to pantry.",
-                    Toast.LENGTH_LONG).show();
+        if (isEditTextEmpty(mEditTextName)) {
+            // Name should not be empty.
+            mEditTextName.setError(getResources().getString(R.string.blank_field_name));
             return;
         }
 
+        String name = mEditTextName.getText().toString();
+        // Don't parse the float if the field is empty.
+        float quantity = isEditTextEmpty(mEditTextQuantity) ? 0.0f : Float.parseFloat(mEditTextQuantity.getText().toString());
+        String unit = mEditTextUnit.getText().toString();
+
         //Sanitize the input
         mEditTextName.setText(null);
-        mEditTextQty.setText(null);
+        mEditTextQuantity.setText(null);
+        mEditTextUnit.setText(null);
 
-        Ingredient item = new Ingredient(name, null, Float.parseFloat(quantity));
+        Ingredient item = new Ingredient(name, unit, quantity);
         mController.insertPantryItem(item);
         updateView();
+    }
 
+    /**
+     * Checks if an {@link EditText} field is empty.
+     *
+     * @param editText {@link EditText} to check.
+     * @return true if editText is empty.
+     */
+    private boolean isEditTextEmpty(EditText editText) {
+        return editText.getText().toString().isEmpty();
     }
 
 
@@ -151,7 +162,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_search_from_pantry:
-                    Toast.makeText(getSherlockActivity(), "TODO: search for " + selection.size(), Toast.LENGTH_SHORT).show();
+                    searchSelected();
                     mode.finish();
                     return true;
                 case R.id.menu_delete_from_pantry:
@@ -173,6 +184,11 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             mActionMode = null;
         }
     };
+
+    private void searchSelected() {
+        Toast.makeText(getSherlockActivity(), "TODO: search for " + selection.size(), Toast.LENGTH_SHORT).show();
+
+    }
 
     private void deleteSelected() {
         if (selection == null) {
@@ -254,17 +270,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             Ingredient ingredient = (Ingredient) getItem(position);
             CheckBox box = (CheckBox) view.findViewById(R.id.check_box);
             box.setTag(ingredient);
-            if (ingredient.getQuantity() == 0.0f) {
-                box.setText(ingredient.getName());
-            } else {
-                // Don't want to show a trailing zero. 6.0 should be shown as 6
-                if (ingredient.getQuantity() == (int) (Math.round(ingredient.getQuantity()))) {
-                    box.setText(ingredient.getName() + " " + (int) ingredient.getQuantity());
-                } else {
-                    box.setText(ingredient.getName() + " " + ingredient.getQuantity());
-                }
-            }
-
+            box.setText(ingredientToString(ingredient));
             box.setOnCheckedChangeListener(onCheckedChangeListener);
             return view;
         }
@@ -273,5 +279,44 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             this.ingredients = ingredients;
             notifyDataSetChanged();
         }
+    }
+
+    /**
+     * Get a text representation of the ingredient to display.
+     *
+     * @param ingredient Ingredient to show.
+     * @return String representation of the ingredient.
+     */
+    private static String ingredientToString(Ingredient ingredient) {
+        String name = ingredient.getName();
+        String quantity = formatFloat(ingredient.getQuantity());
+        String unit = ingredient.getUnit();
+        String text = name;
+        if (quantity != null) {
+            text = text.concat(" " + quantity);
+        }
+        if (unit != null) {
+            text = text.concat(" " + unit);
+        }
+        return text;
+    }
+
+    /**
+     * Get a clean version of the float to display.
+     * 232.00000000 = 232
+     * 0.18000000000 = 0.18
+     * 1237875192
+     *
+     * @param d Float to display.
+     * @return String representation of the ingredient.
+     */
+    public static String formatFloat(float d) {
+        if (d == 0) {
+            return null;
+        }
+        if (d == (int) d)
+            return String.format("%d", (int) d);
+        else
+            return String.format("%s", d);
     }
 }

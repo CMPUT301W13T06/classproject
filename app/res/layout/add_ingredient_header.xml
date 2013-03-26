@@ -22,26 +22,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="100dp">
+              android:layout_height="wrap_content">
 
     <EditText
-            android:layout_width="187dp"
-            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_weight="2"
             android:layout_height="wrap_content"
-            android:id="@+id/editText_pantry"
+            android:id="@+id/editText_ingredient_name"
             android:layout_gravity="center" android:hint="@string/ingredient" android:singleLine="true"
             android:inputType="text"/>
 
     <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:id="@+id/qty_editText" android:layout_gravity="center" android:hint="@string/quantity"
-            android:singleLine="true" android:inputType="numberDecimal"/>
+            android:id="@+id/editText_ingredient_quantity"
+            android:layout_gravity="center" android:hint="@string/quantity" android:singleLine="true"
+            android:inputType="numberDecimal"/>
+
+    <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_ingredient_unit"
+            android:layout_gravity="center" android:hint="@string/unit" android:singleLine="true"
+            android:inputType="text"/>
 
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_input_add"
+            android:src="@drawable/ic_action_add_blue"
             android:id="@+id/button_add_pantry"
             android:layout_gravity="center_horizontal|top"/>
 
