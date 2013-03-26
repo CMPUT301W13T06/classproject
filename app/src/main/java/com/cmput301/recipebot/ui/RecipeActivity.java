@@ -235,12 +235,16 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         public Object instantiateItem(ViewGroup view, int position) {
             final ImageView imageView = (ImageView) inflater.inflate(R.layout.pager_item_recipe_image, view, false);
             if (position < images.size()) {
+                ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                imageView.setLayoutParams(lp);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 ImageLoader.getInstance().displayImage(images.get(position), imageView);
             } else {
                 // Set up an add button
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 imageView.setLayoutParams(lp);
-                imageView.setImageResource(R.drawable.ic_action_add);
+                imageView.setScaleType(ImageView.ScaleType.CENTER);
+                imageView.setImageResource(R.drawable.ic_action_add_blue);
                 imageView.setOnClickListener(addImageListener);
             }
             ((ViewPager) view).addView(imageView, 0);

@@ -73,6 +73,7 @@ public class RecipeGridAdapter extends BaseAdapter {
             imageView.setTag(recipe);
             return imageView;
         } else {
+            // If no photos, simply display some text.
             final TextView textView = (TextView) layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
             textView.setText(recipe.getName());
             textView.setTag(recipe);
