@@ -34,7 +34,6 @@
     <string name="ingredient">Ingredient</string>
     <string name="quantity">Qty</string>
     <string name="unit">Unit</string>
-    <string name="blank_field_name">Name should not be left blank.</string>
 
     <!-- Saved Recipes Fragment !-->
     <string name="fragment_saved_recipes_title">Saved Recipes</string>
@@ -60,5 +59,8 @@
     <string name="enter_instructions">Enter Instructions</string>
     <string name="enter_tags">Enter Tags</string>
     <string name="menu_save">Save</string>
+
+    <!-- Misc !-->
+    <string name="blank_field">Field should not be left blank.</string>
 
 </resources>

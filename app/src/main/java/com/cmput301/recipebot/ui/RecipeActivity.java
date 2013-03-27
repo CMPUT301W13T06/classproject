@@ -54,7 +54,7 @@ import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 /**
  * An Activity that allows user to add a recipe.
  */
-public class RecipeActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
+public class RecipeActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private static final String LOGTAG = makeLogTag(RecipeActivity.class);
     public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
@@ -80,8 +80,8 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     EditText mEditTextRecipeName;
     @InjectView(R.id.editText_recipe_description)
     EditText mEditTextRecipeDescription;
-    @InjectView(R.id.editText_directions)
-    EditText mEditTextDirections;
+    @InjectView(R.id.editText_direction)
+    EditText mEditTextDirection;
     @InjectView(R.id.button_add_direction)
     ImageButton mButtonAddDirection;
     @InjectView(R.id.editText_ingredient_name)
@@ -135,6 +135,9 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
             mRecipeTags = new ArrayList<String>();
             mViewPhotos.setAdapter(new ImagePagerAdapter(mRecipePhotos));
         }
+        mButtonAddDirection.setOnClickListener(this);
+        mButtonAddIngredient.setOnClickListener(this);
+        mButtonAddTag.setOnClickListener(this);
     }
 
     /**
@@ -208,7 +211,6 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
     /**
      * This deletes an item from our list.
-     * Uses selected_data, a global variable to know which item to delete.
      */
     private void deleteSelectedItem() {
         TaggedItem item = (TaggedItem) selectedCheckBox.getTag();
@@ -270,6 +272,104 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
             mActionMode = startActionMode(mActionModeCallback);
         }
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.button_add_tag:
+                addTag();
+                break;
+            case R.id.button_add_direction:
+                addDirection();
+                break;
+            case R.id.button_add_ingredient:
+                addIngredient();
+                break;
+        }
+    }
+
+    /**
+     * Add a {@link Ingredient} to the recipe.
+     */
+    private void addIngredient() {
+
+        if (isEditTextEmpty(mEditTextIngredientName)) {
+            // Name should not be empty.
+            mEditTextIngredientName.setError(getResources().getString(R.string.blank_field));
+            return;
+        } else {
+            mEditTextIngredientName.setError(null);
+        }
+
+        String name = mEditTextIngredientName.getText().toString();
+        // Don't parse the float if the field is empty.
+        float quantity = isEditTextEmpty(mEditTextIngredientQuantity) ?
+                0.0f : Float.parseFloat(mEditTextIngredientQuantity.getText().toString());
+        String unit = mEditTextIngredientUnit.getText().toString();
+        Ingredient item = new Ingredient(name, unit, quantity);
+
+        //Sanitize the input
+        mEditTextIngredientName.setText(null);
+        mEditTextIngredientQuantity.setText(null);
+        mEditTextIngredientUnit.setText(null);
+        mRecipeIngredients.add(item);
+        //Update
+        fillListLayout(mListViewIngredients, mRecipeIngredients, TYPE_INGREDIENT);
+    }
+
+    /**
+     * Add a Direction to the recipe.
+     */
+    private void addDirection() {
+        if (isEditTextEmpty(mEditTextDirection)) {
+            // Field should not be empty
+            mEditTextDirection.setError(getResources().getString(R.string.blank_field));
+            return;
+        } else {
+            mEditTextDirection.setError(null);
+        }
+
+        String direction = mEditTextDirection.getText().toString();
+        mRecipeDirections.add(direction);
+
+        //Sanitize the input
+        mEditTextDirection.setText(null);
+
+        //Update
+        fillListLayout(mListViewDirections, mRecipeDirections, TYPE_DIRECTION);
+    }
+
+    /**
+     * Add a tag to the recipe.
+     */
+    private void addTag() {
+        if (isEditTextEmpty(mEditTextTag)) {
+            // Field should not be empty
+            mEditTextTag.setError(getResources().getString(R.string.blank_field));
+            return;
+        } else {
+            mEditTextTag.setError(null);
+        }
+
+        String tag = mEditTextTag.getText().toString();
+        mRecipeTags.add(tag);
+        mRecipeDirections.add(tag);
+
+        //Sanitize the input
+        mEditTextTag.setText(null);
+        //Update
+        fillListLayout(mListViewTags, mRecipeTags, TYPE_TAG);
+    }
+
+    /**
+     * Checks if an {@link EditText} field is empty.
+     *
+     * @param editText {@link EditText} to check.
+     * @return true if editText is empty.
+     */
+    private boolean isEditTextEmpty(EditText editText) {
+        return editText.getText().toString().isEmpty();
     }
 
     private class ImagePagerAdapter extends PagerAdapter {

@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:id="@+id/editText_directions"
+            android:id="@+id/editText_direction"
             android:hint="@string/enter_instructions"
             android:layout_gravity="left|center_vertical"/>
 

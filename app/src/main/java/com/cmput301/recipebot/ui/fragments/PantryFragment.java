@@ -107,32 +107,34 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_add_ingredient:
-                addPantryItem();
+                addIngredient();
         }
     }
 
     /**
      * Add an pantry item to the database.
      */
-    private void addPantryItem() {
+    private void addIngredient() {
         if (isEditTextEmpty(mEditTextName)) {
             // Name should not be empty.
-            mEditTextName.setError(getResources().getString(R.string.blank_field_name));
+            mEditTextName.setError(getResources().getString(R.string.blank_field));
             return;
+        } else {
+            mEditTextName.setError(null);
         }
 
         String name = mEditTextName.getText().toString();
         // Don't parse the float if the field is empty.
         float quantity = isEditTextEmpty(mEditTextQuantity) ? 0.0f : Float.parseFloat(mEditTextQuantity.getText().toString());
         String unit = mEditTextUnit.getText().toString();
+        Ingredient item = new Ingredient(name, unit, quantity);
+        mController.insertPantryItem(item);
 
         //Sanitize the input
         mEditTextName.setText(null);
         mEditTextQuantity.setText(null);
         mEditTextUnit.setText(null);
-
-        Ingredient item = new Ingredient(name, unit, quantity);
-        mController.insertPantryItem(item);
+        //Update
         updateView();
     }
 
