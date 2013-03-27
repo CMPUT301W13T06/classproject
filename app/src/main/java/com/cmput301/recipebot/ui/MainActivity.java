@@ -47,13 +47,13 @@ import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
  */
 public class MainActivity extends BaseActivity {
 
-    @InjectView(R.id.pager)
-    ViewPager mViewPager;
-    TabsAdapter mTabsAdapter;
-
     private static final String LOGTAG = makeLogTag(MainActivity.class);
 
-    RecipeBotController mController;
+    @InjectView(R.id.pager)
+    ViewPager mViewPager;
+
+    private RecipeBotController mController;
+    private TabsAdapter mTabsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

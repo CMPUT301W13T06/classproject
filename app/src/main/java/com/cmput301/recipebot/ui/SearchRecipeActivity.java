@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import com.actionbarsherlock.view.Window;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.client.ESClient;
@@ -68,7 +67,6 @@ public class SearchRecipeActivity extends BaseActivity implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this, "clicked recipe # " + position, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, RecipeActivity.class);
         intent.putExtra(RecipeActivity.EXTRA_RECIPE, (Recipe) view.getTag());
         startActivity(intent);

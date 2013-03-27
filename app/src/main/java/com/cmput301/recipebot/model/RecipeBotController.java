@@ -27,11 +27,11 @@ import java.util.ArrayList;
  * A controller class that makes it transparent when switching between network and local calls.
  * All UI components should interact with this.
  * Eventually, it will perform all operations on a background thread.
- * TODO : client
+ * TODO : {@link com.cmput301.recipebot.client.ESClient}
  */
 public class RecipeBotController {
 
-    DatabaseHelper dbHelper;
+    private DatabaseHelper dbHelper;
 
     public RecipeBotController(Context context) {
         dbHelper = new DatabaseHelper(context);

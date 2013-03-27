@@ -57,12 +57,12 @@ import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 public class RecipeActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
     private static final String LOGTAG = makeLogTag(RecipeActivity.class);
+    public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
 
     private static final int TYPE_INGREDIENT = 1;
     private static final int TYPE_DIRECTION = 2;
     private static final int TYPE_TAG = 3;
 
-    public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
     private static final int RESULT_LOAD_IMAGE = 458;
     private static final int TAKE_PICTURE = 531;
     private Uri cameraImageUri;

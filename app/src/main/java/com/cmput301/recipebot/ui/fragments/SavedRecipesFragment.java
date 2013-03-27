@@ -26,13 +26,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.ui.RecipeActivity;
 import com.cmput301.recipebot.ui.SearchRecipeActivity;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
@@ -77,7 +77,6 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         List<Recipe> recipes = getRecipesFromArgs();
         gridview.setAdapter(new RecipeGridAdapter(getSherlockActivity(), recipes));
         gridview.setOnItemClickListener(this);
@@ -115,7 +114,9 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getSherlockActivity(), "clicked recipe # " + position, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getSherlockActivity(), RecipeActivity.class);
+        intent.putExtra(RecipeActivity.EXTRA_RECIPE, (Recipe) view.getTag());
+        startActivity(intent);
     }
 
     @Override

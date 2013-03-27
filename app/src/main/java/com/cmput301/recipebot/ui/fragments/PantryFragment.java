@@ -51,11 +51,11 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     private EditText mEditTextQuantity;
     private EditText mEditTextUnit;
 
-    List<Ingredient> mPantryItems;
-    List<CompoundButton> selection;
-    PantryListAdapter mAdapter;
-    ActionMode mActionMode;
-    RecipeBotController mController;
+    private List<Ingredient> mPantryItems;
+    private List<CompoundButton> selection;
+    private PantryListAdapter mAdapter;
+    private ActionMode mActionMode;
+    private RecipeBotController mController;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

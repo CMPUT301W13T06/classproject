@@ -97,8 +97,6 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
 
         final ViewPager viewPager = (ViewPager) activity.findViewById(R.id.pager_recipe_images);
 
-        assertThat(viewPager.getAdapter()).hasCount(activity.mRecipe.getPhotos().size() + 1);
-
         for (int i = 0; i < viewPager.getAdapter().getCount(); i++) {
             final int count = i;
             instrumentation.runOnMainSync(new Runnable() {

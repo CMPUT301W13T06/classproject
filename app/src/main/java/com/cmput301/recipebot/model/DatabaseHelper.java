@@ -38,13 +38,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "recipebot.db";
     private static final int DATABASE_VERSION = 1;
 
-    public static final String TABLE_RECIPES = "recipes";
-    public static final String COLUMN_RECIPE_ID = "_id";
-    public static final String COLUMN_RECIPE_DATA = "data";
+    private static final String TABLE_RECIPES = "recipes";
+    private static final String COLUMN_RECIPE_ID = "_id";
+    private static final String COLUMN_RECIPE_DATA = "data";
 
-    public static final String TABLE_PANTRY = "pantry";
-    public static final String COLUMN_PANTRY_ID = "_id";
-    public static final String COLUMN_PANTRY_DATA = "data";
+    private static final String TABLE_PANTRY = "pantry";
+    private static final String COLUMN_PANTRY_ID = "_id";
+    private static final String COLUMN_PANTRY_DATA = "data";
 
     private static final String CREATE_TABLE_RECIPES = "create table "
             + TABLE_RECIPES + "(" + COLUMN_RECIPE_ID
@@ -56,7 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " text primary key, " + COLUMN_PANTRY_DATA
             + " text not null);";
 
-    Gson mGson;
+    private Gson mGson;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
