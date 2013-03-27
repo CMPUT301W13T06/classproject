@@ -21,17 +21,16 @@ package com.cmput301.recipebot.test;
 
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.User;
 import com.cmput301.recipebot.ui.RecipeActivity;
 import com.squareup.spoon.Spoon;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import static org.fest.assertions.api.ANDROID.assertThat;
 
@@ -56,23 +55,25 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     }
 
     private Intent getTestIntent() {
-        Recipe recipe = new Recipe();
-        recipe.setId(UUID.randomUUID().toString());
-        recipe.setName("Shake and Bake Chicken");
-        recipe.setUser("Colonel Sanders");
+        String id = "testing_id";
+        String name = "Kentucky Fried Chicken";
+        String description = "Fried Chicken";
+        User user = new User("colonel@kfc.com", "Colonel Sanders");
         ArrayList<String> directions = new ArrayList<String>();
-        directions.add("1. First Shake");
-        directions.add("2. Then Bake");
-        recipe.setDirections(directions);
+        directions.add("1. Mix");
+        directions.add("2. Bake");
+        directions.add("3. Eat");
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-        ingredients.add(new Ingredient("Chicken", "g", 500f));
-        ingredients.add(new Ingredient("Shake and Bake mix", "packet", 1f));
-        ingredients.add(new Ingredient("Tequila", "bottle", 1f));
-        recipe.setIngredients(ingredients);
-        ArrayList<Uri> photos = new ArrayList<Uri>();
-        photos.add(Uri.parse("http://www.kraftrecipes.com/assets/recipe_images/SHAKE_N_BAKE_Honey_Drummies.jpg"));
-        photos.add(Uri.parse("http://images.media-allrecipes.com/userphotos/250x250/00/68/33/683349.jpg"));
-        recipe.setPhotos(photos);
+        ingredients.add(new Ingredient("Chicken", "lb", 2f));
+        ingredients.add(new Ingredient("Secret Spice #1", "tbsp.", 1f));
+        ingredients.add(new Ingredient("Secret Spice #2", "tsp.", 1f));
+        ingredients.add(new Ingredient("Buttermilk", "ml", 50f));
+        ArrayList<String> photos = new ArrayList<String>();
+        photos.add("http://www.kraftrecipes.com/assets/recipe_images/SHAKE_N_BAKE_Honey_Drummies.jpg");
+        photos.add("http://images.media-allrecipes.com/userphotos/250x250/00/68/33/683349.jpg");
+        ArrayList<String> tags = new ArrayList<String>();
+        tags.add("chicken, fried, southern");
+        Recipe recipe = new Recipe(id, name, description, user, ingredients, directions, photos, tags);
 
         Intent intent = new Intent(instrumentation.getContext(), RecipeActivity.class);
         intent.putExtra(RecipeActivity.EXTRA_RECIPE, recipe);
@@ -88,15 +89,13 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     }
 
     /**
-     * Verify that {@link RecipeActivity} exists
+     * Verify that {@link RecipeActivity} shows all images.
      */
     public void testVPShowsAllContent() {
         assertThat(activity).isNotNull();
         Spoon.screenshot(activity, "initial_state");
 
         final ViewPager viewPager = (ViewPager) activity.findViewById(R.id.pager_recipe_images);
-
-        assertThat(viewPager.getAdapter()).hasCount(activity.mRecipe.getPhotos().size() + 1);
 
         for (int i = 0; i < viewPager.getAdapter().getCount(); i++) {
             final int count = i;

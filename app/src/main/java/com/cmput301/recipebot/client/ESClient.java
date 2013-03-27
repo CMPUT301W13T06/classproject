@@ -136,7 +136,6 @@ public class ESClient {
         }
         query = query.substring(0, query.length() - operator.length());
         HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", query).accept("application/json");
-        System.out.println(httpSearch.toString());
         return getRecipesFromResponse(httpSearch.body());
     }
 

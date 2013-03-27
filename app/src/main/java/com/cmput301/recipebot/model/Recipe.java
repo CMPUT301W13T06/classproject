@@ -19,7 +19,6 @@
 
 package com.cmput301.recipebot.model;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -31,45 +30,24 @@ import java.util.ArrayList;
 public class Recipe implements Parcelable {
 
     private String id;
-    private String description;
-    private String user;
     private String name;
+    private String description;
+    private User user;
     private ArrayList<Ingredient> ingredients;
     private ArrayList<String> directions;
-    private ArrayList<Uri> photos;
+    private ArrayList<String> photos;
+    private ArrayList<String> tags;
 
-    public Recipe() {
-        this.id = null;
-        this.description = null;
-        this.user = null;
-        this.name = null;
-        this.directions = new ArrayList<String>();
-        this.ingredients = new ArrayList<Ingredient>();
-        this.photos = new ArrayList<Uri>();
-    }
-
-    public Recipe(String id, String description, String user, String name, ArrayList<Ingredient> ingredients,
-                  ArrayList<String> directions, ArrayList<Uri> photos) {
+    public Recipe(String id, String name, String description, User user, ArrayList<Ingredient> ingredients,
+                  ArrayList<String> directions, ArrayList<String> photos, ArrayList<String> tags) {
         this.id = id;
+        this.name = name;
         this.description = description;
         this.user = user;
-        this.name = name;
         this.ingredients = ingredients;
         this.directions = directions;
         this.photos = photos;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Get the description for this Recipe
-     *
-     * @param description
-     */
-    public void setDescription(String description) {
-        this.description = description;
+        this.tags = tags;
     }
 
     /**
@@ -86,19 +64,6 @@ public class Recipe implements Parcelable {
     }
 
     /**
-     * Get name of the user who created this recipe.
-     *
-     * @return Name of user.
-     */
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    /**
      * Get the name of the recipe.
      *
      * @return Name of recipe.
@@ -109,6 +74,32 @@ public class Recipe implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Get the description for this Recipe
+     *
+     * @param description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Get name of the user who created this recipe.
+     *
+     * @return Name of user.
+     */
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
@@ -138,32 +129,42 @@ public class Recipe implements Parcelable {
     }
 
     /**
-     * Get all photoes for this recipe.
-     * TODO: consider using a custom Bitmap class, with a boolean unpublished.*
+     * Get all photos for this recipe.
      *
      * @return `photos for this recipe.
      */
-    public ArrayList<Uri> getPhotos() {
+    public ArrayList<String> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(ArrayList<Uri> photos) {
+    public void setPhotos(ArrayList<String> photos) {
         this.photos = photos;
     }
 
-    public void addPhoto(Uri photo) {
-        photos.add(photo);
+    /**
+     * Get all tags for the recipe.
+     *
+     * @return tags for the recipe.
+     */
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
     }
 
     @Override
     public String toString() {
         return "Recipe{" +
-                "directions=" + directions +
-                ", id='" + id + '\'' +
+                "id='" + id + '\'' +
                 ", description='" + description + '\'' +
-                ", user='" + user + '\'' +
+                ", user=" + user +
                 ", name='" + name + '\'' +
                 ", ingredients=" + ingredients +
+                ", directions=" + directions +
+                ", photos=" + photos +
+                ", tags=" + tags +
                 '}';
     }
 
@@ -175,23 +176,28 @@ public class Recipe implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
-        dest.writeString(description);
-        dest.writeString(user);
         dest.writeString(name);
+        dest.writeString(description);
+        dest.writeParcelable(user, flags);
         dest.writeStringList(directions);
         dest.writeTypedList(ingredients);
-        dest.writeTypedList(photos);
+        dest.writeStringList(photos);
+        dest.writeStringList(tags);
     }
 
     protected Recipe(Parcel in) {
-        this();
         id = in.readString();
-        description = in.readString();
-        user = in.readString();
         name = in.readString();
+        description = in.readString();
+        user = in.readParcelable(User.class.getClassLoader());
+        directions = new ArrayList<String>();
         in.readStringList(directions);
+        ingredients = new ArrayList<Ingredient>();
         in.readTypedList(ingredients, Ingredient.CREATOR);
-        in.readTypedList(photos, Uri.CREATOR);
+        photos = new ArrayList<String>();
+        in.readStringList(photos);
+        tags = new ArrayList<String>();
+        in.readStringList(tags);
     }
 
     public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
