@@ -28,7 +28,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
@@ -120,7 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return All recipes in the database.
      */
-    public List<Recipe> getAllRecipes() {
+    public ArrayList<Recipe> getAllRecipes() {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.query(TABLE_RECIPES, null, null,
@@ -131,7 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.moveToFirst();
 
-        List<Recipe> recipes = new ArrayList<Recipe>();
+        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -174,7 +173,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return All Ingredient in the Pantry
      */
-    public List<Ingredient> getAllPantryItems() {
+    public ArrayList<Ingredient> getAllPantryItems() {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.query(TABLE_PANTRY, null, null,
@@ -185,7 +184,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.moveToFirst();
 
-        List<Ingredient> pantry = new ArrayList<Ingredient>();
+        ArrayList<Ingredient> pantry = new ArrayList<Ingredient>();
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

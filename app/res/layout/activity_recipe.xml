@@ -37,7 +37,13 @@
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText_recipe_title"
+                android:id="@+id/editText_recipe_name"
+                android:layout_gravity="left|center_vertical"/>
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_recipe_description"
                 android:layout_gravity="left|center_vertical"/>
 
         <include layout="@layout/add_ingredient_widget"/>
@@ -51,6 +57,13 @@
 
         <LinearLayout android:layout_width="match_parent"
                       android:id="@+id/list_directions"
+                      android:orientation="vertical"
+                      android:layout_height="wrap_content"/>
+
+        <include layout="@layout/add_tag_widget"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:id="@+id/list_tags"
                       android:orientation="vertical"
                       android:layout_height="wrap_content"/>
 

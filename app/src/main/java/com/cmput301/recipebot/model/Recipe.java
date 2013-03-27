@@ -19,7 +19,6 @@
 
 package com.cmput301.recipebot.model;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -39,7 +38,8 @@ public class Recipe implements Parcelable {
     private ArrayList<String> photos;
     private ArrayList<String> tags;
 
-    public Recipe(String id, String name, String description, User user, ArrayList<Ingredient> ingredients, ArrayList<String> directions, ArrayList<String> photos, ArrayList<String> tags) {
+    public Recipe(String id, String name, String description, User user, ArrayList<Ingredient> ingredients,
+                  ArrayList<String> directions, ArrayList<String> photos, ArrayList<String> tags) {
         this.id = id;
         this.name = name;
         this.description = description;

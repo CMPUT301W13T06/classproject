@@ -40,13 +40,14 @@ import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.RecipeBotController;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
@@ -56,55 +57,96 @@ import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 public class RecipeActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
     private static final String LOGTAG = makeLogTag(RecipeActivity.class);
+
+    private static final int TYPE_INGREDIENT = 1;
+    private static final int TYPE_DIRECTION = 2;
+    private static final int TYPE_TAG = 3;
+
     public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
     private static final int RESULT_LOAD_IMAGE = 458;
     private static final int TAKE_PICTURE = 531;
     private Uri cameraImageUri;
 
     @InjectView(R.id.pager_recipe_images)
-    ViewPager mRecipePhotos;
+    ViewPager mViewPhotos;
     @InjectView(R.id.list_directions)
-    LinearLayout mListDirections;
+    LinearLayout mListViewDirections;
     @InjectView(R.id.list_ingredients)
-    LinearLayout mListIngredients;
+    LinearLayout mListViewIngredients;
+    @InjectView(R.id.list_tags)
+    LinearLayout mListViewTags;
 
-    @InjectView(R.id.editText_recipe_title)
-    EditText mEditTextRecipeTitle;
+    @InjectView(R.id.editText_recipe_name)
+    EditText mEditTextRecipeName;
+    @InjectView(R.id.editText_recipe_description)
+    EditText mEditTextRecipeDescription;
     @InjectView(R.id.editText_directions)
     EditText mEditTextDirections;
     @InjectView(R.id.button_add_direction)
     ImageButton mButtonAddDirection;
     @InjectView(R.id.editText_ingredient_name)
-    EditText mEditTextName;
+    EditText mEditTextIngredientName;
     @InjectView(R.id.editText_ingredient_quantity)
-    EditText mEditTextQuantity;
+    EditText mEditTextIngredientQuantity;
     @InjectView(R.id.editText_ingredient_unit)
-    EditText mEditTextUnit;
+    EditText mEditTextIngredientUnit;
     @InjectView(R.id.button_add_ingredient)
     ImageButton mButtonAddIngredient;
+    @InjectView(R.id.editText_tag)
+    EditText mEditTextTag;
+    @InjectView(R.id.button_add_tag)
+    ImageButton mButtonAddTag;
 
-    @InjectExtra(EXTRA_RECIPE)
-    public Recipe mRecipe;
+    private ActionMode mActionMode;
+    private CompoundButton selectedCheckBox;
 
-    protected ActionMode mActionMode;
+    private String mRecipeID;
+    private String mRecipeName;
+    private String mRecipeDescription;
+    private ArrayList<Ingredient> mRecipeIngredients;
+    private ArrayList<String> mRecipeDirections;
+    private ArrayList<String> mRecipePhotos;
+    private ArrayList<String> mRecipeTags;
 
-    CompoundButton selectedCheckBox;
+    private RecipeBotController mController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mController = new RecipeBotController(this);
         setContentView(R.layout.activity_recipe);
-        fillView();
+        if (getIntent().getExtras() != null) {
+            Recipe recipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
+            mRecipeID = recipe.getId();
+            mRecipeName = recipe.getName();
+            mRecipeDescription = recipe.getDescription();
+            mRecipeIngredients = recipe.getIngredients();
+            mRecipeDirections = recipe.getDirections();
+            mRecipePhotos = recipe.getPhotos();
+            mRecipeTags = recipe.getTags();
+            fillView(recipe);
+        } else {
+            mRecipeID = null;
+            mRecipeName = null;
+            mRecipeDescription = null;
+            mRecipeDirections = new ArrayList<String>();
+            mRecipeIngredients = new ArrayList<Ingredient>();
+            mRecipePhotos = new ArrayList<String>();
+            mRecipeTags = new ArrayList<String>();
+            mViewPhotos.setAdapter(new ImagePagerAdapter(mRecipePhotos));
+        }
     }
 
     /**
      * Fill our Views.
      */
-    private void fillView() {
-        mRecipePhotos.setAdapter(new ImagePagerAdapter(mRecipe.getPhotos()));
-        mEditTextRecipeTitle.setText(mRecipe.getName());
-        fillListLayout(mListDirections, mRecipe.getDirections());
-        fillListLayout(mListIngredients, mRecipe.getIngredients());
+    private void fillView(Recipe recipe) {
+        mViewPhotos.setAdapter(new ImagePagerAdapter(recipe.getPhotos()));
+        mEditTextRecipeName.setText(recipe.getName());
+        mEditTextRecipeDescription.setText(recipe.getDescription());
+        fillListLayout(mListViewDirections, recipe.getDirections(), TYPE_DIRECTION);
+        fillListLayout(mListViewIngredients, recipe.getIngredients(), TYPE_INGREDIENT);
+        fillListLayout(mListViewTags, recipe.getTags(), TYPE_TAG);
     }
 
     /**
@@ -112,17 +154,20 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
      * We don't use {@link ListView} since we don't need scrolling, our {@link ScrollView} handles that for us.
      *
      * @param listDirections the layout to fill
-     * @param data           the data that should be displayed.
+     * @param dataset        the data that should be displayed.
      */
-    private void fillListLayout(LinearLayout listDirections, List data) {
+    private void fillListLayout(LinearLayout listDirections, List dataset, int type) {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //Sanitize the view
         listDirections.removeAllViews();
 
-        for (int i = 0; i < data.size(); i++) {
-            Object item = data.get(i);
+        for (int i = 0; i < dataset.size(); i++) {
+            Object data = dataset.get(i);
             CheckBox checkBox = (CheckBox) layoutInflater.inflate(R.layout.checkbox_view, null);
-            checkBox.setText(item.toString());
+            checkBox.setText(data.toString());
+            TaggedItem item = new TaggedItem();
+            item.type = type;
+            item.data = data;
             checkBox.setTag(item);
             checkBox.setOnCheckedChangeListener(this);
             listDirections.addView(checkBox, i);
@@ -166,28 +211,44 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
      * Uses selected_data, a global variable to know which item to delete.
      */
     private void deleteSelectedItem() {
-        Ingredient ingredient = null;
-        String direction = null;
-        Object data = selectedCheckBox.getTag();
-        try {
-            ingredient = (Ingredient) data;
-        } catch (ClassCastException e1) {
-            try {
-                direction = (String) data;
-            } catch (ClassCastException e2) {
-                Log.e(LOGTAG, "Uh oh, should be either ingredient or direction!");
-            }
+        TaggedItem item = (TaggedItem) selectedCheckBox.getTag();
+
+        switch (item.type) {
+            case TYPE_DIRECTION:
+                String data = (String) item.data;
+                deleteSelectedDirection(data);
+                break;
+            case TYPE_TAG:
+                String tag = (String) item.data;
+                deleteSelectedTag(tag);
+                break;
+            case TYPE_INGREDIENT:
+                Ingredient ingredient = (Ingredient) item.data;
+                deleteSelectedIngredient(ingredient);
+                break;
         }
 
-        if (ingredient != null) {
-            mRecipe.getIngredients().remove(ingredient);
-            fillListLayout(mListIngredients, mRecipe.getIngredients());
-        }
+    }
+
+    private void deleteSelectedDirection(String direction) {
         if (direction != null) {
-            mRecipe.getDirections().remove(direction);
-            fillListLayout(mListDirections, mRecipe.getDirections());
+            mRecipeDirections.remove(direction);
+            fillListLayout(mListViewDirections, mRecipeDirections, TYPE_DIRECTION);
         }
+    }
 
+    private void deleteSelectedIngredient(Ingredient ingredient) {
+        if (ingredient != null) {
+            mRecipeIngredients.remove(ingredient);
+            fillListLayout(mListViewIngredients, mRecipeIngredients, TYPE_INGREDIENT);
+        }
+    }
+
+    private void deleteSelectedTag(String tag) {
+        if (tag != null) {
+            mRecipeTags.remove(tag);
+            fillListLayout(mListViewTags, mRecipeTags, TYPE_TAG);
+        }
     }
 
     @Override
@@ -214,11 +275,9 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     private class ImagePagerAdapter extends PagerAdapter {
 
         private ArrayList<String> images;
-        private LayoutInflater inflater;
 
         ImagePagerAdapter(ArrayList<String> images) {
             this.images = images;
-            this.inflater = getLayoutInflater();
         }
 
         @Override
@@ -233,22 +292,25 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
         @Override
         public Object instantiateItem(ViewGroup view, int position) {
-            final ImageView imageView = (ImageView) inflater.inflate(R.layout.pager_item_recipe_image, view, false);
             if (position < images.size()) {
+                final ImageView imageView = (ImageView) getLayoutInflater().inflate(R.layout.pager_item_recipe_image, view, false);
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 imageView.setLayoutParams(lp);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 ImageLoader.getInstance().displayImage(images.get(position), imageView);
+                ((ViewPager) view).addView(imageView, 0);
+                return imageView;
             } else {
                 // Set up an add button
+                final ImageButton imageButton = new ImageButton(RecipeActivity.this);
+                imageButton.setImageResource(R.drawable.ic_action_add_blue);
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                imageView.setLayoutParams(lp);
-                imageView.setScaleType(ImageView.ScaleType.CENTER);
-                imageView.setImageResource(R.drawable.ic_action_add_blue);
-                imageView.setOnClickListener(addImageListener);
+                imageButton.setLayoutParams(lp);
+                imageButton.setScaleType(ImageView.ScaleType.CENTER);
+                imageButton.setOnClickListener(addImageListener);
+                ((ViewPager) view).addView(imageButton, 0);
+                return imageButton;
             }
-            ((ViewPager) view).addView(imageView, 0);
-            return imageView;
         }
 
         @Override
@@ -286,12 +348,12 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
-            mRecipe.getPhotos().add("file:///" + picturePath);
-            ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
+            mRecipePhotos.add("file:///" + picturePath);
+            ((ImagePagerAdapter) mViewPhotos.getAdapter()).swapData(mRecipePhotos);
         } else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK) {
             Uri selectedImage = cameraImageUri;
-            mRecipe.getPhotos().add("file:///" + selectedImage);
-            ((ImagePagerAdapter) mRecipePhotos.getAdapter()).swapData(mRecipe.getPhotos());
+            mRecipePhotos.add("file:///" + selectedImage);
+            ((ImagePagerAdapter) mViewPhotos.getAdapter()).swapData(mRecipePhotos);
         }
 
     }
@@ -306,12 +368,34 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     @Override
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_camera:
+            case R.id.recipe_menu_camera:
                 takePhoto();
+                return true;
+            case R.id.recipe_menu_save:
+                save();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void save() {
+
+        if (mRecipeID == null) {
+            mRecipeID = UUID.randomUUID().toString();
+        }
+
+        mRecipeName = getEditTextString(mEditTextRecipeName);
+        mRecipeDescription = getEditTextString(mEditTextRecipeDescription);
+
+        Recipe recipe = new Recipe(mRecipeID, mRecipeName, mRecipeDescription, null, mRecipeIngredients,
+                mRecipeDirections, mRecipePhotos, mRecipeTags);
+        Log.d(LOGTAG, "Saving : " + recipe.toString());
+        mController.updateRecipe(recipe);
+    }
+
+    private static String getEditTextString(EditText editText) {
+        return editText.getText().toString();
     }
 
     /**
@@ -326,6 +410,10 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         startActivityForResult(i, TAKE_PICTURE);
     }
 
+    class TaggedItem<T> {
+        T data;
+        int type;
+    }
 }
 
 
