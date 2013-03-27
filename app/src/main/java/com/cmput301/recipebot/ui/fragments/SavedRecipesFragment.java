@@ -78,8 +78,8 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        List<Recipe> recipes =  getRecipesFromArgs();
-        gridview.setAdapter(new RecipeGridAdapter(getSherlockActivity(),recipes));
+        List<Recipe> recipes = getRecipesFromArgs();
+        gridview.setAdapter(new RecipeGridAdapter(getSherlockActivity(), recipes));
         gridview.setOnItemClickListener(this);
     }
 

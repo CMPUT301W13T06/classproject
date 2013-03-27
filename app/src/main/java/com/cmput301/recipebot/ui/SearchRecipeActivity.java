@@ -54,7 +54,6 @@ public class SearchRecipeActivity extends BaseActivity implements AdapterView.On
     @InjectExtra(EXTRA_RECIPE_NAME)
     String query;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
