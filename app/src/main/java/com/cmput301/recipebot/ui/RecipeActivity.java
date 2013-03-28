@@ -402,7 +402,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
         @Override
         public int getCount() {
-            return images.size() + 1;
+            return images.size() + 2;
         }
 
         @Override
@@ -415,14 +415,24 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
                 ImageLoader.getInstance().displayImage(images.get(position), imageView);
                 ((ViewPager) view).addView(imageView, 0);
                 return imageView;
-            } else {
+            } else if (position == images.size()) {
                 // Set up an add button
                 final ImageButton imageButton = new ImageButton(RecipeActivity.this);
-                imageButton.setImageResource(R.drawable.ic_action_add_blue);
+                imageButton.setImageResource(R.drawable.ic_action_picture_blue);
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 imageButton.setLayoutParams(lp);
                 imageButton.setScaleType(ImageView.ScaleType.CENTER);
                 imageButton.setOnClickListener(addImageListener);
+                ((ViewPager) view).addView(imageButton, 0);
+                return imageButton;
+            } else {
+                // Set up a take photo button
+                final ImageButton imageButton = new ImageButton(RecipeActivity.this);
+                imageButton.setImageResource(R.drawable.ic_action_camera_blue);
+                ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                imageButton.setLayoutParams(lp);
+                imageButton.setScaleType(ImageView.ScaleType.CENTER);
+                imageButton.setOnClickListener(takePhotoListener);
                 ((ViewPager) view).addView(imageButton, 0);
                 return imageButton;
             }
@@ -439,6 +449,18 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
                 Intent i = new Intent(
                         Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        };
+
+        private View.OnClickListener takePhotoListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
+                i.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photo));
+                cameraImageUri = Uri.fromFile(photo);
+                startActivityForResult(i, TAKE_PICTURE);
             }
         };
 
@@ -489,9 +511,6 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     @Override
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.recipe_menu_camera:
-                takePhoto();
-                return true;
             case R.id.recipe_menu_save:
                 save();
                 return true;
@@ -505,7 +524,6 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         mController.updateRecipe(mRecipe);
         new WriteRecipeToFileTask().execute(mRecipe);
     }
-
 
     private void updateRecipeFromUI() {
         if (mRecipeID == null) {
@@ -523,18 +541,6 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
     private static String getEditTextString(EditText editText) {
         return editText.getText().toString();
-    }
-
-    /**
-     * Take a photo. Launches the camera app.
-     */
-    public void takePhoto() {
-        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
-        i.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(photo));
-        cameraImageUri = Uri.fromFile(photo);
-        startActivityForResult(i, TAKE_PICTURE);
     }
 
     /**

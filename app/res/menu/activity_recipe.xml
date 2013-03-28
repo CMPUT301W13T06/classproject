@@ -32,9 +32,4 @@
           android:title="@string/share"
           android:actionProviderClass="com.actionbarsherlock.widget.ShareActionProvider"/>
 
-    <item android:id="@+id/recipe_menu_camera"
-          android:icon="@drawable/ic_action_camera"
-          android:title="@string/menu_camera"
-          android:showAsAction="ifRoom|withText"/>
-
 </menu>
