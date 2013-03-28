@@ -19,13 +19,13 @@
 
 package com.cmput301.recipebot.client;
 
+import android.util.Log;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -102,7 +102,7 @@ public class ESClient {
      * @param name The name of the recipe to search for.
      * @return List of recipes that have these ingredients.
      */
-    public ArrayList<Recipe> searchRecipes(String name) throws IOException {
+    public ArrayList<Recipe> searchRecipes(String name) {
         HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", "name:" + name).accept("application/json");
         return getRecipesFromResponse(httpSearch.body());
     }
@@ -135,6 +135,31 @@ public class ESClient {
         }
         query = query.substring(0, query.length() - operator.length());
         HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", query).accept("application/json");
+        return getRecipesFromResponse(httpSearch.body());
+    }
+
+    /**
+     * Search for all recipes with the given tag.
+     *
+     * @param tag The tag to search for.
+     * @return List of recipes that have these ingredients.
+     */
+    public ArrayList<Recipe> searchRecipesFromTag(String tag) {
+        String query = "tags:" + tag;
+        HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", query).accept("application/json");
+        return getRecipesFromResponse(httpSearch.body());
+    }
+
+    /**
+     * Search for all recipes with the given tag.
+     *
+     * @param username The user to search for.
+     * @return List of recipes that have these ingredients.
+     */
+    public ArrayList<Recipe> searchRecipesFromUser(String username) {
+        String query = "user.id:" + username;
+        HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", query).accept("application/json");
+        Log.d(LOGTAG, httpSearch.toString());
         return getRecipesFromResponse(httpSearch.body());
     }
 

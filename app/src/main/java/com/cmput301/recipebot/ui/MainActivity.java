@@ -21,6 +21,7 @@ package com.cmput301.recipebot.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -31,8 +32,11 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import com.actionbarsherlock.widget.SearchView;
 import com.cmput301.recipebot.R;
+import com.cmput301.recipebot.client.ESClient;
+import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.ui.fragments.PantryFragment;
 import com.cmput301.recipebot.ui.fragments.SavedRecipesGridFragment;
 import roboguice.inject.InjectView;
@@ -57,6 +61,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
         setupTabs(savedInstanceState);
     }
@@ -116,15 +121,44 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Intent intent = new Intent(this, SearchRecipeActivity.class);
-        intent.putExtra(SearchRecipeActivity.EXTRA_RECIPE_NAME, query);
-        startActivity(intent);
+        new SearchTask().execute(query);
         return true;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    private class SearchTask extends AsyncTask<String, Void, ArrayList<Recipe>> {
+
+        @Override
+        protected void onPreExecute() {
+            setSupportProgressBarIndeterminateVisibility(true);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ArrayList<Recipe> doInBackground(String... strings) {
+            String query = strings[0];
+            ESClient client = new ESClient();
+            if (query.charAt(0) == '@') {
+                return client.searchRecipesFromUser(query.substring(1));
+            } else if (query.charAt(0) == '#') {
+                return client.searchRecipesFromTag(query.substring(1));
+            } else {
+                return client.searchRecipes(query);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Recipe> recipes) {
+            setSupportProgressBarIndeterminateVisibility(false);
+            Intent intent = new Intent(MainActivity.this, SearchRecipeActivity.class);
+            intent.putParcelableArrayListExtra(SearchRecipeActivity.EXTRA_RECIPE_LIST, recipes);
+            startActivity(intent);
+            super.onPostExecute(recipes);
+        }
     }
 
     /**
