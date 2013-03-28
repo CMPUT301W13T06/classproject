@@ -156,16 +156,13 @@ public class Recipe implements Parcelable {
 
     @Override
     public String toString() {
-        return "Recipe{" +
-                "id='" + id + '\'' +
-                ", description='" + description + '\'' +
-                ", user=" + user +
-                ", name='" + name + '\'' +
-                ", ingredients=" + ingredients +
-                ", directions=" + directions +
-                ", photos=" + photos +
-                ", tags=" + tags +
-                '}';
+        return "Recipe : " + name + "\n" +
+                description + "\n" +
+                "by " + user + "\n" +
+                "Ingredients : " + ingredients + "\n" +
+                "Directions : " + directions + "\n" +
+                "Photos : " + photos + "\n" +
+                "Tags=" + tags;
     }
 
     @Override
@@ -209,5 +206,4 @@ public class Recipe implements Parcelable {
             return new Recipe[size];
         }
     };
-
 }

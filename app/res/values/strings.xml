@@ -62,5 +62,8 @@
 
     <!-- Misc !-->
     <string name="blank_field">Field should not be left blank.</string>
+    <string name="share">Share</string>
+    <string name="recipe_name">Recipe Name</string>
+    <string name="recipe_description">Recipe Description</string>
 
 </resources>

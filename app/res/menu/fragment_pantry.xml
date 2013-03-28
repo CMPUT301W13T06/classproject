@@ -22,8 +22,9 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Select All Button goes here !-->
     <item android:id="@+id/menu_select_all"
           android:title="@string/select_all"
+          android:icon="@drawable/ic_action_select_all"
           android:showAsAction="ifRoom|withText"/>
+
 </menu>

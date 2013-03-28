@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -37,14 +38,17 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.ShareActionProvider;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.model.RecipeBotController;
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import roboguice.inject.InjectView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -108,6 +112,12 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     private ArrayList<String> mRecipePhotos;
     private ArrayList<String> mRecipeTags;
 
+    // This keeps track of our Recipe, is updated when user clicks save.
+    private Recipe mRecipe;
+
+    // Keep a global reference to this since we want to update the recipe when user clicks save.
+    private ShareActionProvider mShareActionProvider;
+
     private RecipeBotController mController;
 
     @Override
@@ -116,16 +126,17 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         mController = new RecipeBotController(this);
         setContentView(R.layout.activity_recipe);
         if (getIntent().getExtras() != null) {
-            Recipe recipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
-            mRecipeID = recipe.getId();
-            mRecipeName = recipe.getName();
-            mRecipeDescription = recipe.getDescription();
-            mRecipeIngredients = recipe.getIngredients();
-            mRecipeDirections = recipe.getDirections();
-            mRecipePhotos = recipe.getPhotos();
-            mRecipeTags = recipe.getTags();
-            fillView(recipe);
+            mRecipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
+            mRecipeID = mRecipe.getId();
+            mRecipeName = mRecipe.getName();
+            mRecipeDescription = mRecipe.getDescription();
+            mRecipeIngredients = mRecipe.getIngredients();
+            mRecipeDirections = mRecipe.getDirections();
+            mRecipePhotos = mRecipe.getPhotos();
+            mRecipeTags = mRecipe.getTags();
+            fillView(mRecipe);
         } else {
+            mRecipe = null;
             mRecipeID = null;
             mRecipeName = null;
             mRecipeDescription = null;
@@ -154,7 +165,8 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
     /**
      * A method that fills a {@link LinearLayout} with data from a List of data.
-     * We don't use {@link ListView} since we don't need scrolling, our {@link ScrollView} handles that for us.
+     * We don't use {@link ListView} since we don't need scrolling, our {@link ScrollView} handles
+     * that for us.
      *
      * @param listDirections the layout to fill
      * @param dataset        the data that should be displayed.
@@ -270,6 +282,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
                 mActionMode.finish();
             }
             mActionMode = startActionMode(mActionModeCallback);
+            mActionMode.setTitle(getResources().getString(R.string.count_items_selected, 1));
         }
 
     }
@@ -314,7 +327,8 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         mEditTextIngredientQuantity.setText(null);
         mEditTextIngredientUnit.setText(null);
         mRecipeIngredients.add(item);
-        //Update
+
+        //Update UI
         fillListLayout(mListViewIngredients, mRecipeIngredients, TYPE_INGREDIENT);
     }
 
@@ -336,7 +350,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         //Sanitize the input
         mEditTextDirection.setText(null);
 
-        //Update
+        //Update UI
         fillListLayout(mListViewDirections, mRecipeDirections, TYPE_DIRECTION);
     }
 
@@ -358,7 +372,8 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
         //Sanitize the input
         mEditTextTag.setText(null);
-        //Update
+
+        //Update UI
         fillListLayout(mListViewTags, mRecipeTags, TYPE_TAG);
     }
 
@@ -462,6 +477,12 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.activity_recipe, menu);
+        MenuItem actionItem = menu.findItem(R.id.recipe_menu_share);
+        mShareActionProvider = (ShareActionProvider) actionItem.getActionProvider();
+        mShareActionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+        if (mRecipe != null) {
+            new WriteRecipeToFileTask().execute(mRecipe);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -480,7 +501,13 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     }
 
     private void save() {
+        updateRecipeFromUI();
+        mController.updateRecipe(mRecipe);
+        new WriteRecipeToFileTask().execute(mRecipe);
+    }
 
+
+    private void updateRecipeFromUI() {
         if (mRecipeID == null) {
             mRecipeID = UUID.randomUUID().toString();
         }
@@ -488,10 +515,10 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         mRecipeName = getEditTextString(mEditTextRecipeName);
         mRecipeDescription = getEditTextString(mEditTextRecipeDescription);
 
-        Recipe recipe = new Recipe(mRecipeID, mRecipeName, mRecipeDescription, null, mRecipeIngredients,
+        // We're already keeping track of mRecipeDirections, mRecipeIngredients and mRecipeTags.
+
+        mRecipe = new Recipe(mRecipeID, mRecipeName, mRecipeDescription, null, mRecipeIngredients,
                 mRecipeDirections, mRecipePhotos, mRecipeTags);
-        Log.d(LOGTAG, "Saving : " + recipe.toString());
-        mController.updateRecipe(recipe);
     }
 
     private static String getEditTextString(EditText editText) {
@@ -510,9 +537,84 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         startActivityForResult(i, TAKE_PICTURE);
     }
 
+    /**
+     * Creates a sharing {@link Intent}.
+     * Shares mRecipe, doesn't get it from the UI.
+     *
+     * @return The sharing intent.
+     */
+    private static Intent createShareIntent(Recipe recipe, File file) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, recipe.getName());
+        shareIntent.putExtra(Intent.EXTRA_TITLE, recipe.getName());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, recipe.toString());
+        shareIntent.setType("application/json");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        return shareIntent;
+    }
+
     class TaggedItem<T> {
         T data;
         int type;
+    }
+
+    private class WriteRecipeToFileTask extends AsyncTask<Recipe, Void, File> {
+
+        private static final String STORAGE_DIRECTORY = "RecipeBot";
+
+        @Override
+        protected File doInBackground(Recipe... params) {
+            Recipe recipe = params[0];
+            File file = new File(getStorageDirectory(), recipe.getId() + ".json");
+            FileOutputStream outputStream;
+            Gson gson = new Gson();
+
+            try {
+                outputStream = new FileOutputStream(file);
+                outputStream.write(gson.toJson(recipe, Recipe.class).getBytes());
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return file;
+        }
+
+        @Override
+        protected void onPostExecute(File file) {
+            super.onPostExecute(file);
+            mShareActionProvider.setShareIntent(createShareIntent(mRecipe, file));
+        }
+
+        protected File getStorageDirectory() {
+            // Get the directory for the user's public pictures directory.
+            File file = new File(Environment.getExternalStorageDirectory(), STORAGE_DIRECTORY);
+            if (!file.exists()) {
+                if (!file.mkdirs()) {
+                    Log.e(LOGTAG, "Directory not created, " + file.getAbsolutePath());
+                }
+            }
+            return file;
+        }
+
+        /* Checks if external storage is available for read and write */
+        protected boolean isExternalStorageWritable() {
+            String state = Environment.getExternalStorageState();
+            if (Environment.MEDIA_MOUNTED.equals(state)) {
+                return true;
+            }
+            return false;
+        }
+
+        /* Checks if external storage is available to at least read */
+        protected boolean isExternalStorageReadable() {
+            String state = Environment.getExternalStorageState();
+            if (Environment.MEDIA_MOUNTED.equals(state) ||
+                    Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+                return true;
+            }
+            return false;
+        }
     }
 }
 

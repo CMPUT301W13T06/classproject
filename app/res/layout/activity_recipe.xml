@@ -38,12 +38,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_recipe_name"
+                android:hint="@string/recipe_name"
                 android:layout_gravity="left|center_vertical"/>
 
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText_recipe_description"
+                android:hint="@string/recipe_description"
                 android:layout_gravity="left|center_vertical"/>
 
         <include layout="@layout/add_ingredient_widget"/>

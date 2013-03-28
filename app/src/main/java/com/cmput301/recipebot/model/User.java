@@ -36,7 +36,6 @@ public class User implements Parcelable {
 
     }
 
-
     public String getId() {
         return id;
     }
@@ -55,6 +54,11 @@ public class User implements Parcelable {
 
     public String getEmail() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return name + '(' + id + ')';
     }
 
     @Override

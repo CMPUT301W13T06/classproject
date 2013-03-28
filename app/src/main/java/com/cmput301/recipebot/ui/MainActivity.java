@@ -94,7 +94,6 @@ public class MainActivity extends BaseActivity {
     private void setupTabs(Bundle savedInstanceState) {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
 
         mTabsAdapter = new TabsAdapter(this, mViewPager);
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.fragment_pantry_title),
