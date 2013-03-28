@@ -25,7 +25,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
-import com.actionbarsherlock.R;
+import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.model.RecipeModel;
 import com.cmput301.recipebot.model.User;
@@ -35,6 +35,9 @@ import com.cmput301.recipebot.util.AppConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A fragment that registers to recipe any database updates.
+ */
 public class SavedRecipesGridFragment extends AbstractRecipeGridFragment implements RecipeModel.RecipeView, AdapterView.OnItemLongClickListener {
 
     @Override
@@ -78,7 +81,7 @@ public class SavedRecipesGridFragment extends AbstractRecipeGridFragment impleme
         Recipe recipe = (Recipe) view.getTag();
         User user = getUserFromPreferences();
         if (recipe.getUser().getId() == user.getId()) {
-            // The recipe is by this user.
+            // The recipe is by this user, so delete it from the network
             RecipeModel.getInstance(getSherlockActivity()).networkDeleteRecipe(recipe.getId());
         }
         RecipeModel.getInstance(getSherlockActivity()).deleteRecipe(recipe.getId());

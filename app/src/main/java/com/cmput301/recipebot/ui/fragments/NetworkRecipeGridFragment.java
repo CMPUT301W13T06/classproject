@@ -27,6 +27,9 @@ import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A fragment that doesn't register to recipe any database updates.
+ */
 public class NetworkRecipeGridFragment extends AbstractRecipeGridFragment {
 
     public static NetworkRecipeGridFragment newInstance(ArrayList<Recipe> recipes) {
