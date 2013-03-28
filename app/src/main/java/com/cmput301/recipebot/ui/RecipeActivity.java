@@ -517,14 +517,22 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     }
 
     private void save() {
-        updateRecipeFromUI();
-        RecipeModel.getInstance(this).updateRecipe(mRecipe);
+        boolean update = updateRecipeFromUI();
+        if (update) {
+            RecipeModel.getInstance(this).updateRecipe(mRecipe);
+        } else {
+            RecipeModel.getInstance(this).insertRecipe(mRecipe);
+        }
         new WriteRecipeToFileTask().execute(mRecipe);
     }
 
-    private void updateRecipeFromUI() {
+    private boolean updateRecipeFromUI() {
+        boolean update;
         if (mRecipeID == null) {
             mRecipeID = UUID.randomUUID().toString();
+            update = false;
+        } else {
+            update = true;
         }
 
         mRecipeName = getEditTextString(mEditTextRecipeName);
@@ -534,6 +542,8 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
         mRecipe = new Recipe(mRecipeID, mRecipeName, mRecipeDescription, null, mRecipeIngredients,
                 mRecipeDirections, mRecipePhotos, mRecipeTags);
+
+        return update;
     }
 
     private static String getEditTextString(EditText editText) {
