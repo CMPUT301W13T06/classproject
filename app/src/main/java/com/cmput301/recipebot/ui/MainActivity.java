@@ -36,7 +36,7 @@ import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.model.RecipeBotController;
 import com.cmput301.recipebot.ui.fragments.PantryFragment;
-import com.cmput301.recipebot.ui.fragments.SavedRecipesFragment;
+import com.cmput301.recipebot.ui.fragments.RecipeGridFragment;
 import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
- * Main Activity, that shows two fragments {@link PantryFragment} and {@link SavedRecipesFragment}.
+ * Main Activity, that shows two fragments {@link PantryFragment} and {@link RecipeGridFragment}.
  */
 public class MainActivity extends BaseActivity implements SearchView.OnQueryTextListener {
 
@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
         Bundle args = new Bundle();
         args.putParcelableArrayList("recipes", recipes);
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.fragment_saved_recipes_title),
-                SavedRecipesFragment.class, args);
+                RecipeGridFragment.class, args);
 
         if (savedInstanceState != null) {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));

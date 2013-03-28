@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.ui.RecipeActivity;
@@ -42,15 +41,15 @@ import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 /**
  * A simple fragment that shows a list of {@link Recipe} items.
  */
-public class SavedRecipesFragment extends RoboSherlockFragment implements AdapterView.OnItemClickListener {
+public class RecipeGridFragment extends RoboSherlockFragment implements AdapterView.OnItemClickListener {
 
-    private static final String LOGTAG = makeLogTag(SavedRecipesFragment.class);
+    private static final String LOGTAG = makeLogTag(RecipeGridFragment.class);
 
     @InjectView(R.id.gridview)
     GridView gridview;
 
-    public static SavedRecipesFragment newInstance(ArrayList<Recipe> recipes) {
-        SavedRecipesFragment f = new SavedRecipesFragment();
+    public static RecipeGridFragment newInstance(ArrayList<Recipe> recipes) {
+        RecipeGridFragment f = new RecipeGridFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList("recipes", recipes);
         f.setArguments(args);
@@ -76,14 +75,6 @@ public class SavedRecipesFragment extends RoboSherlockFragment implements Adapte
             return new ArrayList<Recipe>();
         } else {
             return getArguments().getParcelableArrayList("recipes");
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 
