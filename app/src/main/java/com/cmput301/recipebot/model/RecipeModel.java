@@ -20,6 +20,7 @@
 package com.cmput301.recipebot.model;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import com.cmput301.recipebot.client.ESClient;
 
 import java.util.ArrayList;
@@ -30,9 +31,33 @@ public class RecipeModel {
     private ESClient client;
     private static RecipeModel instance;
 
+    // A cache of last know recipes.
+    private ArrayList<Recipe> mRecipes;
+    private ArrayList<RecipeView> views;
+
     private RecipeModel(Context context) {
         dbHelper = new DatabaseHelper(context);
         client = new ESClient();
+        views = new ArrayList<RecipeView>();
+    }
+
+    public interface RecipeView {
+        public void update(ArrayList<Recipe> recipes);
+    }
+
+    public void addView(RecipeView view) {
+        views.add(view);
+        loadRecipes();
+    }
+
+    public void deleteView(RecipeView view) {
+        views.remove(view);
+    }
+
+    public void notifyViews() {
+        for (RecipeView view : views) {
+            view.update(mRecipes);
+        }
     }
 
     /**
@@ -49,23 +74,70 @@ public class RecipeModel {
     }
 
     public ArrayList<Recipe> loadRecipes() {
-        return dbHelper.getAllRecipes();
+        // Start an AsyncTask to load all items.
+        new LoadRecipesTask().execute();
+        // In the meantime, return the cached version.
+        return mRecipes;
     }
 
     public void insertRecipe(Recipe recipe) {
-        dbHelper.insertRecipe(recipe);
+        new InsertRecipeTask().execute(recipe);
     }
 
     public void deleteRecipe(String id) {
-        dbHelper.deleteRecipe(id);
-    }
-
-    public Recipe getRecipe(String id) {
-        return dbHelper.getRecipe(id);
+        new DeleteRecipeTask().execute(id);
     }
 
     public void updateRecipe(Recipe recipe) {
-        dbHelper.updateRecipe(recipe);
+        new UpdateRecipeTask().execute(recipe);
+    }
+
+    private class LoadRecipesTask extends UpdateRecipeViewTask<Void> {
+        @Override
+        protected ArrayList<Recipe> doInBackground(Void... params) {
+            return super.doInBackground(params);
+        }
+    }
+
+    private class InsertRecipeTask extends UpdateRecipeViewTask<Recipe> {
+        @Override
+        protected ArrayList<Recipe> doInBackground(Recipe... params) {
+            Recipe recipe = params[0];
+            dbHelper.insertRecipe(recipe);
+            return super.doInBackground(params);
+        }
+    }
+
+    private class UpdateRecipeTask extends UpdateRecipeViewTask<Recipe> {
+        @Override
+        protected ArrayList<Recipe> doInBackground(Recipe... params) {
+            Recipe recipe = params[0];
+            dbHelper.updateRecipe(recipe);
+            return super.doInBackground(params);
+        }
+    }
+
+    private class DeleteRecipeTask extends UpdateRecipeViewTask<String> {
+        @Override
+        protected ArrayList<Recipe> doInBackground(String... params) {
+            String id = params[0];
+            dbHelper.deleteRecipe(id);
+            return super.doInBackground(params);
+        }
+    }
+
+    private abstract class UpdateRecipeViewTask<T> extends AsyncTask<T, Void, ArrayList<Recipe>> {
+        @Override
+        protected ArrayList<Recipe> doInBackground(T... params) {
+            return dbHelper.getAllRecipes();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Recipe> recipes) {
+            mRecipes = recipes;
+            notifyViews();
+            super.onPostExecute(recipes);
+        }
     }
 
 }

@@ -42,6 +42,7 @@ import com.actionbarsherlock.widget.ShareActionProvider;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.RecipeModel;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import roboguice.inject.InjectView;
@@ -120,7 +121,6 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mController = new RecipeBotController(this);
         setContentView(R.layout.activity_recipe);
         if (getIntent().getExtras() != null) {
             mRecipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
@@ -518,7 +518,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
     private void save() {
         updateRecipeFromUI();
-        //mController.updateRecipe(mRecipe);
+        RecipeModel.getInstance(this).updateRecipe(mRecipe);
         new WriteRecipeToFileTask().execute(mRecipe);
     }
 

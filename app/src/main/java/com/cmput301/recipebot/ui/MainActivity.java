@@ -34,7 +34,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.ui.fragments.PantryFragment;
-import com.cmput301.recipebot.ui.fragments.RecipeGridFragment;
+import com.cmput301.recipebot.ui.fragments.SavedRecipesGridFragment;
 import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
- * Main Activity, that shows two fragments {@link PantryFragment} and {@link RecipeGridFragment}.
+ * Main Activity, that shows two fragments {@link PantryFragment} and {@link SavedRecipesGridFragment}.
  */
 public class MainActivity extends BaseActivity implements SearchView.OnQueryTextListener {
 
@@ -105,11 +105,8 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
         mTabsAdapter = new TabsAdapter(this, mViewPager);
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.fragment_pantry_title),
                 PantryFragment.class, null);
-        //ArrayList<Recipe> recipes = mController.loadRecipes();
-        // Bundle args = new Bundle();
-        // args.putParcelableArrayList("recipes", recipes);
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.fragment_saved_recipes_title),
-                RecipeGridFragment.class, null);
+                SavedRecipesGridFragment.class, null);
 
         if (savedInstanceState != null) {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));

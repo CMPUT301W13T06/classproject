@@ -52,6 +52,7 @@ public class PantryModel {
 
     public void addView(PantryView view) {
         views.add(view);
+        loadPantry();
     }
 
     public void deleteView(PantryView view) {
