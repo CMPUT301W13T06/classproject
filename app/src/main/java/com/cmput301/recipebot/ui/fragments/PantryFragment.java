@@ -287,5 +287,4 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         }
     }
 
-
 }

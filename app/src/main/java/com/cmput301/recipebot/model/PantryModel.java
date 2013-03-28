@@ -92,44 +92,37 @@ public class PantryModel {
         new DeletePantryItemTask().execute(id);
     }
 
-    private class InsertPantryItemTask extends AsyncTask<Ingredient, Void, ArrayList<Ingredient>> {
+    private class InsertPantryItemTask extends UpdatePantryViewTask<Ingredient> {
 
         @Override
         protected ArrayList<Ingredient> doInBackground(Ingredient... params) {
             Ingredient ingredient = params[0];
             dbHelper.insertPantryItem(ingredient);
-            return dbHelper.getAllPantryItems();
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Ingredient> ingredients) {
-            mPantry = ingredients;
-            notifyViews();
-            super.onPostExecute(ingredients);
+            return super.doInBackground(params);
         }
     }
 
-    private class DeletePantryItemTask extends AsyncTask<String, Void, ArrayList<Ingredient>> {
+    private class DeletePantryItemTask extends UpdatePantryViewTask<String> {
 
         @Override
         protected ArrayList<Ingredient> doInBackground(String... params) {
             String id = params[0];
             dbHelper.deletePantryItem(id);
-            return dbHelper.getAllPantryItems();
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Ingredient> ingredients) {
-            mPantry = ingredients;
-            notifyViews();
-            super.onPostExecute(ingredients);
+            return super.doInBackground(params);
         }
     }
 
-    private class LoadPantryTask extends AsyncTask<Void, Void, ArrayList<Ingredient>> {
-
+    private class LoadPantryTask extends UpdatePantryViewTask<Void> {
         @Override
         protected ArrayList<Ingredient> doInBackground(Void... params) {
+            return super.doInBackground(params);
+        }
+    }
+
+    private abstract class UpdatePantryViewTask<T> extends AsyncTask<T, Void, ArrayList<Ingredient>> {
+
+        @Override
+        protected ArrayList<Ingredient> doInBackground(T... params) {
             return dbHelper.getAllPantryItems();
         }
 
