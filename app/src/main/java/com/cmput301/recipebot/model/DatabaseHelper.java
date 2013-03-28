@@ -89,7 +89,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_RECIPE_ID, recipe.getId());
         values.put(COLUMN_RECIPE_DATA, mGson.toJson(recipe));
         db.insert(TABLE_RECIPES, null, values);
-        db.close();
     }
 
     /**
@@ -108,7 +107,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String json = cursor.getString(index);
         Recipe recipe = mGson.fromJson(json, Recipe.class);
 
-        db.close();
         cursor.close();
 
         return recipe;
@@ -141,7 +139,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToNext();
         }
 
-        db.close();
         cursor.close();
 
         return recipes;
@@ -155,7 +152,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteRecipe(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_RECIPES, COLUMN_RECIPE_ID + "=?", new String[]{id});
-        db.close();
     }
 
     /**
@@ -195,7 +191,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToNext();
         }
 
-        db.close();
         cursor.close();
 
         return pantry;
@@ -211,7 +206,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_PANTRY_ID, ingredient.getName());
         values.put(COLUMN_PANTRY_DATA, mGson.toJson(ingredient));
         db.insert(TABLE_PANTRY, null, values);
-        db.close();
     }
 
     /**
@@ -222,7 +216,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deletePantryItem(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PANTRY, COLUMN_PANTRY_ID + "=?", new String[]{name});
-        db.close();
     }
 
 }

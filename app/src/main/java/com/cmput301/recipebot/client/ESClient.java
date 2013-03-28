@@ -28,7 +28,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
@@ -103,16 +102,16 @@ public class ESClient {
      * @param name The name of the recipe to search for.
      * @return List of recipes that have these ingredients.
      */
-    public List<Recipe> searchRecipes(String name) throws IOException {
+    public ArrayList<Recipe> searchRecipes(String name) throws IOException {
         HttpRequest httpSearch = HttpRequest.get(getRecipeSearchUrl(), true, "q", "name:" + name).accept("application/json");
         return getRecipesFromResponse(httpSearch.body());
     }
 
-    private List<Recipe> getRecipesFromResponse(String response) {
+    private ArrayList<Recipe> getRecipesFromResponse(String response) {
         Type esSearchResponseType = new TypeToken<ESSearchResponse<Recipe>>() {
         }.getType();
         ESSearchResponse<Recipe> esSearchResponse = gson.fromJson(response, esSearchResponseType);
-        List<Recipe> recipes = new ArrayList<Recipe>();
+        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
         for (ESResponse<Recipe> r : esSearchResponse.getHits()) {
             Recipe recipe = r.getSource();
             recipes.add(recipe);
@@ -128,7 +127,7 @@ public class ESClient {
      * @param matchAll    Whether to only show recipes that have every ingredient.
      * @return List of recipes that have these ingredients.
      */
-    public List<Recipe> searchRecipes(List<Ingredient> ingredients, boolean matchAll) {
+    public ArrayList<Recipe> searchRecipes(ArrayList<Ingredient> ingredients, boolean matchAll) {
         String operator = matchAll ? " AND " : " OR ";
         String query = "ingredients.name:";
         for (Ingredient i : ingredients) {

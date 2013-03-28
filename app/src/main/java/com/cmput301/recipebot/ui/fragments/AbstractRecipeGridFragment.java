@@ -33,28 +33,20 @@ import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import roboguice.inject.InjectView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
  * A simple fragment that shows a list of {@link Recipe} items.
  */
-public class RecipeGridFragment extends RoboSherlockFragment implements AdapterView.OnItemClickListener {
+public abstract class AbstractRecipeGridFragment extends RoboSherlockFragment implements AdapterView.OnItemClickListener {
 
-    private static final String LOGTAG = makeLogTag(RecipeGridFragment.class);
+    private static final String LOGTAG = makeLogTag(AbstractRecipeGridFragment.class);
+    protected static final String RECIPE_ARGS = "recipes";
 
     @InjectView(R.id.gridview)
     GridView gridview;
 
-    public static RecipeGridFragment newInstance(ArrayList<Recipe> recipes) {
-        RecipeGridFragment f = new RecipeGridFragment();
-        Bundle args = new Bundle();
-        args.putParcelableArrayList("recipes", recipes);
-        f.setArguments(args);
-        return f;
-    }
+    protected RecipeGridAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,17 +57,7 @@ public class RecipeGridFragment extends RoboSherlockFragment implements AdapterV
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        List<Recipe> recipes = getRecipesFromArgs();
-        gridview.setAdapter(new RecipeGridAdapter(getSherlockActivity(), recipes));
         gridview.setOnItemClickListener(this);
-    }
-
-    private List<Recipe> getRecipesFromArgs() {
-        if (getArguments() == null) {
-            return new ArrayList<Recipe>();
-        } else {
-            return getArguments().getParcelableArrayList("recipes");
-        }
     }
 
     @Override

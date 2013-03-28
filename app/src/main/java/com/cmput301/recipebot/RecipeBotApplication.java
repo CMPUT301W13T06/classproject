@@ -22,25 +22,30 @@ package com.cmput301.recipebot;
 import android.app.Application;
 import android.app.Instrumentation;
 import android.content.Context;
+import android.util.Log;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
+import com.integralblue.httpresponsecache.HttpResponseCache;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 import roboguice.RoboGuice;
 
 import java.io.File;
+import java.io.IOException;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.FROYO;
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
  * RecipeBot application
  */
 public class RecipeBotApplication extends Application {
+
+    private static final String LOGTAG = makeLogTag(RecipeBotApplication.class);
 
     /**
      * Create main application
@@ -67,11 +72,22 @@ public class RecipeBotApplication extends Application {
 
         setApplicationInjector(this);
 
+        buildHttpCache();
         buildImageCache();
     }
 
+    private void buildHttpCache() {
+        File httpCacheDir = new File(getCacheDir(), "http");
+        long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+        try {
+            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+        } catch (IOException e) {
+            Log.e(LOGTAG, "HTTP response cache installation failed:" + e);
+        }
+    }
+
     private void buildImageCache() {
-        File cacheDir = StorageUtils.getCacheDirectory(getApplicationContext());
+        File cacheDir = new File(getCacheDir(), "uil");
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory()

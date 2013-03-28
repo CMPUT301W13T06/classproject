@@ -66,4 +66,13 @@
     <string name="recipe_name">Recipe Name</string>
     <string name="recipe_description">Recipe Description</string>
 
+    <!-- User Activity !-->
+    <string name="user_name">Name</string>
+    <string name="user_email">Email</string>
+    <string name="login">Login</string>
+    <string name="submit">Submit</string>
+    <string name="invalid">Invalid</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="recipe_deleted">Recipe Deleted</string>
+
 </resources>
