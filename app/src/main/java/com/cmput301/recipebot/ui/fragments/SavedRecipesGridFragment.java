@@ -19,16 +19,23 @@
 
 package com.cmput301.recipebot.ui.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
+import com.actionbarsherlock.R;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.model.RecipeModel;
+import com.cmput301.recipebot.model.User;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
+import com.cmput301.recipebot.util.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SavedRecipesGridFragment extends AbstractRecipeGridFragment implements RecipeModel.RecipeView {
+public class SavedRecipesGridFragment extends AbstractRecipeGridFragment implements RecipeModel.RecipeView, AdapterView.OnItemLongClickListener {
 
     @Override
     public void onResume() {
@@ -47,18 +54,42 @@ public class SavedRecipesGridFragment extends AbstractRecipeGridFragment impleme
         super.onViewCreated(view, savedInstanceState);
         List<Recipe> recipeList = RecipeModel.getInstance(getSherlockActivity()).loadRecipes();
         if (recipeList != null && recipeList.size() != 0) {
-            mAdapter = new RecipeGridAdapter(getSherlockActivity(), recipeList);
-            gridview.setAdapter(mAdapter);
+            initaliseGridView(recipeList);
         }
+        gridview.setOnItemLongClickListener(this);
+    }
+
+    private void initaliseGridView(List<Recipe> recipes) {
+        mAdapter = new RecipeGridAdapter(getSherlockActivity(), recipes);
+        gridview.setAdapter(mAdapter);
     }
 
     @Override
     public void update(ArrayList<Recipe> recipes) {
         if (mAdapter == null) {
-            mAdapter = new RecipeGridAdapter(getSherlockActivity(), recipes);
-            gridview.setAdapter(mAdapter);
+            initaliseGridView(recipes);
         } else {
             mAdapter.swapData(recipes);
         }
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        Recipe recipe = (Recipe) view.getTag();
+        User user = getUserFromPreferences();
+        if (recipe.getUser().getId() == user.getId()) {
+            // The recipe is by this user.
+            RecipeModel.getInstance(getSherlockActivity()).networkDeleteRecipe(recipe.getId());
+        }
+        RecipeModel.getInstance(getSherlockActivity()).deleteRecipe(recipe.getId());
+        Toast.makeText(getSherlockActivity(), R.string.recipe_deleted, Toast.LENGTH_LONG);
+        return true;
+    }
+
+    private User getUserFromPreferences() {
+        SharedPreferences sharedPref = getSherlockActivity().getSharedPreferences(AppConstants.DEFAULT_PREFERENCE_FILE, Context.MODE_PRIVATE);
+        String email = sharedPref.getString(AppConstants.KEY_USER_EMAIL, null);
+        String name = sharedPref.getString(AppConstants.KEY_USER_NAME, null);
+        return new User(email, name);
     }
 }

@@ -73,5 +73,6 @@
     <string name="submit">Submit</string>
     <string name="invalid">Invalid</string>
     <string name="invalid_email">Invalid Email</string>
+    <string name="recipe_deleted">Recipe Deleted</string>
 
 </resources>
