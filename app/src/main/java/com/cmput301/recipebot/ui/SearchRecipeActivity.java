@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
- * Contains a {@link NetworkRecipeGridFragment}
+ * Contains a {@link NetworkRecipeGridFragment} to display recipes from the network
  */
 public class SearchRecipeActivity extends BaseActivity {
 

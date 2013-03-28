@@ -201,6 +201,12 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
 
     private class SearchRecipesByIngredientsTask extends AsyncTask<ArrayList<Ingredient>, Void, ArrayList<Recipe>> {
         @Override
+        protected void onPreExecute() {
+            getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
+            super.onPreExecute();
+        }
+
+        @Override
         protected ArrayList<Recipe> doInBackground(ArrayList<Ingredient>... arrayLists) {
             ArrayList<Ingredient> ingredients = arrayLists[0];
             ESClient client = new ESClient();
@@ -209,6 +215,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
 
         @Override
         protected void onPostExecute(ArrayList<Recipe> recipes) {
+            getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
             Intent intent = new Intent(getSherlockActivity(), SearchRecipeActivity.class);
             intent.putParcelableArrayListExtra(SearchRecipeActivity.EXTRA_RECIPE_LIST, recipes);
             startActivity(intent);
@@ -260,7 +267,6 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
 
     @Override
     public void update(ArrayList<Ingredient> ingredientList) {
-        Log.d(LOGTAG, "update : " + ingredientList.toString());
         mPantryItems = ingredientList;
         mAdapter.swapData(mPantryItems);
     }
