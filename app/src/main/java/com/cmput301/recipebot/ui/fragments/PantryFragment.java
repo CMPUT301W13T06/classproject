@@ -21,59 +21,71 @@ package com.cmput301.recipebot.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.*;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
+import com.cmput301.recipebot.model.RecipeBotController;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
  * A fragment that shows a list of items in the pantry.
  */
 public class PantryFragment extends RoboSherlockListFragment implements View.OnClickListener {
 
-    private EditText mEdiText;
-    ArrayList<Ingredient> mItems;
-    PantryListAdapter mAdapter;
+    private static final String LOGTAG = makeLogTag(PantryFragment.class);
+
+    private EditText mEditTextName;
+    private EditText mEditTextQuantity;
+    private EditText mEditTextUnit;
+
+    private List<Ingredient> mPantryItems;
+    private List<CompoundButton> selection;
+    private PantryListAdapter mAdapter;
+    private ActionMode mActionMode;
+    private RecipeBotController mController;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         setHasOptionsMenu(true);
+        setListShown(false);
+        mController = new RecipeBotController(getSherlockActivity());
         fillView();
-
     }
 
     private void fillView() {
-        setListShown(false);
-
-        setEmptyText(getSherlockActivity().getResources().getString(R.string.no_pantry_items));
-
+        mPantryItems = mController.loadPantry();
         LayoutInflater layoutInflater = getSherlockActivity().getLayoutInflater();
-
-        View header = layoutInflater.inflate(R.layout.fragment_pantry_header, null);
-        header.findViewById(R.id.button_add_pantry).setOnClickListener(this);
-        mEdiText = (EditText) header.findViewById(R.id.editText_pantry);
+        View header = layoutInflater.inflate(R.layout.add_ingredient_widget, null);
+        header.findViewById(R.id.button_add_ingredient).setOnClickListener(this);
+        mEditTextName = (EditText) header.findViewById(R.id.editText_ingredient_name);
+        mEditTextQuantity = (EditText) header.findViewById(R.id.editText_ingredient_quantity);
+        mEditTextUnit = (EditText) header.findViewById(R.id.editText_ingredient_unit);
         getListView().addHeaderView(header);
-
-        mItems = new ArrayList<Ingredient>();
-        mItems.add(new Ingredient("Eggs", "nos.", 2f));
-        mItems.add(new Ingredient("Milk", "ml", 500f));
-
-        mAdapter = new PantryListAdapter();
+        mAdapter = new PantryListAdapter(mPantryItems);
         setListAdapter(mAdapter);
         setListShown(true);
+    }
 
+    /**
+     * Update our view, after insert or delete.
+     */
+    private void updateView() {
+        mPantryItems = mController.loadPantry();
+        mAdapter.swapData(mPantryItems);
     }
 
     @Override
@@ -84,39 +96,160 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_add_pantry:
-                addEntry();
-                return true;
+            case R.id.menu_select_all:
+                selectAll();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void addEntry() {
-        Ingredient item = new Ingredient();
-        item.setName(mEdiText.getText().toString());
-        mItems.add(item);
-        mAdapter.swapData(mItems);
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_add_pantry:
-                addEntry();
+            case R.id.button_add_ingredient:
+                addIngredient();
         }
     }
 
+    /**
+     * Add an pantry item to the database.
+     */
+    private void addIngredient() {
+        if (isEditTextEmpty(mEditTextName)) {
+            // Name should not be empty.
+            mEditTextName.setError(getResources().getString(R.string.blank_field));
+            return;
+        } else {
+            mEditTextName.setError(null);
+        }
+
+        String name = mEditTextName.getText().toString();
+        // Don't parse the float if the field is empty.
+        float quantity = isEditTextEmpty(mEditTextQuantity) ? 0.0f : Float.parseFloat(mEditTextQuantity.getText().toString());
+        String unit = mEditTextUnit.getText().toString();
+        Ingredient item = new Ingredient(name, unit, quantity);
+        mController.insertPantryItem(item);
+
+        //Sanitize the input
+        mEditTextName.setText(null);
+        mEditTextQuantity.setText(null);
+        mEditTextUnit.setText(null);
+        //Update
+        updateView();
+    }
+
+    /**
+     * Checks if an {@link EditText} field is empty.
+     *
+     * @param editText {@link EditText} to check.
+     * @return true if editText is empty.
+     */
+    private boolean isEditTextEmpty(EditText editText) {
+        return editText.getText().toString().isEmpty();
+    }
+
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.fragment_pantry_cab, menu);
+            return true;
+        }
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_search_from_pantry:
+                    searchSelected();
+                    mode.finish();
+                    return true;
+                case R.id.menu_delete_from_pantry:
+                    deleteSelected();
+                    mode.finish();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // Called when the user exits the action mode
+        public void onDestroyActionMode(ActionMode mode) {
+            for (CompoundButton button : selection) {
+                button.setOnCheckedChangeListener(null);
+                button.setChecked(false);
+                button.setOnCheckedChangeListener(onCheckedChangeListener);
+            }
+            mActionMode = null;
+        }
+    };
+
+    private void searchSelected() {
+        Toast.makeText(getSherlockActivity(), "TODO: search for " + selection.size(), Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void deleteSelected() {
+        if (selection == null) {
+            Log.e(LOGTAG, "Shouldn't be here!");
+        }
+        for (CompoundButton button : selection) {
+            Ingredient ingredient = (Ingredient) button.getTag();
+            mController.deletePantryItem(ingredient.getName());
+        }
+        updateView();
+    }
+
+    /**
+     * Select all ingredients.
+     */
+    public void selectAll() {
+        final ListView listView = getListView();
+        for (int i = 1; i < listView.getChildCount(); i++) {
+            CheckBox cb = (CheckBox) listView.getChildAt(i);
+            cb.setChecked(true);
+        }
+    }
+
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+            if (isChecked) {
+                if (mActionMode == null) {
+                    selection = new ArrayList<CompoundButton>();
+                    mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
+                }
+                selection.add(compoundButton);
+                mActionMode.setTitle(getSherlockActivity().getResources().getString(R.string.count_items_selected, selection.size()));
+            } else {
+                selection.remove(compoundButton);
+                mActionMode.setTitle(getSherlockActivity().getResources().getString(R.string.count_items_selected, selection.size()));
+                //If no more items, finish the action mode explicitly
+                if (selection.size() == 0 && mActionMode != null) {
+                    mActionMode.finish();
+                }
+            }
+        }
+    };
+
     public class PantryListAdapter extends BaseAdapter {
+
+        List<Ingredient> ingredients;
+
+        public PantryListAdapter(List<Ingredient> ingredients) {
+            this.ingredients = ingredients;
+        }
 
         @Override
         public int getCount() {
-            return mItems.size();
+            return ingredients.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return mItems.get(position);
+            return ingredients.get(position);
         }
 
         @Override
@@ -130,21 +263,24 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             if (convertView == null) {
                 LayoutInflater layoutInflater = (LayoutInflater) getSherlockActivity().
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = layoutInflater.inflate(R.layout.item_pantry, parent, false);
+                view = layoutInflater.inflate(R.layout.checkbox_view, parent, false);
             } else {
                 view = (convertView);
             }
 
-            CheckBox box = (CheckBox) view.findViewById(R.id.checkBox);
-            box.setText(((Ingredient) getItem(position)).getName());
-
+            Ingredient ingredient = (Ingredient) getItem(position);
+            CheckBox box = (CheckBox) view.findViewById(R.id.check_box);
+            box.setTag(ingredient);
+            box.setText(ingredient.toString());
+            box.setOnCheckedChangeListener(onCheckedChangeListener);
             return view;
         }
 
-        public void swapData(ArrayList<Ingredient> items) {
-            mItems = items;
+        public void swapData(List<Ingredient> ingredients) {
+            this.ingredients = ingredients;
             notifyDataSetChanged();
         }
     }
+
 
 }

@@ -20,6 +20,7 @@
 package com.cmput301.recipebot.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -27,28 +28,75 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.SearchView;
 import com.cmput301.recipebot.R;
+import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.RecipeBotController;
 import com.cmput301.recipebot.ui.fragments.PantryFragment;
-import com.cmput301.recipebot.ui.fragments.SavedRecipesFragment;
+import com.cmput301.recipebot.ui.fragments.RecipeGridFragment;
+import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 
-/**
- * Main Activity, that shows two fragments {@link PantryFragment} and {@link SavedRecipesFragment}.
- */
-public class MainActivity extends BaseActivity {
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
+/**
+ * Main Activity, that shows two fragments {@link PantryFragment} and {@link RecipeGridFragment}.
+ */
+public class MainActivity extends BaseActivity implements SearchView.OnQueryTextListener {
+
+    private static final String LOGTAG = makeLogTag(MainActivity.class);
+
+    @InjectView(R.id.pager)
     ViewPager mViewPager;
-    TabsAdapter mTabsAdapter;
+
+    private RecipeBotController mController;
+    private TabsAdapter mTabsAdapter;
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mController = new RecipeBotController(this);
         setContentView(R.layout.activity_main);
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-
         setupTabs(savedInstanceState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add_recipe:
+                addRecipe();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.activity_main, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search_saved_recipes);
+        mSearchView = (SearchView) searchItem.getActionView();
+        setupSearchView(searchItem);
+        return true;
+    }
+
+    private void setupSearchView(MenuItem searchItem) {
+        searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM
+                | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        mSearchView.setOnQueryTextListener(this);
+    }
+
+    /**
+     * Start an activity to add a new Recipe.
+     */
+    private void addRecipe() {
+        Intent intent = new Intent(this, RecipeActivity.class);
+        startActivity(intent);
     }
 
     /**
@@ -57,18 +105,33 @@ public class MainActivity extends BaseActivity {
     private void setupTabs(Bundle savedInstanceState) {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
 
         mTabsAdapter = new TabsAdapter(this, mViewPager);
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.fragment_pantry_title),
                 PantryFragment.class, null);
+        ArrayList<Recipe> recipes = mController.loadRecipes();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("recipes", recipes);
         mTabsAdapter.addTab(actionBar.newTab().setText(R.string.fragment_saved_recipes_title),
-                SavedRecipesFragment.class, null);
+                RecipeGridFragment.class, args);
 
         if (savedInstanceState != null) {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
         }
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Intent intent = new Intent(this, SearchRecipeActivity.class);
+        intent.putExtra(SearchRecipeActivity.EXTRA_RECIPE_NAME, query);
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
     /**

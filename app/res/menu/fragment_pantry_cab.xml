@@ -19,23 +19,16 @@
   ~  limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditText
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText_pantry"
-            android:layout_gravity="left|center_vertical"/>
+    <item android:id="@+id/menu_search_from_pantry"
+          android:icon="@drawable/ic_action_search"
+          android:title="@string/menu_search"
+          android:showAsAction="ifRoom|withText"/>
 
-    <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_input_add"
-            android:id="@+id/button_add_pantry"
-            android:layout_gravity="right|center_vertical"/>
+    <item android:id="@+id/menu_delete_from_pantry"
+          android:icon="@drawable/ic_action_delete"
+          android:title="@string/menu_delete"
+          android:showAsAction="ifRoom|withText"/>
 
-</LinearLayout>
+</menu>
