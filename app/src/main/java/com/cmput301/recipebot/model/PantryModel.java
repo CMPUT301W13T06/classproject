@@ -37,7 +37,7 @@ public class PantryModel {
     private DatabaseHelper dbHelper;
     private static PantryModel instance;
     // A cache of last know ingredients.
-    private ArrayList<Ingredient> mPantry;
+    private static ArrayList<Ingredient> mPantry;
     private ArrayList<PantryView> views;
 
     private PantryModel(Context context) {

@@ -32,7 +32,7 @@ public class RecipeModel {
     private static RecipeModel instance;
 
     // A cache of last know recipes.
-    private ArrayList<Recipe> mRecipes;
+    private static ArrayList<Recipe> mRecipes;
     private ArrayList<RecipeView> views;
 
     private RecipeModel(Context context) {
