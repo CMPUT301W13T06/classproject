@@ -297,7 +297,7 @@ public class ClientTest {
     /**
      * Generate some random recipes.
      */
-    private ArrayList<Recipe> generateTestRecipes() {
+    private static ArrayList<Recipe> generateTestRecipes() {
         ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 
         Random random = new Random();
