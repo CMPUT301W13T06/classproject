@@ -20,33 +20,32 @@
 package com.cmput301.recipebot.model;
 
 import android.content.Context;
+import com.cmput301.recipebot.client.ESClient;
 
 import java.util.ArrayList;
 
-/**
- * A controller class that makes it transparent when switching between network and local calls.
- * All UI components should interact with this.
- * Eventually, it will perform all operations on a background thread.
- * TODO : {@link com.cmput301.recipebot.client.ESClient}
- */
-public class RecipeBotController {
+public class RecipeModel {
 
     private DatabaseHelper dbHelper;
+    private ESClient client;
+    private static RecipeModel instance;
 
-    public RecipeBotController(Context context) {
+    private RecipeModel(Context context) {
         dbHelper = new DatabaseHelper(context);
+        client = new ESClient();
     }
 
-    public ArrayList<Ingredient> loadPantry() {
-        return dbHelper.getAllPantryItems();
-    }
-
-    public void insertPantryItem(Ingredient ingredient) {
-        dbHelper.insertPantryItem(ingredient);
-    }
-
-    public void deletePantryItem(String name) {
-        dbHelper.deletePantryItem(name);
+    /**
+     * Get the instance. Attaches to application context regardless of context.
+     *
+     * @param context
+     * @return
+     */
+    public static RecipeModel getInstance(Context context) {
+        if (instance == null) {
+            instance = new RecipeModel(context.getApplicationContext());
+        }
+        return instance;
     }
 
     public ArrayList<Recipe> loadRecipes() {

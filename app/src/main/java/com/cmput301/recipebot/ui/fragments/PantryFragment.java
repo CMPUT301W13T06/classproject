@@ -32,7 +32,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
-import com.cmput301.recipebot.model.RecipeBotController;
+import com.cmput301.recipebot.model.PantryModel;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 /**
  * A fragment that shows a list of items in the pantry.
  */
-public class PantryFragment extends RoboSherlockListFragment implements View.OnClickListener {
+public class PantryFragment extends RoboSherlockListFragment implements View.OnClickListener, PantryModel.PantryView {
 
     private static final String LOGTAG = makeLogTag(PantryFragment.class);
 
@@ -55,19 +55,29 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     private List<CompoundButton> selection;
     private PantryListAdapter mAdapter;
     private ActionMode mActionMode;
-    private RecipeBotController mController;
+
+    @Override
+    public void onResume() {
+        PantryModel.getInstance(getSherlockActivity()).addView(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        PantryModel.getInstance(getSherlockActivity()).deleteView(this);
+        super.onPause();
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
         setListShown(false);
-        mController = new RecipeBotController(getSherlockActivity());
         fillView();
     }
 
     private void fillView() {
-        mPantryItems = mController.loadPantry();
+        mPantryItems = PantryModel.getInstance(getSherlockActivity()).loadPantry();
         LayoutInflater layoutInflater = getSherlockActivity().getLayoutInflater();
         View header = layoutInflater.inflate(R.layout.add_ingredient_widget, null);
         header.findViewById(R.id.button_add_ingredient).setOnClickListener(this);
@@ -78,14 +88,6 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         mAdapter = new PantryListAdapter(mPantryItems);
         setListAdapter(mAdapter);
         setListShown(true);
-    }
-
-    /**
-     * Update our view, after insert or delete.
-     */
-    private void updateView() {
-        mPantryItems = mController.loadPantry();
-        mAdapter.swapData(mPantryItems);
     }
 
     @Override
@@ -128,14 +130,12 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         float quantity = isEditTextEmpty(mEditTextQuantity) ? 0.0f : Float.parseFloat(mEditTextQuantity.getText().toString());
         String unit = mEditTextUnit.getText().toString();
         Ingredient item = new Ingredient(name, unit, quantity);
-        mController.insertPantryItem(item);
+        PantryModel.getInstance(getSherlockActivity()).insertPantryItem(item);
 
         //Sanitize the input
         mEditTextName.setText(null);
         mEditTextQuantity.setText(null);
         mEditTextUnit.setText(null);
-        //Update
-        updateView();
     }
 
     /**
@@ -188,7 +188,6 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
 
     private void searchSelected() {
         Toast.makeText(getSherlockActivity(), "TODO: search for " + selection.size(), Toast.LENGTH_SHORT).show();
-
     }
 
     private void deleteSelected() {
@@ -197,9 +196,8 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         }
         for (CompoundButton button : selection) {
             Ingredient ingredient = (Ingredient) button.getTag();
-            mController.deletePantryItem(ingredient.getName());
+            PantryModel.getInstance(getSherlockActivity()).deletePantryItem(ingredient.getName());
         }
-        updateView();
     }
 
     /**
@@ -233,6 +231,13 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             }
         }
     };
+
+    @Override
+    public void update(ArrayList<Ingredient> ingredientList) {
+        Log.d(LOGTAG, "update : " + ingredientList.toString());
+        mPantryItems = ingredientList;
+        mAdapter.swapData(mPantryItems);
+    }
 
     public class PantryListAdapter extends BaseAdapter {
 
