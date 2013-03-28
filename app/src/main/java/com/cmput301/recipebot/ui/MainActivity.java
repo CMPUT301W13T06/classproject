@@ -31,6 +31,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.SearchView;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.model.RecipeBotController;
@@ -45,7 +46,7 @@ import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 /**
  * Main Activity, that shows two fragments {@link PantryFragment} and {@link SavedRecipesFragment}.
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements SearchView.OnQueryTextListener {
 
     private static final String LOGTAG = makeLogTag(MainActivity.class);
 
@@ -54,6 +55,7 @@ public class MainActivity extends BaseActivity {
 
     private RecipeBotController mController;
     private TabsAdapter mTabsAdapter;
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,16 @@ public class MainActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.activity_main, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search_saved_recipes);
+        mSearchView = (SearchView) searchItem.getActionView();
+        setupSearchView(searchItem);
         return true;
+    }
+
+    private void setupSearchView(MenuItem searchItem) {
+        searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM
+                | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        mSearchView.setOnQueryTextListener(this);
     }
 
     /**
@@ -108,6 +119,19 @@ public class MainActivity extends BaseActivity {
             actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
         }
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Intent intent = new Intent(this, SearchRecipeActivity.class);
+        intent.putExtra(SearchRecipeActivity.EXTRA_RECIPE_NAME, query);
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
     /**
