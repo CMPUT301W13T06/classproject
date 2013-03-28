@@ -22,15 +22,15 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menu_add_recipe"
-          android:icon="@drawable/ic_action_add"
-          android:title="@string/menu_add"
-          android:showAsAction="ifRoom|withText"/>
-
     <item android:id="@+id/menu_search_saved_recipes"
           android:title="@string/menu_search"
           android:icon="@drawable/ic_action_search"
           android:showAsAction="ifRoom|withText"
           android:actionViewClass="com.actionbarsherlock.widget.SearchView"/>
+
+    <item android:id="@+id/menu_add_recipe"
+          android:icon="@drawable/ic_action_add"
+          android:title="@string/menu_add"
+          android:showAsAction="ifRoom|withText"/>
 
 </menu>

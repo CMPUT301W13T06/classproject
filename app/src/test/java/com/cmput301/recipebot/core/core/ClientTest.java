@@ -26,7 +26,10 @@ import com.cmput301.recipebot.model.User;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Random;
+import java.util.UUID;
 
 import static com.cmput301.recipebot.core.core.RecipeAssert.assertThat;
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -172,7 +175,7 @@ public class ClientTest {
         assertThat(recipe).hasName("Cream Soda").hasUser(RECIPE_USERS[2]).hasDirection("Blend")
                 .hasIngredient(new Ingredient("Water", "testing", 2f)).hasDescription("Not so healthy!");
 
-        List<Recipe> recipes = mClient.searchRecipes("Cream Soda");
+        ArrayList<Recipe> recipes = mClient.searchRecipes("Cream Soda");
         assertThat(recipes.size()).isGreaterThan(0); // We know this exists, but could be multiple (random).
         assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe); // confirm that it contains our expected recipe
 
@@ -191,14 +194,14 @@ public class ClientTest {
         for (Ingredient i : recipe.getIngredients()) {
             ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
             ingredients.add(i);
-            List<Recipe> recipes = mClient.searchRecipes(ingredients, false);
+            ArrayList<Recipe> recipes = mClient.searchRecipes(ingredients, false);
             assertThat(recipes.size()).isGreaterThan(0); // We know this exists, but could be multiple (random).
             assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe);
         }
 
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
         ingredients.add(new Ingredient("dsadsadasdasdasdada", "lb", 2f));
-        List<Recipe> recipes = mClient.searchRecipes(ingredients, false);
+        ArrayList<Recipe> recipes = mClient.searchRecipes(ingredients, false);
         assertThat(recipes.size()).isEqualTo(0); // We know this doesn't exist.
     }
 
@@ -213,9 +216,9 @@ public class ClientTest {
         assertThat(recipe1).hasIngredient(ingredient);
         assertThat(recipe2).hasIngredient(ingredient);
 
-        List<Ingredient> ingredients = new ArrayList<Ingredient>();
+        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
         ingredients.add(ingredient);
-        List<Recipe> recipes = mClient.searchRecipes(ingredients, false);
+        ArrayList<Recipe> recipes = mClient.searchRecipes(ingredients, false);
         assertThat(recipes.size()).isGreaterThan(1); // We know at least two exist.
         assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe1);
         assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe2);
@@ -232,13 +235,13 @@ public class ClientTest {
         Ingredient salt = new Ingredient("Salt", "testing", 2f);
         assertThat(recipe).hasIngredient(honey_garlic).hasIngredient(bacon).hasIngredient(salt);
 
-        List<Ingredient> ingredients = new ArrayList<Ingredient>();
+        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
         ingredients.add(honey_garlic);
         ingredients.add(bacon);
         ingredients.add(salt);
 
         // Test that we get at least this one (many recipes with one or more of these ingredients.
-        List<Recipe> recipes = mClient.searchRecipes(ingredients, false);
+        ArrayList<Recipe> recipes = mClient.searchRecipes(ingredients, false);
         assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe);
 
         // Test that we get only this one (only recipe with all ingredients)
@@ -282,7 +285,7 @@ public class ClientTest {
      * update our expected values.
      */
     private void insertRecipesToServer() {
-        List<Recipe> mRecipeList;
+        ArrayList<Recipe> mRecipeList;
 
         mRecipeList = generateTestRecipes();
 
@@ -294,8 +297,8 @@ public class ClientTest {
     /**
      * Generate some random recipes.
      */
-    private List<Recipe> generateTestRecipes() {
-        List<Recipe> recipeList = new ArrayList<Recipe>();
+    private ArrayList<Recipe> generateTestRecipes() {
+        ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 
         Random random = new Random();
 

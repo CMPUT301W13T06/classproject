@@ -21,6 +21,7 @@ package com.cmput301.recipebot.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,7 +43,9 @@ import com.actionbarsherlock.widget.ShareActionProvider;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
-import com.cmput301.recipebot.model.RecipeBotController;
+import com.cmput301.recipebot.model.RecipeModel;
+import com.cmput301.recipebot.model.User;
+import com.cmput301.recipebot.util.AppConstants;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import roboguice.inject.InjectView;
@@ -106,6 +109,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
 
     private String mRecipeID;
     private String mRecipeName;
+    private User mUser;
     private String mRecipeDescription;
     private ArrayList<Ingredient> mRecipeIngredients;
     private ArrayList<String> mRecipeDirections;
@@ -118,18 +122,16 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     // Keep a global reference to this since we want to update the recipe when user clicks save.
     private ShareActionProvider mShareActionProvider;
 
-    private RecipeBotController mController;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mController = new RecipeBotController(this);
         setContentView(R.layout.activity_recipe);
         if (getIntent().getExtras() != null) {
             mRecipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
             mRecipeID = mRecipe.getId();
             mRecipeName = mRecipe.getName();
             mRecipeDescription = mRecipe.getDescription();
+            mUser = mRecipe.getUser();
             mRecipeIngredients = mRecipe.getIngredients();
             mRecipeDirections = mRecipe.getDirections();
             mRecipePhotos = mRecipe.getPhotos();
@@ -140,6 +142,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
             mRecipeID = null;
             mRecipeName = null;
             mRecipeDescription = null;
+            mUser = null;
             mRecipeDirections = new ArrayList<String>();
             mRecipeIngredients = new ArrayList<Ingredient>();
             mRecipePhotos = new ArrayList<String>();
@@ -520,23 +523,35 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     }
 
     private void save() {
-        updateRecipeFromUI();
-        mController.updateRecipe(mRecipe);
+        boolean update = updateRecipeFromUI();
+        if (update) {
+            RecipeModel.getInstance(this).updateRecipe(mRecipe);
+        } else {
+            RecipeModel.getInstance(this).insertRecipe(mRecipe);
+        }
         new WriteRecipeToFileTask().execute(mRecipe);
     }
 
-    private void updateRecipeFromUI() {
+    private boolean updateRecipeFromUI() {
+        boolean update;
         if (mRecipeID == null) {
+            // generate an id.
             mRecipeID = UUID.randomUUID().toString();
+            SharedPreferences sharedPref = getSharedPreferences(AppConstants.DEFAULT_PREFERENCE_FILE, Context.MODE_PRIVATE);
+            String email = sharedPref.getString(AppConstants.KEY_USER_EMAIL, null);
+            String name = sharedPref.getString(AppConstants.KEY_USER_NAME, null);
+            mUser = new User(email, name);
+            update = false;
+        } else {
+            update = true;
         }
 
         mRecipeName = getEditTextString(mEditTextRecipeName);
         mRecipeDescription = getEditTextString(mEditTextRecipeDescription);
-
         // We're already keeping track of mRecipeDirections, mRecipeIngredients and mRecipeTags.
-
-        mRecipe = new Recipe(mRecipeID, mRecipeName, mRecipeDescription, null, mRecipeIngredients,
+        mRecipe = new Recipe(mRecipeID, mRecipeName, mRecipeDescription, mUser, mRecipeIngredients,
                 mRecipeDirections, mRecipePhotos, mRecipeTags);
+        return update;
     }
 
     private static String getEditTextString(EditText editText) {
