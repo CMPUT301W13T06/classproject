@@ -54,7 +54,7 @@ public class RecipeSearchActivityTest extends ActivityInstrumentationTestCase2<S
 
     private Intent getTestIntent() {
         Intent intent = new Intent(instrumentation.getContext(), SearchRecipeActivity.class);
-        intent.putExtra(SearchRecipeActivity.EXTRA_RECIPE_NAME, "Roasted");
+        intent.putExtra(SearchRecipeActivity.EXTRA_RECIPE_LIST, "Roasted");
         return intent;
     }
 }

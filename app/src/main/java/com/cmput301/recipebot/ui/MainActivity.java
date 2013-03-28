@@ -116,9 +116,9 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Intent intent = new Intent(this, SearchRecipeActivity.class);
-        intent.putExtra(SearchRecipeActivity.EXTRA_RECIPE_NAME, query);
-        startActivity(intent);
+        //Intent intent = new Intent(this, SearchRecipeActivity.class);
+        //intent.putExtra(SearchRecipeActivity.EXTRA_RECIPE_NAME, query);
+        //startActivity(intent);
         return true;
     }
 

@@ -20,6 +20,8 @@
 package com.cmput301.recipebot.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +33,11 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
+import com.cmput301.recipebot.client.ESClient;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.PantryModel;
+import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.ui.SearchRecipeActivity;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
 import java.util.ArrayList;
@@ -187,7 +192,28 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
     };
 
     private void searchSelected() {
-        Toast.makeText(getSherlockActivity(), "TODO: search for " + selection.size(), Toast.LENGTH_SHORT).show();
+        ArrayList<Ingredient> items = new ArrayList<Ingredient>();
+        for (CompoundButton button : selection) {
+            items.add((Ingredient) button.getTag());
+        }
+        new SearchRecipesByIngredientsTask().execute(items);
+    }
+
+    private class SearchRecipesByIngredientsTask extends AsyncTask<ArrayList<Ingredient>, Void, ArrayList<Recipe>> {
+        @Override
+        protected ArrayList<Recipe> doInBackground(ArrayList<Ingredient>... arrayLists) {
+            ArrayList<Ingredient> ingredients = arrayLists[0];
+            ESClient client = new ESClient();
+            return client.searchRecipes(ingredients, true);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Recipe> recipes) {
+            Intent intent = new Intent(getSherlockActivity(), SearchRecipeActivity.class);
+            intent.putParcelableArrayListExtra(SearchRecipeActivity.EXTRA_RECIPE_LIST, recipes);
+            startActivity(intent);
+            super.onPostExecute(recipes);
+        }
     }
 
     private void deleteSelected() {

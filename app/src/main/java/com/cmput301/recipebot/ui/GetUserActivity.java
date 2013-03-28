@@ -25,7 +25,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,7 +63,6 @@ public class GetUserActivity extends BaseActivity implements View.OnClickListene
         if (email != null && name != null) {
             Intent intent = new Intent(GetUserActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            Log.d(LOGTAG, "starting activity.");
             startActivity(intent);
             finish();
         }
