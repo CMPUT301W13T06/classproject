@@ -27,8 +27,8 @@ import java.util.ArrayList;
 
 public class RecipeModel {
 
-    private DatabaseHelper dbHelper;
-    private ESClient client;
+    private DatabaseHelper mDbHelper;
+    private ESClient mClient;
     private static RecipeModel instance;
 
     // A cache of last know recipes.
@@ -36,8 +36,8 @@ public class RecipeModel {
     private ArrayList<RecipeView> views;
 
     private RecipeModel(Context context) {
-        dbHelper = new DatabaseHelper(context);
-        client = new ESClient();
+        mDbHelper = new DatabaseHelper(context);
+        mClient = new ESClient();
         views = new ArrayList<RecipeView>();
     }
 
@@ -88,6 +88,10 @@ public class RecipeModel {
         new DeleteRecipeTask().execute(id);
     }
 
+    public void networkDeleteRecipe(String id) {
+        new NetworkDeleteRecipeTask().execute(id);
+    }
+
     public void updateRecipe(Recipe recipe) {
         new UpdateRecipeTask().execute(recipe);
     }
@@ -103,7 +107,8 @@ public class RecipeModel {
         @Override
         protected ArrayList<Recipe> doInBackground(Recipe... params) {
             Recipe recipe = params[0];
-            dbHelper.insertRecipe(recipe);
+            mDbHelper.insertRecipe(recipe);
+            mClient.insertRecipe(recipe);
             return super.doInBackground(params);
         }
     }
@@ -112,7 +117,8 @@ public class RecipeModel {
         @Override
         protected ArrayList<Recipe> doInBackground(Recipe... params) {
             Recipe recipe = params[0];
-            dbHelper.updateRecipe(recipe);
+            mDbHelper.updateRecipe(recipe);
+            mClient.updateRecipe(recipe);
             return super.doInBackground(params);
         }
     }
@@ -121,7 +127,16 @@ public class RecipeModel {
         @Override
         protected ArrayList<Recipe> doInBackground(String... params) {
             String id = params[0];
-            dbHelper.deleteRecipe(id);
+            mDbHelper.deleteRecipe(id);
+            return super.doInBackground(params);
+        }
+    }
+
+    private class NetworkDeleteRecipeTask extends UpdateRecipeViewTask<String> {
+        @Override
+        protected ArrayList<Recipe> doInBackground(String... params) {
+            String id = params[0];
+            mClient.deleteRecipe(id);
             return super.doInBackground(params);
         }
     }
@@ -129,7 +144,7 @@ public class RecipeModel {
     private abstract class UpdateRecipeViewTask<T> extends AsyncTask<T, Void, ArrayList<Recipe>> {
         @Override
         protected ArrayList<Recipe> doInBackground(T... params) {
-            return dbHelper.getAllRecipes();
+            return mDbHelper.getAllRecipes();
         }
 
         @Override
