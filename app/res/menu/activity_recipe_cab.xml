@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <!--
   ~ Copyright 2013 Adam Saturna
   ~  Copyright 2013 Brian Trinh
@@ -22,15 +21,9 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menu_add_recipe"
-          android:icon="@drawable/ic_action_add"
-          android:title="@string/menu_add"
+    <item android:id="@+id/menu_delete_item_from_list"
+          android:icon="@drawable/ic_action_delete"
+          android:title="@string/menu_delete"
           android:showAsAction="ifRoom|withText"/>
-
-    <item android:id="@+id/menu_search_saved_recipes"
-          android:title="@string/menu_search"
-          android:icon="@drawable/ic_action_search"
-          android:showAsAction="ifRoom|withText"
-          android:actionViewClass="com.actionbarsherlock.widget.SearchView"/>
 
 </menu>

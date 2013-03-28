@@ -29,7 +29,11 @@
 
     <!-- Pantry Fragment !-->
     <string name="fragment_pantry_title">Pantry</string>
-    <string name="select_all">SELECT ALL</string>
+    <string name="select_all">Select All</string>
+    <string name="count_items_selected">%d selected.</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="quantity">Qty</string>
+    <string name="unit">Unit</string>
 
     <!-- Saved Recipes Fragment !-->
     <string name="fragment_saved_recipes_title">Saved Recipes</string>
@@ -47,5 +51,19 @@
     <string name="hint_edit_text_pantry">Add Pantry Item</string>
     <string name="description_button">Button</string>
     <string name="recipe_title">Recipe Title</string>
+    <string name="menu_delete">Delete</string>
+
+    <!-- Recipe Activity !-->
+    <string name="menu_camera">Camera</string>
+    <string name="enter_ingredients">Enter Ingredients</string>
+    <string name="enter_instructions">Enter Instructions</string>
+    <string name="enter_tags">Enter Tags</string>
+    <string name="menu_save">Save</string>
+
+    <!-- Misc !-->
+    <string name="blank_field">Field should not be left blank.</string>
+    <string name="share">Share</string>
+    <string name="recipe_name">Recipe Name</string>
+    <string name="recipe_description">Recipe Description</string>
 
 </resources>

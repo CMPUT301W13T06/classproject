@@ -40,7 +40,6 @@ public class MainActivityTest extends ActivityTest<MainActivity> {
 
     /**
      * Verify that {@link MainActivity} exists
-     * TODO: might not be required - {@link org.fest.assertions.api.ANDROID} checks for null with every test.
      */
     public void testMainActivityExists() {
         assertThat(activity).isNotNull();
