@@ -36,9 +36,9 @@ public class RecipeModel {
     private ArrayList<RecipeView> views;
 
     private RecipeModel(Context context) {
-        mDbHelper = new DatabaseHelper(context);
         mClient = new ESClient();
         views = new ArrayList<RecipeView>();
+        mDbHelper = DatabaseHelper.getInstance(context);
     }
 
     public interface RecipeView {

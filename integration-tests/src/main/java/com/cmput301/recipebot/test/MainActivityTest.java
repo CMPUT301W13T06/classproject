@@ -28,7 +28,6 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.ui.MainActivity;
 import com.cmput301.recipebot.util.AppConstants;
-import com.jayway.android.robotium.solo.Solo;
 import com.squareup.spoon.Spoon;
 
 /**
@@ -36,8 +35,8 @@ import com.squareup.spoon.Spoon;
  */
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
-    private Solo solo;
     private MainActivity activity;
+    private Instrumentation instrumentation;
 
     /**
      * Create test for {@link com.cmput301.recipebot.ui.MainActivity}
@@ -49,10 +48,9 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        Instrumentation instrumentation = getInstrumentation();
+        instrumentation = getInstrumentation();
         setupTestPreferences(instrumentation);
         activity = getActivity();
-        solo = new Solo(getInstrumentation(), activity);
     }
 
     /**
@@ -72,16 +70,22 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
      */
     public void testBothTabsShown() {
         final ViewPager viewPager = (ViewPager) activity.findViewById(R.id.pager);
-        solo.clickOnText("Pantry");
+        instrumentation.runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(0);
+            }
+        });
+        instrumentation.waitForIdleSync();
         Spoon.screenshot(activity, "pantry");
-        solo.clickOnText("Saved Recipes");
+        instrumentation.runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(1);
+            }
+        });
+        instrumentation.waitForIdleSync();
         Spoon.screenshot(activity, "saved_recipes");
-    }
-
-    @Override
-    public void tearDown() throws Exception {
-        solo.finishOpenedActivities();
-        super.tearDown();
     }
 }
 

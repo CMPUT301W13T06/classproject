@@ -67,6 +67,8 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
         checkPreferences();
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
+        // Explicitly required for pre-4.0 devices
+        setSupportProgressBarIndeterminateVisibility(false);
         setupTabs(savedInstanceState);
     }
 
