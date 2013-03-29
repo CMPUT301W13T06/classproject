@@ -21,8 +21,10 @@ package com.cmput301.recipebot.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -39,6 +41,7 @@ import com.cmput301.recipebot.client.ESClient;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.ui.fragments.PantryFragment;
 import com.cmput301.recipebot.ui.fragments.SavedRecipesGridFragment;
+import com.cmput301.recipebot.util.AppConstants;
 import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
@@ -61,9 +64,22 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkPreferences();
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
         setupTabs(savedInstanceState);
+    }
+
+    private void checkPreferences() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String email = sharedPref.getString(AppConstants.KEY_USER_EMAIL, null);
+        String name = sharedPref.getString(AppConstants.KEY_USER_NAME, null);
+        if (email == null || name == null) {
+            Intent intent = new Intent(MainActivity.this, GetUserActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override

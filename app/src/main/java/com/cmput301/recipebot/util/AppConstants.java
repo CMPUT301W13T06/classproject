@@ -24,6 +24,4 @@ public class AppConstants {
     public static final String KEY_USER_NAME = "KEY_USER_NAME";
     public static final String KEY_USER_EMAIL = "KEY_USER_EMAIL";
 
-    public static final String DEFAULT_PREFERENCE_FILE = "DEFAULT_PREFERENCE_FILE";
-
 }

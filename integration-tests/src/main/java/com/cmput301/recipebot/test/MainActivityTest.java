@@ -19,17 +19,25 @@
 
 package com.cmput301.recipebot.test;
 
+import android.app.Instrumentation;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
+import android.test.ActivityInstrumentationTestCase2;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.ui.MainActivity;
+import com.cmput301.recipebot.util.AppConstants;
+import com.jayway.android.robotium.solo.Solo;
 import com.squareup.spoon.Spoon;
-
-import static org.fest.assertions.api.ANDROID.assertThat;
 
 /**
  * Tests of displaying the authenticator activity
  */
-public class MainActivityTest extends ActivityTest<MainActivity> {
+public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+
+    private Solo solo;
+    private MainActivity activity;
 
     /**
      * Create test for {@link com.cmput301.recipebot.ui.MainActivity}
@@ -38,37 +46,42 @@ public class MainActivityTest extends ActivityTest<MainActivity> {
         super(MainActivity.class);
     }
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        Instrumentation instrumentation = getInstrumentation();
+        setupTestPreferences(instrumentation);
+        activity = getActivity();
+        solo = new Solo(getInstrumentation(), activity);
+    }
+
     /**
-     * Verify that {@link MainActivity} exists
+     * Set up some Preferences for testing. {@link MainActivity} checks these
+     * on it's start, and launches {@link com.cmput301.recipebot.ui.GetUserActivity} if doesn't find these.
      */
-    public void testMainActivityExists() {
-        assertThat(activity).isNotNull();
-        Spoon.screenshot(activity, "initial_state");
+    private void setupTestPreferences(Instrumentation instrumentation) {
+        Context context = instrumentation.getTargetContext();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putString(AppConstants.KEY_USER_EMAIL, "f2prateek@gmail.com");
+        editor.putString(AppConstants.KEY_USER_NAME, "Prateek Srivastava");
+        editor.commit();
     }
 
     /**
      * Verify that two tabs are shown to the user.
      */
-    public void testTabsExist() {
+    public void testBothTabsShown() {
         final ViewPager viewPager = (ViewPager) activity.findViewById(R.id.pager);
+        solo.clickOnText("Pantry");
+        Spoon.screenshot(activity, "pantry");
+        solo.clickOnText("Saved Recipes");
+        Spoon.screenshot(activity, "saved_recipes");
+    }
 
-        instrumentation.runOnMainSync(new Runnable() {
-            @Override
-            public void run() {
-                viewPager.setCurrentItem(0);
-            }
-        });
-        instrumentation.waitForIdleSync();
-        Spoon.screenshot(activity, "tab_0");
-
-        instrumentation.runOnMainSync(new Runnable() {
-            @Override
-            public void run() {
-                viewPager.setCurrentItem(1);
-            }
-        });
-        instrumentation.waitForIdleSync();
-        Spoon.screenshot(activity, "tab_1");
+    @Override
+    public void tearDown() throws Exception {
+        solo.finishOpenedActivities();
+        super.tearDown();
     }
 }
 

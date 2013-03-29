@@ -19,11 +19,11 @@
 
 package com.cmput301.recipebot.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -53,19 +53,6 @@ public class GetUserActivity extends BaseActivity implements View.OnClickListene
         TextView title = (TextView) findViewById(android.R.id.title);
         title.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf"));
         mButtonSubmit.setOnClickListener(this);
-        checkPreferences();
-    }
-
-    private void checkPreferences() {
-        SharedPreferences sharedPref = getSharedPreferences(AppConstants.DEFAULT_PREFERENCE_FILE, Context.MODE_PRIVATE);
-        String email = sharedPref.getString(AppConstants.KEY_USER_EMAIL, null);
-        String name = sharedPref.getString(AppConstants.KEY_USER_NAME, null);
-        if (email != null && name != null) {
-            Intent intent = new Intent(GetUserActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
-        }
     }
 
     @Override
@@ -90,7 +77,7 @@ public class GetUserActivity extends BaseActivity implements View.OnClickListene
         }
 
         if (!hasError) {
-            SharedPreferences sharedPref = getSharedPreferences(AppConstants.DEFAULT_PREFERENCE_FILE, Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString(AppConstants.KEY_USER_EMAIL, mEditTextUserEmail.getText().toString());
             editor.putString(AppConstants.KEY_USER_NAME, mEditTextUserName.getText().toString());

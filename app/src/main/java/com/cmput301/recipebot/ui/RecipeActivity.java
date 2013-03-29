@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -537,7 +538,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         if (mRecipeID == null) {
             // generate an id.
             mRecipeID = UUID.randomUUID().toString();
-            SharedPreferences sharedPref = getSharedPreferences(AppConstants.DEFAULT_PREFERENCE_FILE, Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             String email = sharedPref.getString(AppConstants.KEY_USER_EMAIL, null);
             String name = sharedPref.getString(AppConstants.KEY_USER_NAME, null);
             mUser = new User(email, name);
