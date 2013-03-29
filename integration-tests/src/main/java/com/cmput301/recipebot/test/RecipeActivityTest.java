@@ -123,6 +123,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
         });
         instrumentation.waitForIdleSync();
         assertThat(editTextDirection).hasError(R.string.at_least_one_direction_required);
+        Spoon.screenshot(activity, "has_error");
     }
 
     /**
@@ -153,6 +154,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
             Spoon.screenshot(activity, tag + "_deleted_" + i);
         }
         assertThat(layout).hasChildCount(0);
+        Spoon.screenshot(activity, "cleared");
     }
 
     /**
@@ -179,6 +181,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
         });
         instrumentation.waitForIdleSync();
         assertThat(editTextIngredient).hasError(R.string.at_least_one_ingredient_required);
+        Spoon.screenshot(activity, "has_error");
     }
 
     /**
@@ -204,6 +207,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
         });
         instrumentation.waitForIdleSync();
         assertThat(editTextName).hasError(R.string.blank_field);
+        Spoon.screenshot(activity, "has_error");
     }
 
     /**
@@ -223,6 +227,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
         instrumentation.waitForIdleSync();
         clearList(directionsList, "directions");
         clearList(ingredientList, "ingredients");
+        Spoon.screenshot(activity, "cleared");
         final View save = activity.findViewById(R.id.recipe_menu_save);
         instrumentation.runOnMainSync(new Runnable() {
             @Override
@@ -234,6 +239,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
         assertThat(editTextName).hasError(R.string.blank_field);
         assertThat(editTextDirection).hasError(R.string.at_least_one_direction_required);
         assertThat(editTextIngredient).hasError(R.string.at_least_one_ingredient_required);
+        Spoon.screenshot(activity, "all_errors");
     }
 
 }
