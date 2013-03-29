@@ -30,6 +30,7 @@ import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.ui.RecipeActivity;
 import com.squareup.spoon.Spoon;
 
+import static com.cmput301.recipebot.util.TestDataSetGenerator.generateRandomRecipe;
 import static com.cmput301.recipebot.util.TestDataSetGenerator.getTestRecipe;
 import static org.fest.assertions.api.ANDROID.assertThat;
 
@@ -59,7 +60,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     /**
      * Verify that {@link RecipeActivity} exists.
      */
-    public void testRecipeActivityIsShownCorrectly() {
+    public void testRecipeActivityIsShown() {
         Recipe recipe = getTestRecipe();
         setActivityIntent(makeTestIntent(recipe));
         RecipeActivity activity = getActivity();
@@ -93,7 +94,63 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     }
 
     /**
-     * Test that new recipe activity can be started.
+     * Verify that {@link RecipeActivity} is shown with empty descriptions.
+     */
+    public void testRecipeActivityIsShownWithEmptyDescription() {
+        Recipe recipe = generateRandomRecipe();
+        recipe.setDescription(null);
+        setActivityIntent(makeTestIntent(recipe));
+        RecipeActivity activity = getActivity();
+        assertThat(activity).isNotNull();
+        Spoon.screenshot(activity, "initial_state");
+        final EditText editTextDescription = (EditText) activity.findViewById(R.id.editText_recipe_description);
+        assertThat(editTextDescription).hasTextString("");
+    }
+
+    /**
+     * Verify that {@link RecipeActivity} is shown with empty descriptions.
+     */
+    public void testRecipeActivityIsShownWithEmptyDirections() {
+        Recipe recipe = generateRandomRecipe();
+        recipe.setDirections(null);
+        setActivityIntent(makeTestIntent(recipe));
+        RecipeActivity activity = getActivity();
+        assertThat(activity).isNotNull();
+        Spoon.screenshot(activity, "initial_state");
+        final LinearLayout directionsList = (LinearLayout) activity.findViewById(R.id.list_directions);
+        assertThat(directionsList).hasChildCount(0);
+    }
+
+    /**
+     * Verify that {@link RecipeActivity} is shown with empty tags.
+     */
+    public void testRecipeActivityIsShownWithEmptyTags() {
+        Recipe recipe = generateRandomRecipe();
+        recipe.setTags(null);
+        setActivityIntent(makeTestIntent(recipe));
+        RecipeActivity activity = getActivity();
+        assertThat(activity).isNotNull();
+        Spoon.screenshot(activity, "initial_state");
+        final LinearLayout tagsList = (LinearLayout) activity.findViewById(R.id.list_tags);
+        assertThat(tagsList).hasChildCount(0);
+    }
+
+    /**
+     * Verify that {@link RecipeActivity} is shown with empty tags.
+     */
+    public void testRecipeActivityIsShownWithEmptyIngredients() {
+        Recipe recipe = generateRandomRecipe();
+        recipe.setIngredients(null);
+        setActivityIntent(makeTestIntent(recipe));
+        RecipeActivity activity = getActivity();
+        assertThat(activity).isNotNull();
+        Spoon.screenshot(activity, "initial_state");
+        final LinearLayout ingredientsList = (LinearLayout) activity.findViewById(R.id.list_ingredients);
+        assertThat(ingredientsList).hasChildCount(0);
+    }
+
+    /**
+     * Test that new recipe activity can be started. This is done by providing it no extrass
      */
     public void testNewRecipeActivity() {
         RecipeActivity activity = getActivity();

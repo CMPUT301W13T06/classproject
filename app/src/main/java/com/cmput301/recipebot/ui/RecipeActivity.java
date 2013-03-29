@@ -31,6 +31,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -524,7 +525,10 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     }
 
     private void save() {
-        boolean update = updateRecipeFromUI();
+        boolean update = mRecipeID != null;
+        if (!updateRecipeFromUI()) {
+            return;
+        }
         if (update) {
             RecipeModel.getInstance(this).updateRecipe(mRecipe);
         } else {
@@ -534,7 +538,25 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
     }
 
     private boolean updateRecipeFromUI() {
-        boolean update;
+        if (TextUtils.isEmpty(mEditTextRecipeName.getText())) {
+            mEditTextRecipeName.setError(getString(R.string.blank_field));
+            return false;
+        } else {
+            mEditTextRecipeName.setError(null);
+        }
+
+        if (mRecipeIngredients == null || mRecipeIngredients.size() == 0) {
+            mEditTextIngredientName.setError(getString(R.string.at_least_one_ingredient_required));
+        } else {
+            mEditTextIngredientName.setError(null);
+        }
+
+        if (mRecipeDirections == null || mRecipeDirections.size() == 0) {
+            mEditTextDirection.setError(getString(R.string.at_least_one_direction_required));
+        } else {
+            mEditTextDirection.setError(null);
+        }
+
         if (mRecipeID == null) {
             // generate an id.
             mRecipeID = UUID.randomUUID().toString();
@@ -542,9 +564,6 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
             String email = sharedPref.getString(AppConstants.KEY_USER_EMAIL, null);
             String name = sharedPref.getString(AppConstants.KEY_USER_NAME, null);
             mUser = new User(email, name);
-            update = false;
-        } else {
-            update = true;
         }
 
         mRecipeName = getEditTextString(mEditTextRecipeName);
@@ -552,7 +571,7 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         // We're already keeping track of mRecipeDirections, mRecipeIngredients and mRecipeTags.
         mRecipe = new Recipe(mRecipeID, mRecipeName, mRecipeDescription, mUser, mRecipeIngredients,
                 mRecipeDirections, mRecipePhotos, mRecipeTags);
-        return update;
+        return true;
     }
 
     private static String getEditTextString(EditText editText) {
