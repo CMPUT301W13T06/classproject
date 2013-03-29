@@ -19,88 +19,36 @@
 
 package com.cmput301.recipebot.ui;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ProgressBar;
-import com.actionbarsherlock.view.Window;
-import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.client.ESClient;
 import com.cmput301.recipebot.model.Recipe;
-import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
+import com.cmput301.recipebot.ui.fragments.NetworkRecipeGridFragment;
 import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectView;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
- * Ideally we would re-use our fragment, but search menu button conflicts.
+ * Contains a {@link NetworkRecipeGridFragment} to display recipes from the network
  */
-public class SearchRecipeActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public class SearchRecipeActivity extends BaseActivity {
 
-    public static final String EXTRA_RECIPE_NAME = "EXTRA_RECIPE_NAME";
     private static final String LOGTAG = makeLogTag(SearchRecipeActivity.class);
 
-    @InjectView(R.id.gridview)
-    GridView gridView;
-    @InjectExtra(EXTRA_RECIPE_NAME)
-    String query;
+    public static final String EXTRA_RECIPE_LIST = "EXTRA_RECIPE_LIST";
+
+    @InjectExtra(EXTRA_RECIPE_LIST)
+    ArrayList<Recipe> recipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.saved_recipes_grid);
-
-        gridView.setOnItemClickListener(this);
-        gridView.setEmptyView(new ProgressBar(this));
-        new GetRecipesTask().execute(query);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, RecipeActivity.class);
-        intent.putExtra(RecipeActivity.EXTRA_RECIPE, (Recipe) view.getTag());
-        startActivity(intent);
-    }
-
-    private class GetRecipesTask extends AsyncTask<String, Void, List<Recipe>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            setProgressBarIndeterminateVisibility(true);
+        if (savedInstanceState == null) {
+            NetworkRecipeGridFragment f = NetworkRecipeGridFragment.newInstance(recipes);
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, f).commit();
         }
 
-        @Override
-        protected List<Recipe> doInBackground(String... params) {
-            String query = params[0];
-            ESClient client = new ESClient();
-            try {
-                List<Recipe> recipes = client.searchRecipes(query);
-                return recipes;
-            } catch (IOException e) {
-                Log.e(LOGTAG, e.toString());
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<Recipe> recipes) {
-            if (recipes != null) {
-                gridView.setAdapter(new RecipeGridAdapter(SearchRecipeActivity.this, recipes));
-            }
-            setProgressBarIndeterminateVisibility(false);
-            super.onPostExecute(recipes);
-        }
     }
 
 }
