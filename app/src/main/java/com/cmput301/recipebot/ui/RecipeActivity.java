@@ -537,24 +537,36 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         new WriteRecipeToFileTask().execute(mRecipe);
     }
 
+    /**
+     * Update mRecipe from the UI fields.
+     *
+     * @return false if some required fields are empty.
+     */
     private boolean updateRecipeFromUI() {
+        boolean hasError = false;
         if (TextUtils.isEmpty(mEditTextRecipeName.getText())) {
             mEditTextRecipeName.setError(getString(R.string.blank_field));
-            return false;
+            hasError = true;
         } else {
             mEditTextRecipeName.setError(null);
         }
 
-        if (mRecipeIngredients == null || mRecipeIngredients.size() == 0) {
+        if (isListEmtpy(mRecipeIngredients)) {
             mEditTextIngredientName.setError(getString(R.string.at_least_one_ingredient_required));
+            hasError = true;
         } else {
             mEditTextIngredientName.setError(null);
         }
 
-        if (mRecipeDirections == null || mRecipeDirections.size() == 0) {
+        if (isListEmtpy(mRecipeDirections)) {
             mEditTextDirection.setError(getString(R.string.at_least_one_direction_required));
+            hasError = true;
         } else {
             mEditTextDirection.setError(null);
+        }
+
+        if (hasError) {
+            return false;
         }
 
         if (mRecipeID == null) {
@@ -572,6 +584,16 @@ public class RecipeActivity extends BaseActivity implements CompoundButton.OnChe
         mRecipe = new Recipe(mRecipeID, mRecipeName, mRecipeDescription, mUser, mRecipeIngredients,
                 mRecipeDirections, mRecipePhotos, mRecipeTags);
         return true;
+    }
+
+    /**
+     * Return true if list is empty or null.
+     *
+     * @param list List to check
+     * @return true if list is empty or null.
+     */
+    private boolean isListEmtpy(List list) {
+        return list == null || list.size() == 0;
     }
 
     private static String getEditTextString(EditText editText) {
