@@ -23,21 +23,19 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
-import com.cmput301.recipebot.model.User;
 import com.cmput301.recipebot.ui.RecipeActivity;
 import com.squareup.spoon.Spoon;
 
-import java.util.ArrayList;
-
+import static com.cmput301.recipebot.util.TestDataSetGenerator.getTestRecipe;
 import static org.fest.assertions.api.ANDROID.assertThat;
 
 public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeActivity> {
 
     protected Instrumentation instrumentation;
-    protected RecipeActivity activity;
 
     /**
      * Create test for {@link com.cmput301.recipebot.ui.RecipeActivity}
@@ -50,54 +48,38 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     protected void setUp() throws Exception {
         super.setUp();
         instrumentation = getInstrumentation();
-        setActivityIntent(getTestIntent()); // Set intent first
-        activity = getActivity();
     }
 
-    private Intent getTestIntent() {
-        String id = "testing_id";
-        String name = "Kentucky Fried Chicken";
-        String description = "Fried Chicken";
-        User user = new User("colonel@kfc.com", "Colonel Sanders");
-        ArrayList<String> directions = new ArrayList<String>();
-        directions.add("1. Mix");
-        directions.add("2. Bake");
-        directions.add("3. Eat");
-        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-        ingredients.add(new Ingredient("Chicken", "lb", 2f));
-        ingredients.add(new Ingredient("Secret Spice #1", "tbsp.", 1f));
-        ingredients.add(new Ingredient("Secret Spice #2", "tsp.", 1f));
-        ingredients.add(new Ingredient("Buttermilk", "ml", 50f));
-        ArrayList<String> photos = new ArrayList<String>();
-        photos.add("http://www.kraftrecipes.com/assets/recipe_images/SHAKE_N_BAKE_Honey_Drummies.jpg");
-        photos.add("http://images.media-allrecipes.com/userphotos/250x250/00/68/33/683349.jpg");
-        ArrayList<String> tags = new ArrayList<String>();
-        tags.add("chicken, fried, southern");
-        Recipe recipe = new Recipe(id, name, description, user, ingredients, directions, photos, tags);
-
+    private Intent makeTestIntent(Recipe recipe) {
         Intent intent = new Intent(instrumentation.getContext(), RecipeActivity.class);
         intent.putExtra(RecipeActivity.EXTRA_RECIPE, recipe);
         return intent;
     }
 
     /**
-     * Verify that {@link RecipeActivity} exists
+     * Verify that {@link RecipeActivity} exists.
      */
-    public void testRecipeActivityExists() {
+    public void testRecipeActivityIsShownCorrectly() {
+        Recipe recipe = getTestRecipe();
+        setActivityIntent(makeTestIntent(recipe));
+        RecipeActivity activity = getActivity();
         assertThat(activity).isNotNull();
         Spoon.screenshot(activity, "initial_state");
-    }
 
-    /**
-     * Verify that {@link RecipeActivity} shows all images.
-     */
-    public void testVPShowsAllContent() {
-        assertThat(activity).isNotNull();
-        Spoon.screenshot(activity, "initial_state");
+        final EditText editTextName = (EditText) activity.findViewById(R.id.editText_recipe_name);
+        assertThat(editTextName).hasTextString(recipe.getName());
+        final EditText editTextDescription = (EditText) activity.findViewById(R.id.editText_recipe_description);
+        assertThat(editTextDescription).hasTextString(recipe.getDescription());
+        final LinearLayout ingredientList = (LinearLayout) activity.findViewById(R.id.list_ingredients);
+        assertThat(ingredientList).hasChildCount(recipe.getIngredients().size());
+        final LinearLayout directionsList = (LinearLayout) activity.findViewById(R.id.list_directions);
+        assertThat(directionsList).hasChildCount(recipe.getDirections().size());
+        final LinearLayout tagsList = (LinearLayout) activity.findViewById(R.id.list_tags);
+        assertThat(tagsList).hasChildCount(recipe.getTags().size());
 
         final ViewPager viewPager = (ViewPager) activity.findViewById(R.id.pager_recipe_images);
-
-        for (int i = 0; i < viewPager.getAdapter().getCount(); i++) {
+        assertThat(viewPager.getAdapter()).hasCount(7);
+        for (int i = 0; i < 7; i++) {
             final int count = i;
             instrumentation.runOnMainSync(new Runnable() {
                 @Override
@@ -106,7 +88,17 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
                 }
             });
             instrumentation.waitForIdleSync();
-            Spoon.screenshot(activity, "image_" + count);
+            Spoon.screenshot(activity, "pager_" + count);
         }
     }
+
+    /**
+     * Test that new recipe activity can be started.
+     */
+    public void testNewRecipeActivity() {
+        RecipeActivity activity = getActivity();
+        assertThat(activity).isNotNull();
+        Spoon.screenshot(activity, "initial_state");
+    }
+
 }

@@ -69,39 +69,71 @@ public class TestDataSetGenerator {
     /**
      * Generate some random recipes.
      */
-    public static ArrayList<Recipe> generateTestRecipes(int count) {
+    public static ArrayList<Recipe> generateRandomRecipes(int count) {
         ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 
-        Random random = new Random();
-
         for (int i = 0; i < count; i++) {
-            String id = UUID.randomUUID().toString();
-            String name = RECIPE_NAMES[random.nextInt(RECIPE_NAMES.length)];
-            String description = RECIPE_DESCRIPTIONS[random.nextInt(RECIPE_DESCRIPTIONS.length)];
-            User user = RECIPE_USERS[random.nextInt(RECIPE_USERS.length)];
-            ArrayList<String> directions = new ArrayList<String>();
-            for (int j = 0; j < random.nextInt(3) + 1; j++) {
-                directions.add(RECIPE_DIRECTIONS[random.nextInt(RECIPE_DIRECTIONS.length)]);
-            }
-            ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-            for (int j = 0; j < random.nextInt(6) + 1; j++) {
-                Ingredient ingredient = new Ingredient(RECIPE_INGREDIENTS[random.nextInt(RECIPE_INGREDIENTS.length)], "testing", 4f);
-                ingredients.add(ingredient);
-            }
-            ArrayList<String> photos = new ArrayList<String>();
-            for (int j = 0; j < random.nextInt(6) + 1; j++) {
-                photos.add(RECIPE_PHOTOS[random.nextInt(RECIPE_PHOTOS.length)]);
-            }
-            ArrayList<String> tags = new ArrayList<String>();
-            for (int j = 0; j < random.nextInt(6) + 1; j++) {
-                tags.add(RECIPE_TAGS[random.nextInt(RECIPE_TAGS.length)]);
-            }
-
-            Recipe recipe = new Recipe(id, name, description, user, ingredients, directions, photos, tags);
-            recipeList.add(recipe);
+            recipeList.add(generateRandomRecipe());
         }
 
         return recipeList;
+    }
+
+    public static Recipe generateRandomRecipe() {
+        String id = UUID.randomUUID().toString();
+        Random random = new Random();
+        String name = RECIPE_NAMES[random.nextInt(RECIPE_NAMES.length)];
+        String description = RECIPE_DESCRIPTIONS[random.nextInt(RECIPE_DESCRIPTIONS.length)];
+        User user = RECIPE_USERS[random.nextInt(RECIPE_USERS.length)];
+        ArrayList<String> directions = new ArrayList<String>();
+        for (int j = 0; j < random.nextInt(3) + 1; j++) {
+            directions.add(RECIPE_DIRECTIONS[random.nextInt(RECIPE_DIRECTIONS.length)]);
+        }
+        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+        for (int j = 0; j < random.nextInt(6) + 1; j++) {
+            Ingredient ingredient = new Ingredient(RECIPE_INGREDIENTS[random.nextInt(RECIPE_INGREDIENTS.length)], "testing", 4f);
+            ingredients.add(ingredient);
+        }
+        ArrayList<String> photos = new ArrayList<String>();
+        for (int j = 0; j < random.nextInt(6) + 1; j++) {
+            photos.add(RECIPE_PHOTOS[random.nextInt(RECIPE_PHOTOS.length)]);
+        }
+        ArrayList<String> tags = new ArrayList<String>();
+        for (int j = 0; j < random.nextInt(6) + 1; j++) {
+            tags.add(RECIPE_TAGS[random.nextInt(RECIPE_TAGS.length)]);
+        }
+
+        return new Recipe(id, name, description, user, ingredients, directions, photos, tags);
+    }
+
+    /**
+     * Make a new Recipe
+     *
+     * @return A test recipe.
+     */
+    public static Recipe getTestRecipe() {
+        String id = "testing_id";
+        String name = "Kentucky Fried Chicken";
+        String description = "Fried Chicken";
+        User user = new User("colonel@kfc.com", "Colonel Sanders");
+        ArrayList<String> directions = new ArrayList<String>();
+        directions.add("1. Mix");
+        directions.add("2. Bake");
+        directions.add("3. Eat");
+        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+        ingredients.add(new Ingredient("Chicken", "lb", 2f));
+        ingredients.add(new Ingredient("Secret Spice #1", "tbsp.", 1f));
+        ingredients.add(new Ingredient("Secret Spice #2", "tsp.", 1f));
+        ingredients.add(new Ingredient("Buttermilk", "ml", 50f));
+        ArrayList<String> photos = new ArrayList<String>();
+        for (int i = 0; i < 5; i++) {
+            photos.add(RECIPE_PHOTOS[i]);
+        }
+        ArrayList<String> tags = new ArrayList<String>();
+        tags.add("chicken, fried, southern");
+
+        Recipe recipe = new Recipe(id, name, description, user, ingredients, directions, photos, tags);
+        return recipe;
     }
 
 }

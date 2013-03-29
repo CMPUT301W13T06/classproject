@@ -210,43 +210,13 @@ public class ClientTest {
     }
 
     /**
-     * Make a new Recipe
-     *
-     * @return A test recipe.
-     */
-    private Recipe getTestRecipe() {
-        String id = "testing_id";
-        String name = "Kentucky Fried Chicken";
-        String description = "Fried Chicken";
-        User user = new User("colonel@kfc.com", "Colonel Sanders");
-        ArrayList<String> directions = new ArrayList<String>();
-        directions.add("1. Mix");
-        directions.add("2. Bake");
-        directions.add("3. Eat");
-        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-        ingredients.add(new Ingredient("Chicken", "lb", 2f));
-        ingredients.add(new Ingredient("Secret Spice #1", "tbsp.", 1f));
-        ingredients.add(new Ingredient("Secret Spice #2", "tsp.", 1f));
-        ingredients.add(new Ingredient("Buttermilk", "ml", 50f));
-        ArrayList<String> photos = new ArrayList<String>();
-        for (int i = 0; i < 5; i++) {
-            photos.add(RECIPE_PHOTOS[i]);
-        }
-        ArrayList<String> tags = new ArrayList<String>();
-        tags.add("chicken, fried, southern");
-
-        Recipe recipe = new Recipe(id, name, description, user, ingredients, directions, photos, tags);
-        return recipe;
-    }
-
-    /**
      * A method that generates a dataset that can be pushed to the server.
      * Our tests are reliant on this dataset. Everytime this function is used to generate a new dataset,
      * update our expected values.
      */
     private void insertRecipesToServer() {
         ArrayList<Recipe> mRecipeList;
-        mRecipeList = generateTestRecipes(50);
+        mRecipeList = generateRandomRecipes(50);
         for (Recipe recipe : mRecipeList) {
             mClient.insertRecipe(recipe);
         }
