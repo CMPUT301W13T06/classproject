@@ -57,7 +57,7 @@ public class ImagePagerAdapter extends PagerAdapter {
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(lp);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        if (image.startsWith("http:")) {
+        if (image.startsWith("http")) {
             ImageLoader.getInstance().displayImage(image, imageView);
         } else {
             new BitmapUtils.DecodeBitmapTask(imageView).execute(image);
