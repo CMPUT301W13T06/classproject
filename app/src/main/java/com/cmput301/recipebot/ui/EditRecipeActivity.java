@@ -86,9 +86,8 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
     protected void fillView() {
         if (mRecipe == null) {
             mRecipe = new Recipe();
-        } else {
-            super.fillView();
         }
+        super.fillView();
     }
 
     @Override
