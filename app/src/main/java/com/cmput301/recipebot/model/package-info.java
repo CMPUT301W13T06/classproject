@@ -18,7 +18,8 @@
  */
 
 /**
- * Provides the interface to communicate
+ * The package that stores our model. It contains the beans for our objects, interfaces for our local and network data,
+ * as well as a wrapper our these interfaces that can be used by the UI. These wrappers are asynchronous and non-blocking.
  *
  * @see com.cmput301.recipebot.model.beans.Recipe
  */
