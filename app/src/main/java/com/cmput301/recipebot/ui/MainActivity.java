@@ -39,9 +39,11 @@ import com.actionbarsherlock.widget.SearchView;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.client.ESClient;
 import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.RecipeModel;
 import com.cmput301.recipebot.ui.fragments.PantryFragment;
 import com.cmput301.recipebot.ui.fragments.SavedRecipesGridFragment;
 import com.cmput301.recipebot.util.AppConstants;
+import com.cmput301.recipebot.util.NetworkUtils;
 import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
@@ -139,7 +141,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        new SearchTask(query).execute();
+        new SearchTask(this, query).execute();
         return true;
     }
 
@@ -150,8 +152,10 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
 
     private class SearchTask extends AsyncTask<Void, Void, ArrayList<Recipe>> {
         String query;
+        Context context;
 
-        public SearchTask(String query) {
+        public SearchTask(Context context, String query) {
+            this.context = context;
             this.query = query;
         }
 
@@ -163,6 +167,24 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
 
         @Override
         protected ArrayList<Recipe> doInBackground(Void... params) {
+            if (NetworkUtils.isConnected(context)) {
+                return networkSearch();
+            } else {
+                return localSearch();
+            }
+        }
+
+        private ArrayList<Recipe> localSearch() {
+            if (query.charAt(0) == '@') {
+                return RecipeModel.getInstance(context).searchRecipesFromUser(query.substring(1));
+            } else if (query.charAt(0) == '#') {
+                return RecipeModel.getInstance(context).searchRecipesFromTag(query.substring(1));
+            } else {
+                return RecipeModel.getInstance(context).searchRecipes(query);
+            }
+        }
+
+        private ArrayList<Recipe> networkSearch() {
             ESClient client = new ESClient();
             if (query.charAt(0) == '@') {
                 return client.searchRecipesFromUser(query.substring(1));

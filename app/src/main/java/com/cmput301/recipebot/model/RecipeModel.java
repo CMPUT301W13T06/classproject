@@ -22,6 +22,7 @@ package com.cmput301.recipebot.model;
 import android.content.Context;
 import android.os.AsyncTask;
 import com.cmput301.recipebot.client.ESClient;
+import com.cmput301.recipebot.util.NetworkUtils;
 
 import java.util.ArrayList;
 
@@ -30,12 +31,27 @@ public class RecipeModel {
     private DatabaseHelper mDbHelper;
     private ESClient mClient;
     private static RecipeModel instance;
+    private Context context;
 
     // A cache of last know recipes.
     private static ArrayList<Recipe> mRecipes;
     private ArrayList<RecipeView> views;
 
+    /**
+     * Get the instance. Attaches to application context regardless of context.
+     *
+     * @param context
+     * @return
+     */
+    public static RecipeModel getInstance(Context context) {
+        if (instance == null) {
+            instance = new RecipeModel(context.getApplicationContext());
+        }
+        return instance;
+    }
+
     private RecipeModel(Context context) {
+        this.context = context;
         mClient = new ESClient();
         views = new ArrayList<RecipeView>();
         mDbHelper = DatabaseHelper.getInstance(context);
@@ -58,19 +74,6 @@ public class RecipeModel {
         for (RecipeView view : views) {
             view.update(mRecipes);
         }
-    }
-
-    /**
-     * Get the instance. Attaches to application context regardless of context.
-     *
-     * @param context
-     * @return
-     */
-    public static RecipeModel getInstance(Context context) {
-        if (instance == null) {
-            instance = new RecipeModel(context.getApplicationContext());
-        }
-        return instance;
     }
 
     public ArrayList<Recipe> loadRecipes() {
@@ -96,6 +99,39 @@ public class RecipeModel {
         new UpdateRecipeTask().execute(recipe);
     }
 
+    public ArrayList<Recipe> searchRecipes(String name) {
+        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+        for (Recipe recipe : mRecipes) {
+            if (recipe.getName().compareToIgnoreCase(name) == 0) {
+                recipes.add(recipe);
+            }
+        }
+        return recipes;
+    }
+
+    public ArrayList<Recipe> searchRecipesFromTag(String tag) {
+        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+        for (Recipe recipe : mRecipes) {
+            if (recipe.getTags() == null) {
+                continue;
+            }
+            if (recipe.getTags().contains(tag)) {
+                recipes.add(recipe);
+            }
+        }
+        return recipes;
+    }
+
+    public ArrayList<Recipe> searchRecipesFromUser(String email) {
+        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+        for (Recipe recipe : mRecipes) {
+            if (recipe.getUser().getEmail().compareToIgnoreCase(email) == 0) {
+                recipes.add(recipe);
+            }
+        }
+        return recipes;
+    }
+
     private class LoadRecipesTask extends UpdateRecipeViewTask<Void> {
         @Override
         protected ArrayList<Recipe> doInBackground(Void... params) {
@@ -108,7 +144,9 @@ public class RecipeModel {
         protected ArrayList<Recipe> doInBackground(Recipe... params) {
             Recipe recipe = params[0];
             mDbHelper.insertRecipe(recipe);
-            mClient.insertRecipe(recipe);
+            if (NetworkUtils.isConnected(context)) {
+                mClient.insertRecipe(recipe);
+            }
             return super.doInBackground(params);
         }
     }
@@ -118,7 +156,9 @@ public class RecipeModel {
         protected ArrayList<Recipe> doInBackground(Recipe... params) {
             Recipe recipe = params[0];
             mDbHelper.updateRecipe(recipe);
-            mClient.updateRecipe(recipe);
+            if (NetworkUtils.isConnected(context)) {
+                mClient.updateRecipe(recipe);
+            }
             return super.doInBackground(params);
         }
     }
@@ -136,7 +176,9 @@ public class RecipeModel {
         @Override
         protected ArrayList<Recipe> doInBackground(String... params) {
             String id = params[0];
-            mClient.deleteRecipe(id);
+            if (NetworkUtils.isConnected(context)) {
+                mClient.deleteRecipe(id);
+            }
             return super.doInBackground(params);
         }
     }
