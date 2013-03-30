@@ -22,7 +22,7 @@ package com.cmput301.recipebot.test;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.ui.EditRecipeActivity;
 import com.cmput301.recipebot.ui.ViewRecipeActivity;
 import com.squareup.spoon.Spoon;

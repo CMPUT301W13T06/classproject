@@ -33,7 +33,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.beans.Recipe;
 import com.google.gson.Gson;
 import roboguice.inject.InjectView;
 
@@ -224,7 +224,7 @@ public abstract class AbstractRecipeActivity extends BaseActivity implements Com
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, recipe.getName());
         shareIntent.putExtra(Intent.EXTRA_TITLE, recipe.getName());
-        shareIntent.putExtra(Intent.EXTRA_TEXT, recipe.toString());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, recipe.toEmail());
         shareIntent.setType("application/json");
         shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
         return shareIntent;

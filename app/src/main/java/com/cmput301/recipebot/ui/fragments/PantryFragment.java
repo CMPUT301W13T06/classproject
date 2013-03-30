@@ -33,10 +33,10 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.client.ESClient;
-import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.PantryModel;
-import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.beans.Ingredient;
+import com.cmput301.recipebot.model.beans.Recipe;
+import com.cmput301.recipebot.model.network.ESClient;
 import com.cmput301.recipebot.ui.SearchRecipeActivity;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 
@@ -134,7 +134,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         // Don't parse the float if the field is empty.
         float quantity = isEditTextEmpty(mEditTextQuantity) ? 0.0f : Float.parseFloat(mEditTextQuantity.getText().toString());
         String unit = mEditTextUnit.getText().toString();
-        Ingredient item = new Ingredient(name, unit, quantity);
+        Ingredient item = new Ingredient(name, quantity, unit);
         PantryModel.getInstance(getSherlockActivity()).insertPantryItem(item);
 
         //Sanitize the input

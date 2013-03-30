@@ -21,7 +21,7 @@ package com.cmput301.recipebot.ui.fragments;
 
 import android.os.Bundle;
 import android.view.View;
-import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 
 import java.util.ArrayList;

@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.cmput301.recipebot.model;
+package com.cmput301.recipebot.model.beans;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -25,19 +25,60 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 /**
- * A recipe class.
+ * A recipe object. This class is the recipe object that is stored on the server and locally.
  */
 public class Recipe implements Parcelable {
 
+    /**
+     * An ID for this recipe to be identified uniquely. Generated with a random UUID.
+     *
+     * @see java.util.UUID
+     */
     private String id;
+
+    /**
+     * The name of the recipe. Must not be null.
+     */
     private String name;
+
+    /**
+     * A description for this recipe.
+     */
     private String description;
+
+    /**
+     * The recipes User.
+     *
+     * @see User
+     */
     private User user;
+
+    /**
+     * Ingredients required for this recipe. Must contain at least one ingredient.
+     */
     private ArrayList<Ingredient> ingredients;
+
+    /**
+     * A list of directions to make the recipe. Must contain at least ont direction.
+     */
     private ArrayList<String> directions;
+
+    /**
+     * A list of photos for the Recipe. Each string can either be a link to :
+     * 1. Image on the internet (begins with http:)
+     * 2. Local image (begins with file:///)
+     * 3. A {@link java.util.prefs.Base64} encoded image.
+     */
     private ArrayList<String> photos;
+
+    /**
+     * A list of tags describing the recipe. Can be empty.
+     */
     private ArrayList<String> tags;
 
+    /**
+     * Constructs an empty Recipe object.
+     */
     public Recipe() {
         // Default constructor for NewRecipeActivity.
         this.id = null;
@@ -50,6 +91,18 @@ public class Recipe implements Parcelable {
         this.tags = new ArrayList<String>();
     }
 
+    /**
+     * Constructs a Recipe Object with the given params.
+     *
+     * @param id          Unique ID of the Recipe.
+     * @param name        Name of the Recipe.
+     * @param description Description of the Recipe.
+     * @param user        User of the Recipe.
+     * @param ingredients Ingredients required for the Recipe.
+     * @param directions  Directions to make the Recipe.
+     * @param photos      Photos of the Recipe.
+     * @param tags        Tags of the Recipe.
+     */
     public Recipe(String id, String name, String description, User user, ArrayList<Ingredient> ingredients,
                   ArrayList<String> directions, ArrayList<String> photos, ArrayList<String> tags) {
         this.id = id;
@@ -64,38 +117,41 @@ public class Recipe implements Parcelable {
 
     /**
      * Get the unique id for this recipe.
-     *
-     * @return id of this recipe.
      */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the id of the recipe.
+     */
     public void setId(String id) {
         this.id = id;
     }
 
     /**
      * Get the name of the recipe.
-     *
-     * @return Name of recipe.
      */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name of the recipe.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Get the description of the recipe.
+     */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Get the description for this Recipe
-     *
-     * @param description
+     * Sets the description for this recipe.
      */
     public void setDescription(String description) {
         this.description = description;
@@ -103,71 +159,91 @@ public class Recipe implements Parcelable {
 
     /**
      * Get name of the user who created this recipe.
-     *
-     * @return Name of user.
      */
     public User getUser() {
         return user;
     }
 
+    /**
+     * Sets the user of this recipe.
+     *
+     * @param user
+     */
     public void setUser(User user) {
         this.user = user;
     }
 
     /**
      * Get ingredients required for this recipe.
-     *
-     * @return List of ingredients required for this recipe.
      */
     public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
 
+    /**
+     * Sets the ingredients required for this recipe.
+     */
     public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
     /**
      * Get directions for this recipe.
-     *
-     * @return Ordered set of directions for this recipe.
      */
     public ArrayList<String> getDirections() {
         return directions;
     }
 
+    /**
+     * Sets the directions of this recipe.
+     */
     public void setDirections(ArrayList<String> directions) {
         this.directions = directions;
     }
 
     /**
      * Get all photos for this recipe.
-     *
-     * @return `photos for this recipe.
      */
     public ArrayList<String> getPhotos() {
         return photos;
     }
 
+    /**
+     * Sets the photos for this recipe.
+     */
     public void setPhotos(ArrayList<String> photos) {
         this.photos = photos;
     }
 
     /**
      * Get all tags for the recipe.
-     *
-     * @return tags for the recipe.
      */
     public ArrayList<String> getTags() {
         return tags;
     }
 
+    /**
+     * Set the tags for this recipe.
+     */
     public void setTags(ArrayList<String> tags) {
         this.tags = tags;
     }
 
     @Override
     public String toString() {
+        return "Recipe{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", user=" + user +
+                ", ingredients=" + ingredients +
+                ", directions=" + directions +
+                ", photos=" + photos +
+                ", tags=" + tags +
+                '}';
+    }
+
+    public String toEmail() {
         return "Recipe : " + name + "\n" +
                 description + "\n" +
                 "by " + user + "\n" +
@@ -194,6 +270,11 @@ public class Recipe implements Parcelable {
         dest.writeStringList(tags);
     }
 
+    /**
+     * Constructs a Recipe from {@link Parcel} object.
+     *
+     * @param in
+     */
     protected Recipe(Parcel in) {
         id = in.readString();
         name = in.readString();
@@ -209,6 +290,9 @@ public class Recipe implements Parcelable {
         in.readStringList(tags);
     }
 
+    /**
+     * @see Parcelable.Creator
+     */
     public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
         public Recipe createFromParcel(Parcel in) {
             return new Recipe(in);
