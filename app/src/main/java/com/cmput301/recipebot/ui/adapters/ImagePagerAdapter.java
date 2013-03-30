@@ -25,6 +25,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import com.cmput301.recipebot.util.BitmapUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -52,10 +53,15 @@ public class ImagePagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup view, int position) {
         final ImageView imageView = new ImageView(mContext);
+        String image = mImages.get(position);
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(lp);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        ImageLoader.getInstance().displayImage(mImages.get(position), imageView);
+        if (image.startsWith("http:")) {
+            ImageLoader.getInstance().displayImage(image, imageView);
+        } else {
+            new BitmapUtils.DecodeBitmapTask(imageView).execute(image);
+        }
         ((ViewPager) view).addView(imageView, 0);
         return imageView;
     }
@@ -63,10 +69,5 @@ public class ImagePagerAdapter extends PagerAdapter {
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view.equals(object);
-    }
-
-    public void swapData(ArrayList<String> images) {
-        this.mImages = images;
-        notifyDataSetChanged();
     }
 }

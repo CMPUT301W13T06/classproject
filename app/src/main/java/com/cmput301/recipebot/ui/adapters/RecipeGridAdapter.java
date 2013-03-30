@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.beans.Recipe;
+import com.cmput301.recipebot.util.BitmapUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -68,8 +69,17 @@ public class RecipeGridAdapter extends BaseAdapter {
         LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Recipe recipe = mRecipes.get(position);
         if (recipe.getPhotos() != null && recipe.getPhotos().size() != 0) {
+            for (String s : recipe.getPhotos()) {
+                if (s.startsWith("http:")) {
+                    final ImageView imageView = (ImageView) layoutInflater.inflate(R.layout.item_recipe_image, parent, false);
+                    ImageLoader.getInstance().displayImage(recipe.getPhotos().get(0), imageView);
+                    imageView.setTag(recipe);
+                    return imageView;
+                }
+            }
+
             final ImageView imageView = (ImageView) layoutInflater.inflate(R.layout.item_recipe_image, parent, false);
-            ImageLoader.getInstance().displayImage(recipe.getPhotos().get(0), imageView);
+            new BitmapUtils.DecodeBitmapTask(imageView).execute(recipe.getPhotos().get(0));
             imageView.setTag(recipe);
             return imageView;
         } else {

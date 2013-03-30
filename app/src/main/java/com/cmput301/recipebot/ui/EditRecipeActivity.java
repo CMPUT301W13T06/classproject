@@ -23,11 +23,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -43,6 +45,7 @@ import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.model.beans.User;
 import com.cmput301.recipebot.ui.adapters.EditableImagePagerAdapter;
 import com.cmput301.recipebot.util.AppConstants;
+import com.cmput301.recipebot.util.BitmapUtils;
 import roboguice.inject.InjectView;
 
 import java.io.File;
@@ -335,14 +338,31 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
-            mRecipe.getPhotos().add("file:///" + picturePath);
-            ((EditableImagePagerAdapter) mViewPhotos.getAdapter()).swapData(mRecipe.getPhotos());
+            Log.d(LOGTAG, "picture " + picturePath);
+            new EncodeBitmapTask().execute(picturePath);
         } else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK) {
             Uri selectedImage = cameraImageUri;
-            mRecipe.getPhotos().add("file:///" + selectedImage);
-            ((EditableImagePagerAdapter) mViewPhotos.getAdapter()).swapData(mRecipe.getPhotos());
+            Log.d(LOGTAG, "picture " + selectedImage.getPath());
+            new EncodeBitmapTask().execute(selectedImage.getPath());
         }
 
+    }
+
+    private class EncodeBitmapTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String imagePath = strings[0];
+            return BitmapUtils.encodeBitmap(imagePath);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            mRecipe.getPhotos().add(s);
+            mViewPhotos.setAdapter(new EditableImagePagerAdapter(EditRecipeActivity.this, mRecipe.getPhotos(),
+                    addImageFromGalleryListener, addImageFromCameraListener));
+        }
     }
 
     @Override
