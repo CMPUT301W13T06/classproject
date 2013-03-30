@@ -26,9 +26,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.model.RecipeModel;
-import com.cmput301.recipebot.model.User;
+import com.cmput301.recipebot.model.beans.Recipe;
+import com.cmput301.recipebot.model.beans.User;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import com.cmput301.recipebot.util.AppConstants;
 

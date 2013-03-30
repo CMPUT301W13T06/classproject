@@ -30,7 +30,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:id="@+id/editText_direction"
-            android:hint="@string/enter_instructions"
+            android:hint="@string/enter_directions"
             android:layout_gravity="left|center_vertical"/>
 
     <ImageButton

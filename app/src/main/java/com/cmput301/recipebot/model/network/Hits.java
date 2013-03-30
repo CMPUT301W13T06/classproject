@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.cmput301.recipebot.client;
+package com.cmput301.recipebot.model.network;
 
 import java.util.Collection;
 

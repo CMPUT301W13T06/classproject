@@ -17,36 +17,9 @@
  *  limitations under the License.
  */
 
-package com.cmput301.recipebot.client;
-
 /**
- * A wrapper class for response from ElasticSearch
- * Fields are mappings of a query retrieval from ElasticSearch.
+ * Provides the interface necessary to communicate with the Elastic Search Backend.
  *
- * @param <T> the data that is wrapped in this response
+ * @see com.cmput301.recipebot.model.beans.Recipe
  */
-public class ESResponse<T> {
-
-    String _index;
-    String _type;
-    String _id;
-    int _version;
-    boolean exists;
-    T _source;
-    double max_score;
-
-    /**
-     * Get the object associated with this repsonse.
-     *
-     * @return Object of type T
-     */
-    public T getSource() {
-        return _source;
-    }
-
-    @Override
-    public String toString() {
-        return "Response [id=" + _id;
-    }
-
-}
+package com.cmput301.recipebot.model.network;

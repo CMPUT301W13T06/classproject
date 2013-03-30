@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.ui.ViewRecipeActivity;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
@@ -43,7 +43,7 @@ public abstract class AbstractRecipeGridFragment extends RoboSherlockFragment im
     private static final String LOGTAG = makeLogTag(AbstractRecipeGridFragment.class);
     protected static final String RECIPE_ARGS = "recipes";
 
-    @InjectView(R.id.gridview)
+    @InjectView(R.id.fragment_recipe_gridview)
     GridView gridview;
 
     protected RecipeGridAdapter mAdapter;
