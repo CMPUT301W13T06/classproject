@@ -19,9 +19,9 @@
 
 package com.cmput301.recipebot.ui.fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -38,7 +38,8 @@ import java.util.List;
 /**
  * A fragment that registers to recipe any database updates.
  */
-public class SavedRecipesGridFragment extends AbstractRecipeGridFragment implements RecipeModel.RecipeView, AdapterView.OnItemLongClickListener {
+public class SavedRecipesGridFragment extends AbstractRecipeGridFragment implements RecipeModel.RecipeView,
+        AdapterView.OnItemLongClickListener {
 
     @Override
     public void onResume() {
@@ -90,7 +91,7 @@ public class SavedRecipesGridFragment extends AbstractRecipeGridFragment impleme
     }
 
     private User getUserFromPreferences() {
-        SharedPreferences sharedPref = getSherlockActivity().getSharedPreferences(AppConstants.DEFAULT_PREFERENCE_FILE, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getSherlockActivity());
         String email = sharedPref.getString(AppConstants.KEY_USER_EMAIL, null);
         String name = sharedPref.getString(AppConstants.KEY_USER_NAME, null);
         return new User(email, name);

@@ -22,11 +22,6 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/recipe_menu_save"
-          android:icon="@drawable/ic_action_save"
-          android:title="@string/menu_save"
-          android:showAsAction="ifRoom|withText"/>
-
     <item android:id="@+id/recipe_menu_share"
           android:showAsAction="ifRoom"
           android:title="@string/share"

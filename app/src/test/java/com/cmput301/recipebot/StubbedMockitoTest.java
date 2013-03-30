@@ -1,6 +1,6 @@
 
 
-package com.cmput301.recipebot.core.core;
+package com.cmput301.recipebot;
 
 import org.junit.Before;
 import org.junit.Test;

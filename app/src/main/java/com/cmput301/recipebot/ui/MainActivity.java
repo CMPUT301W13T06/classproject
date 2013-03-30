@@ -21,8 +21,10 @@ package com.cmput301.recipebot.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -39,6 +41,7 @@ import com.cmput301.recipebot.client.ESClient;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.ui.fragments.PantryFragment;
 import com.cmput301.recipebot.ui.fragments.SavedRecipesGridFragment;
+import com.cmput301.recipebot.util.AppConstants;
 import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
@@ -61,9 +64,24 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkPreferences();
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
+        // Explicitly required for pre-4.0 devices
+        setSupportProgressBarIndeterminateVisibility(false);
         setupTabs(savedInstanceState);
+    }
+
+    private void checkPreferences() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String email = sharedPref.getString(AppConstants.KEY_USER_EMAIL, null);
+        String name = sharedPref.getString(AppConstants.KEY_USER_NAME, null);
+        if (email == null || name == null) {
+            Intent intent = new Intent(MainActivity.this, GetUserActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -96,7 +114,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
      * Start an activity to add a new Recipe.
      */
     private void addRecipe() {
-        Intent intent = new Intent(this, RecipeActivity.class);
+        Intent intent = new Intent(this, EditRecipeActivity.class);
         startActivity(intent);
     }
 
@@ -121,7 +139,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        new SearchTask().execute(query);
+        new SearchTask(query).execute();
         return true;
     }
 
@@ -130,7 +148,12 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
         return false;
     }
 
-    private class SearchTask extends AsyncTask<String, Void, ArrayList<Recipe>> {
+    private class SearchTask extends AsyncTask<Void, Void, ArrayList<Recipe>> {
+        String query;
+
+        public SearchTask(String query) {
+            this.query = query;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -139,8 +162,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
         }
 
         @Override
-        protected ArrayList<Recipe> doInBackground(String... strings) {
-            String query = strings[0];
+        protected ArrayList<Recipe> doInBackground(Void... params) {
             ESClient client = new ESClient();
             if (query.charAt(0) == '@') {
                 return client.searchRecipesFromUser(query.substring(1));
@@ -156,6 +178,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
             setSupportProgressBarIndeterminateVisibility(false);
             Intent intent = new Intent(MainActivity.this, SearchRecipeActivity.class);
             intent.putParcelableArrayListExtra(SearchRecipeActivity.EXTRA_RECIPE_LIST, recipes);
+            intent.putExtra(SearchRecipeActivity.EXTRA_SEARCH_TERM, query);
             startActivity(intent);
             super.onPostExecute(recipes);
         }

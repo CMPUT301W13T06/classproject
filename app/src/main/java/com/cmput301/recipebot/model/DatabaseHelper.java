@@ -24,7 +24,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -57,16 +56,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " text not null);";
 
     private Gson mGson;
+    private static DatabaseHelper instance;
 
-    public DatabaseHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mGson = new Gson();
     }
 
+    public static DatabaseHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new DatabaseHelper(context.getApplicationContext());
+        }
+        return instance;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        Log.d(LOGTAG, CREATE_TABLE_RECIPES);
-        Log.d(LOGTAG, CREATE_TABLE_PANTRY);
         sqLiteDatabase.execSQL(CREATE_TABLE_RECIPES);
         sqLiteDatabase.execSQL(CREATE_TABLE_PANTRY);
     }

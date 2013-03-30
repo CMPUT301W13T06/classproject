@@ -19,17 +19,23 @@
 
 package com.cmput301.recipebot.test;
 
-import android.app.Activity;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
+import com.cmput301.recipebot.ui.EditRecipeActivity;
+import com.squareup.spoon.Spoon;
 
-public abstract class ActivityTest<T extends Activity> extends ActivityInstrumentationTestCase2<T> {
+import static org.fest.assertions.api.ANDROID.assertThat;
+
+public class NewRecipeActivityTest extends ActivityInstrumentationTestCase2<EditRecipeActivity> {
 
     protected Instrumentation instrumentation;
-    protected T activity;
+    protected EditRecipeActivity activity;
 
-    public ActivityTest(Class<T> activityClass) {
-        super(activityClass);
+    /**
+     * Create test for {@link com.cmput301.recipebot.ui.EditRecipeActivity}
+     */
+    public NewRecipeActivityTest() {
+        super(EditRecipeActivity.class);
     }
 
     @Override
@@ -37,5 +43,13 @@ public abstract class ActivityTest<T extends Activity> extends ActivityInstrumen
         super.setUp();
         instrumentation = getInstrumentation();
         activity = getActivity();
+    }
+
+    /**
+     * Test that new recipe activity can be started.
+     */
+    public void testNewRecipeActivityExists() {
+        assertThat(activity).isNotNull();
+        Spoon.screenshot(activity, "initial_state");
     }
 }
