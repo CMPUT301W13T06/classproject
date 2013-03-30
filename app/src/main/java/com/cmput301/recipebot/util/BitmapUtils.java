@@ -31,10 +31,10 @@ import java.lang.ref.WeakReference;
 public class BitmapUtils {
 
     public static String encodeBitmap(String imagePath) {
-        Bitmap immagex = BitmapFactory.decodeFile(imagePath);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immagex.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
+        Bitmap image = BitmapFactory.decodeFile(imagePath);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] b = bos.toByteArray();
         String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
         return imageEncoded;
     }

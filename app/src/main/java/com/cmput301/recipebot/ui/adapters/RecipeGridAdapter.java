@@ -33,7 +33,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
+import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
+
 public class RecipeGridAdapter extends BaseAdapter {
+
+    private static final String LOGTAG = makeLogTag(RecipeGridAdapter.class);
 
     private List<Recipe> mRecipes;
     private Context mContext;
@@ -70,14 +74,13 @@ public class RecipeGridAdapter extends BaseAdapter {
         Recipe recipe = mRecipes.get(position);
         if (recipe.getPhotos() != null && recipe.getPhotos().size() != 0) {
             for (String s : recipe.getPhotos()) {
-                if (s.startsWith("http:")) {
+                if (s.startsWith("http")) {
                     final ImageView imageView = (ImageView) layoutInflater.inflate(R.layout.item_recipe_image, parent, false);
                     ImageLoader.getInstance().displayImage(recipe.getPhotos().get(0), imageView);
                     imageView.setTag(recipe);
                     return imageView;
                 }
             }
-
             final ImageView imageView = (ImageView) layoutInflater.inflate(R.layout.item_recipe_image, parent, false);
             new BitmapUtils.DecodeBitmapTask(imageView).execute(recipe.getPhotos().get(0));
             imageView.setTag(recipe);
