@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.cmput301.recipebot.core.core;
+package com.cmput301.recipebot;
 
 import com.cmput301.recipebot.client.ESClient;
 import com.cmput301.recipebot.model.Ingredient;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
-import static com.cmput301.recipebot.core.core.RecipeAssert.assertThat;
+import static com.cmput301.recipebot.RecipeAssert.assertThat;
 import static com.cmput301.recipebot.util.TestDataSetGenerator.*;
 import static org.fest.assertions.api.Assertions.assertThat;
 
