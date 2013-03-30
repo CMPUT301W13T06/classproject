@@ -29,7 +29,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -338,11 +337,9 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
-            Log.d(LOGTAG, "picture " + picturePath);
             new EncodeBitmapTask().execute(picturePath);
         } else if (requestCode == TAKE_PICTURE && resultCode == RESULT_OK) {
             Uri selectedImage = cameraImageUri;
-            Log.d(LOGTAG, "picture " + selectedImage.getPath());
             new EncodeBitmapTask().execute(selectedImage.getPath());
         }
 
