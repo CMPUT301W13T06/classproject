@@ -23,35 +23,63 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * A user class.
+ * A user class. Each recipe has a user, who is uniquely identified by their email.
  */
 public class User implements Parcelable {
 
+    /**
+     * The user's name.
+     */
     private String name;
+
+    /**
+     * The user's id. For our app, this is just an email.
+     */
     private String id;
 
+    /**
+     * Constructs a user object.
+     *
+     * @param id   Email of the user.
+     * @param name Name of the user.
+     */
     public User(String id, String name) {
         this.id = id;
         this.name = name;
 
     }
 
+    /**
+     * Get the ID of the user.
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Set the ID of the user.
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Get the name of the user.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the name of the user.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Get the email of the user. This just returns the ID, since that is the email.
+     */
     public String getEmail() {
         return id;
     }
@@ -72,11 +100,19 @@ public class User implements Parcelable {
         dest.writeString(name);
     }
 
+    /**
+     * Constructs a user object from the Parcel.
+     *
+     * @param in Parcel to construct from.
+     */
     protected User(Parcel in) {
         id = in.readString();
         name = in.readString();
     }
 
+    /**
+     * @see Parcelable.Creator
+     */
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
         public User createFromParcel(Parcel in) {
             return new User(in);
