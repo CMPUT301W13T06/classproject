@@ -19,10 +19,10 @@
 
 package com.cmput301.recipebot;
 
-import com.cmput301.recipebot.client.ESClient;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.model.User;
+import com.cmput301.recipebot.model.network.ESClient;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ import static com.cmput301.recipebot.util.TestDataSetGenerator.*;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 /**
- * Unit tests of client API
+ * Unit tests of Elastic Search API
  */
 public class ClientTest {
 

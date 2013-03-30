@@ -33,10 +33,10 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.client.ESClient;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.PantryModel;
 import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.network.ESClient;
 import com.cmput301.recipebot.ui.SearchRecipeActivity;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 

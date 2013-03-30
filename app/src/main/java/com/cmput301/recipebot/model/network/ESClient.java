@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.cmput301.recipebot.client;
+package com.cmput301.recipebot.model.network;
 
 import android.util.Log;
 import com.cmput301.recipebot.model.Ingredient;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
- * The client class that communicates with our server.
+ * The network class that communicates with our server.
  */
 public class ESClient {
 

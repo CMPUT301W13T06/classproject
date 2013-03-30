@@ -21,13 +21,14 @@ package com.cmput301.recipebot.model;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import com.cmput301.recipebot.model.local.DatabaseHelper;
 
 import java.util.ArrayList;
 
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
- * A controller class that makes it transparent when switching between network and local calls.
+ * A controller class that makes it transparent when switching between network and network calls.
  * All UI components should interact with this.
  */
 public class PantryModel {
