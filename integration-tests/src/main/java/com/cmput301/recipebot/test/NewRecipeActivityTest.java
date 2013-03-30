@@ -20,7 +20,9 @@
 package com.cmput301.recipebot.test;
 
 import android.app.Instrumentation;
+import android.support.v4.view.ViewPager;
 import android.test.ActivityInstrumentationTestCase2;
+import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.ui.EditRecipeActivity;
 import com.squareup.spoon.Spoon;
 
@@ -51,5 +53,14 @@ public class NewRecipeActivityTest extends ActivityInstrumentationTestCase2<Edit
     public void testNewRecipeActivityExists() {
         assertThat(activity).isNotNull();
         Spoon.screenshot(activity, "initial_state");
+    }
+
+    /**
+     * Test that new recipe activity can be started.
+     */
+    public void testTwoAddImageButtonsShown() {
+        Spoon.screenshot(activity, "initial_state");
+        final ViewPager pager = (ViewPager) activity.findViewById(R.id.pager_recipe_images);
+        assertThat(pager.getAdapter()).hasCount(2);
     }
 }
