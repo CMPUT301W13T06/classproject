@@ -80,5 +80,9 @@
     <string name="direction">Direction</string>
     <string name="tags">Tags</string>
     <string name="search_ingredients">Search By Ingredients</string>
+    <string name="recipe_saved">Recipe Saved.</string>
+    <string name="pantry_item_deleted">Ingredient deleted from pantry</string>
+    <string name="hello_user">Hello %s</string>
+    <string name="no_results_found">No Results</string>
 
 </resources>

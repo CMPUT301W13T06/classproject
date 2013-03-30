@@ -39,6 +39,8 @@ import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.model.network.ESClient;
 import com.cmput301.recipebot.ui.SearchRecipeActivity;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -232,6 +234,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             Ingredient ingredient = (Ingredient) button.getTag();
             PantryModel.getInstance(getSherlockActivity()).deletePantryItem(ingredient.getName());
         }
+        Crouton.makeText(getSherlockActivity(), R.string.pantry_item_deleted, Style.ALERT).show();
     }
 
     /**
