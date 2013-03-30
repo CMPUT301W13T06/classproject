@@ -21,7 +21,6 @@ package com.cmput301.recipebot.ui.adapters;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -45,7 +44,6 @@ public class EditableImagePagerAdapter extends ImagePagerAdapter {
 
     @Override
     public int getCount() {
-        Log.d("EditableImagePagerAdapter", (mImages.size() + 2) + "");
         return mImages.size() + 2;
     }
 

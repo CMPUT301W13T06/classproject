@@ -22,7 +22,6 @@ package com.cmput301.recipebot.ui.adapters;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -47,7 +46,6 @@ public class ImagePagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        Log.d("ImagePagerAdapter", mImages.size() + "");
         return mImages.size();
     }
 
