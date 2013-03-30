@@ -17,68 +17,31 @@
  *  limitations under the License.
  */
 
-package com.cmput301.recipebot.test;
+package com.cmput301.recipebot.util;
 
-import android.app.Instrumentation;
-import android.content.Intent;
-import android.test.ActivityInstrumentationTestCase2;
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.model.User;
-import com.cmput301.recipebot.ui.SearchRecipeActivity;
-import com.squareup.spoon.Spoon;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
-import static org.fest.assertions.api.ANDROID.assertThat;
+public class TestDataSetGenerator {
 
-public class RecipeSearchActivityTest extends ActivityInstrumentationTestCase2<SearchRecipeActivity> {
-
-    protected Instrumentation instrumentation;
-    protected SearchRecipeActivity activity;
-
-    public RecipeSearchActivityTest() {
-        super(SearchRecipeActivity.class);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        instrumentation = getInstrumentation();
-        setActivityIntent(getTestIntent()); // Set intent first
-        activity = getActivity();
-    }
-
-    /**
-     * Verify that {@link com.cmput301.recipebot.ui.RecipeActivity} exists
-     */
-    public void testRecipeActivityExists() {
-        assertThat(activity).isNotNull();
-        Spoon.screenshot(activity, "initial_state");
-    }
-
-    private Intent getTestIntent() {
-        Intent intent = new Intent(instrumentation.getContext(), SearchRecipeActivity.class);
-        intent.putExtra(SearchRecipeActivity.EXTRA_RECIPE_LIST, generateTestRecipes());
-        return intent;
-    }
-
-    private static final String[] RECIPE_NAMES = {"Chicken Parmesan", "Kentucky Fried Chicken", "Green Salad", "Kahlua",
+    public static final String[] RECIPE_NAMES = {"Chicken Parmesan", "Kentucky Fried Chicken", "Green Salad", "Kahlua",
             "Stir Fry", "Fried Rice", "Hamburger", "Mocha", "Cream Soda", "Omelette's", "Chicken Wings", "Caesar Salad",
             "Steak", "Chilli", "Baked Rice", "Roasted Potatoes", "Chicken Satay", "Ravioli", "Corn on the Cob"};
-    private static final String[] RECIPE_DESCRIPTIONS = {"Very Healthy", "Not so healthy!", "Unhealthy"};
-    private static final String[] RECIPE_INGREDIENTS = {"Chicken", "Butter", "Water", "Fresh Vegetables",
+    public static final String[] RECIPE_DESCRIPTIONS = {"Very Healthy", "Not so healthy!", "Unhealthy"};
+    public static final String[] RECIPE_INGREDIENTS = {"Chicken", "Butter", "Water", "Fresh Vegetables",
             "Fresh Greens", "Vodka", "Oil", "Bun", "Salt", "Lamb", "Peas", "Fish", "Beans", "Tofu", "Cream",
             "Sugar", "Rhubarb", "Milk", "Eggs", "Strawberry", "Honey Garlic", "Corn", "Beans", "Kale", "Bacon"};
-    private static final String[] RECIPE_DIRECTIONS = {"Bake", "Mix", "Shake", "Blend", "Eat", "Heat",
+    public static final String[] RECIPE_DIRECTIONS = {"Bake", "Mix", "Shake", "Blend", "Eat", "Heat",
             "Fry", "Saute", "Mash", "Steam", "Stir", "Whip", "Chop", "Blend", "Boil", "Grill"};
-    private static final User[] RECIPE_USERS = {new User("1@gmail.com", "prateek"), new User("2@gmail.com", "adam"), new User("3@gmail.com", "ethan"),
+    public static final User[] RECIPE_USERS = {new User("1@gmail.com", "prateek"), new User("2@gmail.com", "adam"), new User("3@gmail.com", "ethan"),
             new User("4@gmail.com", "brian"), new User("5@gmail.com", "bruce"), new User("6@gmail.com", "clark")};
-    private static final String[] RECIPE_TAGS = {"Chicken", "Dairy", "Vegetarian", "Southern", "Baked", "Fried"};
-
-    private static final String[] RECIPE_PHOTOS = new String[]{
+    public static final String[] RECIPE_TAGS = {"Chicken", "Dairy", "Vegetarian", "Southern", "Baked", "Fried"};
+    public static final String[] RECIPE_PHOTOS = new String[]{
             "https://lh6.googleusercontent.com/-jZgveEqb6pg/T3R4kXScycI/AAAAAAAAAE0/xQ7CvpfXDzc/s1024/sample_image_01.jpg",
             "https://lh4.googleusercontent.com/-K2FMuOozxU0/T3R4lRAiBTI/AAAAAAAAAE8/a3Eh9JvnnzI/s1024/sample_image_02.jpg",
             "https://lh5.googleusercontent.com/-SCS5C646rxM/T3R4l7QB6xI/AAAAAAAAAFE/xLcuVv3CUyA/s1024/sample_image_03.jpg",
@@ -103,43 +66,74 @@ public class RecipeSearchActivityTest extends ActivityInstrumentationTestCase2<S
             "https://lh3.googleusercontent.com/-lnGi4IMLpwU/T3R4uCMa7vI/AAAAAAAAAHc/1zgzzz6qTpk/s1024/sample_image_22.jpg",
     };
 
-    private static final int TEST_SIZES = 20;
-
     /**
      * Generate some random recipes.
      */
-    private static ArrayList<Recipe> generateTestRecipes() {
+    public static ArrayList<Recipe> generateRandomRecipes(int count) {
         ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 
-        Random random = new Random();
-
-        for (int i = 0; i < TEST_SIZES; i++) {
-            String id = UUID.randomUUID().toString();
-            String name = RECIPE_NAMES[random.nextInt(RECIPE_NAMES.length)];
-            String description = RECIPE_DESCRIPTIONS[random.nextInt(RECIPE_DESCRIPTIONS.length)];
-            User user = RECIPE_USERS[random.nextInt(RECIPE_USERS.length)];
-            ArrayList<String> directions = new ArrayList<String>();
-            for (int j = 0; j < random.nextInt(3) + 1; j++) {
-                directions.add(RECIPE_DIRECTIONS[random.nextInt(RECIPE_DIRECTIONS.length)]);
-            }
-            ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-            for (int j = 0; j < random.nextInt(6) + 1; j++) {
-                Ingredient ingredient = new Ingredient(RECIPE_INGREDIENTS[random.nextInt(RECIPE_INGREDIENTS.length)], "testing", 4f);
-                ingredients.add(ingredient);
-            }
-            ArrayList<String> photos = new ArrayList<String>();
-            for (int j = 0; j < random.nextInt(6) + 1; j++) {
-                photos.add(RECIPE_PHOTOS[random.nextInt(RECIPE_PHOTOS.length)]);
-            }
-            ArrayList<String> tags = new ArrayList<String>();
-            for (int j = 0; j < random.nextInt(6) + 1; j++) {
-                tags.add(RECIPE_TAGS[random.nextInt(RECIPE_TAGS.length)]);
-            }
-
-            Recipe recipe = new Recipe(id, name, description, user, ingredients, directions, photos, tags);
-            recipeList.add(recipe);
+        for (int i = 0; i < count; i++) {
+            recipeList.add(generateRandomRecipe());
         }
 
         return recipeList;
     }
+
+    public static Recipe generateRandomRecipe() {
+        String id = UUID.randomUUID().toString();
+        Random random = new Random();
+        String name = RECIPE_NAMES[random.nextInt(RECIPE_NAMES.length)];
+        String description = RECIPE_DESCRIPTIONS[random.nextInt(RECIPE_DESCRIPTIONS.length)];
+        User user = RECIPE_USERS[random.nextInt(RECIPE_USERS.length)];
+        ArrayList<String> directions = new ArrayList<String>();
+        for (int j = 0; j < random.nextInt(3) + 1; j++) {
+            directions.add(RECIPE_DIRECTIONS[random.nextInt(RECIPE_DIRECTIONS.length)]);
+        }
+        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+        for (int j = 0; j < random.nextInt(6) + 1; j++) {
+            Ingredient ingredient = new Ingredient(RECIPE_INGREDIENTS[random.nextInt(RECIPE_INGREDIENTS.length)], "testing", 4f);
+            ingredients.add(ingredient);
+        }
+        ArrayList<String> photos = new ArrayList<String>();
+        for (int j = 0; j < random.nextInt(6) + 1; j++) {
+            photos.add(RECIPE_PHOTOS[random.nextInt(RECIPE_PHOTOS.length)]);
+        }
+        ArrayList<String> tags = new ArrayList<String>();
+        for (int j = 0; j < random.nextInt(6) + 1; j++) {
+            tags.add(RECIPE_TAGS[random.nextInt(RECIPE_TAGS.length)]);
+        }
+
+        return new Recipe(id, name, description, user, ingredients, directions, photos, tags);
+    }
+
+    /**
+     * Make a new Recipe
+     *
+     * @return A test recipe.
+     */
+    public static Recipe getTestRecipe() {
+        String id = "testing_id";
+        String name = "Kentucky Fried Chicken";
+        String description = "Fried Chicken";
+        User user = new User("colonel@kfc.com", "Colonel Sanders");
+        ArrayList<String> directions = new ArrayList<String>();
+        directions.add("1. Mix");
+        directions.add("2. Bake");
+        directions.add("3. Eat");
+        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+        ingredients.add(new Ingredient("Chicken", "lb", 2f));
+        ingredients.add(new Ingredient("Secret Spice #1", "tbsp.", 1f));
+        ingredients.add(new Ingredient("Secret Spice #2", "tsp.", 1f));
+        ingredients.add(new Ingredient("Buttermilk", "ml", 50f));
+        ArrayList<String> photos = new ArrayList<String>();
+        for (int i = 0; i < 5; i++) {
+            photos.add(RECIPE_PHOTOS[i]);
+        }
+        ArrayList<String> tags = new ArrayList<String>();
+        tags.add("chicken, fried, southern");
+
+        Recipe recipe = new Recipe(id, name, description, user, ingredients, directions, photos, tags);
+        return recipe;
+    }
+
 }

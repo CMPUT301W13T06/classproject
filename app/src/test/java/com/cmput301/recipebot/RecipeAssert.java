@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.cmput301.recipebot.core.core;
+package com.cmput301.recipebot;
 
 import com.cmput301.recipebot.model.Ingredient;
 import com.cmput301.recipebot.model.Recipe;

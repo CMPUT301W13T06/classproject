@@ -36,13 +36,18 @@ public class SearchRecipeActivity extends BaseActivity {
     private static final String LOGTAG = makeLogTag(SearchRecipeActivity.class);
 
     public static final String EXTRA_RECIPE_LIST = "EXTRA_RECIPE_LIST";
+    public static final String EXTRA_SEARCH_TERM = "EXTRA_SEARCH_TERM";
 
     @InjectExtra(EXTRA_RECIPE_LIST)
     ArrayList<Recipe> recipes;
+    @InjectExtra(EXTRA_SEARCH_TERM)
+    String query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setTitle(query);
 
         if (savedInstanceState == null) {
             NetworkRecipeGridFragment f = NetworkRecipeGridFragment.newInstance(recipes);

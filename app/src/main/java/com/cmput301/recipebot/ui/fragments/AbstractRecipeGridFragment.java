@@ -28,7 +28,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Recipe;
-import com.cmput301.recipebot.ui.RecipeActivity;
+import com.cmput301.recipebot.ui.ViewRecipeActivity;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import roboguice.inject.InjectView;
@@ -62,8 +62,8 @@ public abstract class AbstractRecipeGridFragment extends RoboSherlockFragment im
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getSherlockActivity(), RecipeActivity.class);
-        intent.putExtra(RecipeActivity.EXTRA_RECIPE, (Recipe) view.getTag());
+        Intent intent = new Intent(getSherlockActivity(), ViewRecipeActivity.class);
+        intent.putExtra(ViewRecipeActivity.EXTRA_RECIPE, (Recipe) view.getTag());
         startActivity(intent);
     }
 }

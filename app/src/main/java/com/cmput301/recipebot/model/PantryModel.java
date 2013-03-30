@@ -41,9 +41,9 @@ public class PantryModel {
     private ArrayList<PantryView> views;
 
     private PantryModel(Context context) {
-        dbHelper = new DatabaseHelper(context);
         mPantry = new ArrayList<Ingredient>();
         views = new ArrayList<PantryView>();
+        dbHelper = DatabaseHelper.getInstance(context);
     }
 
     public interface PantryView {

@@ -38,6 +38,18 @@ public class Recipe implements Parcelable {
     private ArrayList<String> photos;
     private ArrayList<String> tags;
 
+    public Recipe() {
+        // Default constructor for NewRecipeActivity.
+        this.id = null;
+        this.name = null;
+        this.description = null;
+        this.user = null;
+        this.ingredients = new ArrayList<Ingredient>();
+        this.directions = new ArrayList<String>();
+        this.photos = new ArrayList<String>();
+        this.tags = new ArrayList<String>();
+    }
+
     public Recipe(String id, String name, String description, User user, ArrayList<Ingredient> ingredients,
                   ArrayList<String> directions, ArrayList<String> photos, ArrayList<String> tags) {
         this.id = id;
