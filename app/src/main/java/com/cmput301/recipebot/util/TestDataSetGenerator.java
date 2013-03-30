@@ -91,7 +91,7 @@ public class TestDataSetGenerator {
         }
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
         for (int j = 0; j < random.nextInt(6) + 1; j++) {
-            Ingredient ingredient = new Ingredient(RECIPE_INGREDIENTS[random.nextInt(RECIPE_INGREDIENTS.length)], "testing", 4f);
+            Ingredient ingredient = new Ingredient(RECIPE_INGREDIENTS[random.nextInt(RECIPE_INGREDIENTS.length)], 4f, "testing");
             ingredients.add(ingredient);
         }
         ArrayList<String> photos = new ArrayList<String>();
@@ -121,10 +121,10 @@ public class TestDataSetGenerator {
         directions.add("2. Bake");
         directions.add("3. Eat");
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-        ingredients.add(new Ingredient("Chicken", "lb", 2f));
-        ingredients.add(new Ingredient("Secret Spice #1", "tbsp.", 1f));
-        ingredients.add(new Ingredient("Secret Spice #2", "tsp.", 1f));
-        ingredients.add(new Ingredient("Buttermilk", "ml", 50f));
+        ingredients.add(new Ingredient("Chicken", 2f, "lb"));
+        ingredients.add(new Ingredient("Secret Spice #1", 1f, "tbsp."));
+        ingredients.add(new Ingredient("Secret Spice #2", 1f, "tsp."));
+        ingredients.add(new Ingredient("Buttermilk", 50f, "ml"));
         ArrayList<String> photos = new ArrayList<String>();
         for (int i = 0; i < 5; i++) {
             photos.add(RECIPE_PHOTOS[i]);

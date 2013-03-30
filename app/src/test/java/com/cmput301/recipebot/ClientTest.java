@@ -70,7 +70,7 @@ public class ClientTest {
         // Test the inital conditions. The user is randomised between runs, so we don't know what it is initially.
         Recipe recipe = mClient.getRecipe("46f1ea27-460c-4f5a-819b-33c0c333e6c2");
         assertThat(recipe).hasName("Baked Rice").hasDirection("Bake")
-                .hasIngredient(new Ingredient("Beans", "dsa", 2f)).hasDescription("Unhealthy").hasTag("Fried")
+                .hasIngredient(new Ingredient("Beans", 2f, "dsa")).hasDescription("Unhealthy").hasTag("Fried")
                 .hasPhoto(RECIPE_PHOTOS[6]);
 
         // make a new_user that is not the same as the old one.
@@ -89,7 +89,7 @@ public class ClientTest {
         //Verify only that attribute has changed in server, other remain same
         Recipe recipe2 = mClient.getRecipe("46f1ea27-460c-4f5a-819b-33c0c333e6c2");
         assertThat(recipe2).hasName("Baked Rice").hasDirection("Bake").hasUser(new_user)
-                .hasIngredient(new Ingredient("Beans", "dsa", 2f)).hasDescription("Unhealthy").hasTag("Fried")
+                .hasIngredient(new Ingredient("Beans", 2f, "dsa")).hasDescription("Unhealthy").hasTag("Fried")
                 .hasPhoto(RECIPE_PHOTOS[6]);
     }
 
@@ -100,14 +100,14 @@ public class ClientTest {
     public void testRetrieval() throws Exception {
         Recipe recipe1 = mClient.getRecipe("32a02a76-ed0d-4504-bfc4-ea996bfc36b3");
         assertThat(recipe1).hasName("Ravioli").hasUser(RECIPE_USERS[1]).hasDirection("Heat")
-                .hasIngredient(new Ingredient("Beans", "testing", 2f)).hasIngredient(new Ingredient("Strawberry", "testing", 2f))
-                .hasIngredient(new Ingredient("Eggs", "testing", 2f))
+                .hasIngredient(new Ingredient("Beans", 2f, "testing")).hasIngredient(new Ingredient("Strawberry", 2f, "testing"))
+                .hasIngredient(new Ingredient("Eggs", 2f, "testing"))
                 .hasDescription("Not so healthy!").hasTag("Vegetarian").hasTag("Chicken");
 
         Recipe recipe2 = mClient.getRecipe("b0b6d762-296d-4cd6-980e-f629b96ed05e");
         assertThat(recipe2).hasName("Roasted Potatoes").hasUser(RECIPE_USERS[4]).hasDirection("Chop").hasDirection("Saute").hasDirection("Stir")
-                .hasIngredient(new Ingredient("Fresh Greens", "dsa", 2f))
-                .hasIngredient(new Ingredient("Cream", "sdsa", 2f)).hasDescription("Unhealthy");
+                .hasIngredient(new Ingredient("Fresh Greens", 2f, "dsa"))
+                .hasIngredient(new Ingredient("Cream", 2f, "sdsa")).hasDescription("Unhealthy");
     }
 
     /**
@@ -133,7 +133,7 @@ public class ClientTest {
         // Test the initial conditions, verify that the recipe exists on the server.
         Recipe recipe = mClient.getRecipe("064cca20-9bd9-43a3-8a57-98497b0acdf3");
         assertThat(recipe).hasName("Cream Soda").hasUser(RECIPE_USERS[2]).hasDirection("Blend")
-                .hasIngredient(new Ingredient("Water", "testing", 2f)).hasDescription("Not so healthy!");
+                .hasIngredient(new Ingredient("Water", 2f, "testing")).hasDescription("Not so healthy!");
 
         ArrayList<Recipe> recipes = mClient.searchRecipes("Cream Soda");
         assertThat(recipes.size()).isGreaterThan(0); // We know this exists, but could be multiple (random).
@@ -160,7 +160,7 @@ public class ClientTest {
         }
 
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-        ingredients.add(new Ingredient("dsadsadasdasdasdada", "lb", 2f));
+        ingredients.add(new Ingredient("dsadsadasdasdasdada", 2f, "lb"));
         ArrayList<Recipe> recipes = mClient.searchRecipes(ingredients, false);
         assertThat(recipes.size()).isEqualTo(0); // We know this doesn't exist.
     }
@@ -172,7 +172,7 @@ public class ClientTest {
     public void testSearchByIngredientsReturnsMultipleRecipes() throws Exception {
         Recipe recipe1 = mClient.getRecipe("be92092c-5419-4f69-a061-111e89ef4409");
         Recipe recipe2 = mClient.getRecipe("018aced9-9289-4c5c-8e98-ead216e30ae0");
-        Ingredient ingredient = new Ingredient("Milk", "testing", 2f);
+        Ingredient ingredient = new Ingredient("Milk", 2f, "testing");
         assertThat(recipe1).hasIngredient(ingredient);
         assertThat(recipe2).hasIngredient(ingredient);
 
@@ -190,9 +190,9 @@ public class ClientTest {
     @Test
     public void testSearchByMultipleIngredients() throws Exception {
         Recipe recipe = mClient.getRecipe("ad745bcd-8503-4716-ad57-8ee0f604ad65");
-        Ingredient honey_garlic = new Ingredient("Honey Garlic", "testing", 2f);
-        Ingredient bacon = new Ingredient("Bacon", "testing", 2f);
-        Ingredient salt = new Ingredient("Salt", "testing", 2f);
+        Ingredient honey_garlic = new Ingredient("Honey Garlic", 2f, "testing");
+        Ingredient bacon = new Ingredient("Bacon", 2f, "testing");
+        Ingredient salt = new Ingredient("Salt", 2f, "testing");
         assertThat(recipe).hasIngredient(honey_garlic).hasIngredient(bacon).hasIngredient(salt);
 
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();

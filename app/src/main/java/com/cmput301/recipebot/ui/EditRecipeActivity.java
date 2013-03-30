@@ -254,7 +254,7 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
         float quantity = isEditTextEmpty(mEditTextIngredientQuantity) ?
                 0.0f : Float.parseFloat(mEditTextIngredientQuantity.getText().toString());
         String unit = mEditTextIngredientUnit.getText().toString();
-        Ingredient item = new Ingredient(name, unit, quantity);
+        Ingredient item = new Ingredient(name, quantity, unit);
 
         //Sanitize the input
         mEditTextIngredientName.setText(null);

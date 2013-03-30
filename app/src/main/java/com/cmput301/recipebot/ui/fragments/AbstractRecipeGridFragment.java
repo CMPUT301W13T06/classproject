@@ -43,7 +43,7 @@ public abstract class AbstractRecipeGridFragment extends RoboSherlockFragment im
     private static final String LOGTAG = makeLogTag(AbstractRecipeGridFragment.class);
     protected static final String RECIPE_ARGS = "recipes";
 
-    @InjectView(R.id.gridview)
+    @InjectView(R.id.fragment_recipe_gridview)
     GridView gridview;
 
     protected RecipeGridAdapter mAdapter;

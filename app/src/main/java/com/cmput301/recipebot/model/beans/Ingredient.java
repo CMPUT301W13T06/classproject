@@ -23,33 +23,48 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * An ingredient class. This is used by the {@link Recipe} object to show all ingredients required.
+ * This class stores an Ingredient object. A {@link Recipe} object contains a list of these.
+ * It is re-used by {@link com.cmput301.recipebot.model.PantryModel} to save ingredients in the Pantry.
  */
 public class Ingredient implements Parcelable {
 
+    /**
+     * The name of the ingredient. This is used to match two ingredients.
+     */
     private String name;
-    private String unit;
+
+    /**
+     * The quantity for for this ingredient. Could be null.
+     */
     private float quantity;
 
-    public Ingredient(String name, String unit, float quantity) {
+    /**
+     * The units that give context to the quantity. e.g. "ml", "nos.", "tbsp", "tsp", etc.
+     */
+    private String unit;
+
+    /**
+     * Construct an Ingredient object.
+     *
+     * @param name     Name of the ingredient.
+     * @param quantity Quantity of the ingredient.
+     * @param unit     Units for the quantity of the ingredient.
+     */
+    public Ingredient(String name, float quantity, String unit) {
         this.name = name;
-        this.unit = unit;
         this.quantity = quantity;
+        this.unit = unit;
     }
 
     /**
-     * Get the name of the item
-     *
-     * @return Name of item.
+     * Returns the name of the ingredient.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Set the name of the item.
-     *
-     * @param name Name of item.
+     * Sets the name of the ingredient.
      */
     public void setName(String name) {
         this.name = name;
@@ -57,26 +72,28 @@ public class Ingredient implements Parcelable {
 
     /**
      * Returns unit associated with this Ingredient (e.g. 'ml', or 'oz.' or 'nos')
-     *
-     * @return The unit.
      */
     public String getUnit() {
         return unit;
     }
 
+    /**
+     * Sets the unit of the ingredient.
+     */
     public void setUnit(String unit) {
         this.unit = unit;
     }
 
     /**
      * Returns quantity for this ingredient.
-     *
-     * @return The quantity required.
      */
     public float getQuantity() {
         return quantity;
     }
 
+    /**
+     * Sets the quantity of the ingredient.
+     */
     public void setQuantity(float quantity) {
         this.quantity = quantity;
     }
@@ -86,13 +103,23 @@ public class Ingredient implements Parcelable {
         if (unit == null || quantity == 0.0f) {
             return name;
         }
+        if (unit == "") {
+            if (quantity == (int) quantity)
+                return String.format("%d of %s", (int) quantity, name);
+            else
+                return String.format("%s of %s", quantity, name);
+        }
         if (quantity == (int) quantity)
             return String.format("%d %s of %s", (int) quantity, unit, name);
         else
             return String.format("%s %s of %s", quantity, unit, name);
     }
 
-    //Parcel code
+    /**
+     * Constructs an Ingredient object from a {@link Parcel}
+     *
+     * @param in Parcel to contruct from.
+     */
     protected Ingredient(Parcel in) {
         name = in.readString();
         unit = in.readString();
@@ -111,6 +138,9 @@ public class Ingredient implements Parcelable {
         dest.writeFloat(quantity);
     }
 
+    /**
+     * @see Parcelable.Creator
+     */
     public static final Parcelable.Creator<Ingredient> CREATOR = new Parcelable.Creator<Ingredient>() {
         public Ingredient createFromParcel(Parcel in) {
             return new Ingredient(in);

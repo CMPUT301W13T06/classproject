@@ -134,7 +134,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         // Don't parse the float if the field is empty.
         float quantity = isEditTextEmpty(mEditTextQuantity) ? 0.0f : Float.parseFloat(mEditTextQuantity.getText().toString());
         String unit = mEditTextUnit.getText().toString();
-        Ingredient item = new Ingredient(name, unit, quantity);
+        Ingredient item = new Ingredient(name, quantity, unit);
         PantryModel.getInstance(getSherlockActivity()).insertPantryItem(item);
 
         //Sanitize the input

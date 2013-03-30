@@ -25,7 +25,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 /**
- * A recipe class.
+ * A recipe object. This class
  */
 public class Recipe implements Parcelable {
 

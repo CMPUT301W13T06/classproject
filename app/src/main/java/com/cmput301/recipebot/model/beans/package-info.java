@@ -18,7 +18,6 @@
  */
 
 /**
- * Provides the interface for communicating with data that is locally stored.
- *
+ * Package that stores our objects.
  */
-package com.cmput301.recipebot.model.local;
+package com.cmput301.recipebot.model.beans;
