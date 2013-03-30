@@ -231,6 +231,19 @@ public class Recipe implements Parcelable {
 
     @Override
     public String toString() {
+        return "Recipe{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", user=" + user +
+                ", ingredients=" + ingredients +
+                ", directions=" + directions +
+                ", photos=" + photos +
+                ", tags=" + tags +
+                '}';
+    }
+
+    public String toEmail() {
         return "Recipe : " + name + "\n" +
                 description + "\n" +
                 "by " + user + "\n" +
