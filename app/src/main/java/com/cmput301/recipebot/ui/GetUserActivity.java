@@ -49,7 +49,7 @@ public class GetUserActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_get_user);
         TextView title = (TextView) findViewById(android.R.id.title);
         title.setTypeface(Typeface.createFromAsset(getAssets(), "Roboto-Thin.ttf"));
         mButtonSubmit.setOnClickListener(this);
