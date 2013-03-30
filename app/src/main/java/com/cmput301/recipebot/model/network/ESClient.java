@@ -32,18 +32,41 @@ import java.util.ArrayList;
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
 /**
- * The network class that communicates with our server.
+ * The client class that communicates with our backend. It uses an instance of {@link Gson} to serialize and
+ * deserialize data.
  */
 public class ESClient {
 
     private static final String LOGTAG = makeLogTag(ESClient.class);
+
+    /**
+     * URL for the server.
+     */
     private static final String SERVER_URL = "http://cmput301.softwareprocess.es:8080";
+
+    /**
+     * The index that we're using.
+     */
     private static final String CLIENT_INDEX = "test-cmput301w13t06";// "cmput301w13t06";
+
+    /**
+     * An identifier for the recipe object.
+     */
     private static final String TYPE_RECIPE = "recipe";
+
+    /**
+     * Perform a sarch query.
+     */
     private static final String METHOD_SEARCH = "_search";
 
+    /**
+     * A {@link Gson} object to deserialize and deserialize our data.
+     */
     private final Gson gson;
 
+    /**
+     * Constructs a client object.
+     */
     public ESClient() {
         gson = new Gson();
     }
@@ -107,6 +130,12 @@ public class ESClient {
         return getRecipesFromResponse(httpSearch.body());
     }
 
+    /**
+     * A helper method that analyzes the response and returns an ArrayList of {@link Recipe} objects.
+     *
+     * @param response Response from the server.
+     * @return List of recipes in the response.
+     */
     private ArrayList<Recipe> getRecipesFromResponse(String response) {
         Type esSearchResponseType = new TypeToken<ESSearchResponse<Recipe>>() {
         }.getType();
@@ -174,24 +203,23 @@ public class ESClient {
     }
 
     /**
-     * Get the Recipe URL
-     *
-     * @return Recipe URL
+     * Get the complete Recipe URL.
      */
-    public static String getRecipesUrl() {
+    private static String getRecipesUrl() {
         return getIndexUrl() + "/" + TYPE_RECIPE;
     }
 
-    public static String getRecipeSearchUrl() {
+    /**
+     * Get the URL to search for a recipe.
+     */
+    private static String getRecipeSearchUrl() {
         return getRecipesUrl() + "/" + METHOD_SEARCH;
     }
 
     /**
-     * Get the url for our index.
-     *
-     * @return Index URL
+     * Get the complete url for our index.
      */
-    public static String getIndexUrl() {
+    private static String getIndexUrl() {
         return SERVER_URL + "/" + CLIENT_INDEX;
     }
 
