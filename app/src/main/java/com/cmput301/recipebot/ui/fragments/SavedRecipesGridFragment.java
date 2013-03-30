@@ -38,7 +38,8 @@ import java.util.List;
 /**
  * A fragment that registers to recipe any database updates.
  */
-public class SavedRecipesGridFragment extends AbstractRecipeGridFragment implements RecipeModel.RecipeView, AdapterView.OnItemLongClickListener {
+public class SavedRecipesGridFragment extends AbstractRecipeGridFragment implements RecipeModel.RecipeView,
+        AdapterView.OnItemLongClickListener {
 
     @Override
     public void onResume() {

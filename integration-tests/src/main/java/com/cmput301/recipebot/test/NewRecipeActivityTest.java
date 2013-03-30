@@ -21,7 +21,7 @@ package com.cmput301.recipebot.test;
 
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
-import com.cmput301.recipebot.ui.RecipeActivity;
+import com.cmput301.recipebot.ui.EditRecipeActivity;
 import com.squareup.spoon.Spoon;
 
 import static org.fest.assertions.api.ANDROID.assertThat;
@@ -29,16 +29,16 @@ import static org.fest.assertions.api.ANDROID.assertThat;
 /**
  * Tests for a new Recipe Activity
  */
-public class NewRecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeActivity> {
+public class NewRecipeActivityTest extends ActivityInstrumentationTestCase2<EditRecipeActivity> {
 
     protected Instrumentation instrumentation;
-    protected RecipeActivity activity;
+    protected EditRecipeActivity activity;
 
     /**
-     * Create test for {@link com.cmput301.recipebot.ui.RecipeActivity}
+     * Create test for {@link com.cmput301.recipebot.ui.EditRecipeActivity}
      */
     public NewRecipeActivityTest() {
-        super(RecipeActivity.class);
+        super(EditRecipeActivity.class);
     }
 
     @Override

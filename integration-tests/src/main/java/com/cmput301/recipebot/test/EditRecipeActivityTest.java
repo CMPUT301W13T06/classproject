@@ -29,7 +29,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.Recipe;
-import com.cmput301.recipebot.ui.RecipeActivity;
+import com.cmput301.recipebot.ui.EditRecipeActivity;
 import com.squareup.spoon.Spoon;
 
 import static com.cmput301.recipebot.util.TestDataSetGenerator.getTestRecipe;
@@ -38,10 +38,10 @@ import static org.fest.assertions.api.ANDROID.assertThat;
 /**
  * Test for existing recipe activity.
  */
-public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeActivity> {
+public class EditRecipeActivityTest extends ActivityInstrumentationTestCase2<EditRecipeActivity> {
 
     private Instrumentation instrumentation;
-    private RecipeActivity activity;
+    private EditRecipeActivity activity;
     private Recipe recipe;
     private EditText editTextName;
     private EditText editTextDescription;
@@ -54,10 +54,10 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     private View save;
 
     /**
-     * Create test for {@link com.cmput301.recipebot.ui.RecipeActivity}
+     * Create test for {@link com.cmput301.recipebot.ui.EditRecipeActivity}
      */
-    public RecipeActivityTest() {
-        super(RecipeActivity.class);
+    public EditRecipeActivityTest() {
+        super(EditRecipeActivity.class);
     }
 
     @Override
@@ -75,17 +75,17 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
         directionsList = (LinearLayout) activity.findViewById(R.id.list_directions);
         tagsList = (LinearLayout) activity.findViewById(R.id.list_tags);
         viewPager = (ViewPager) activity.findViewById(R.id.pager_recipe_images);
-        save = activity.findViewById(R.id.recipe_menu_save);
+        save = null;
     }
 
     private Intent makeTestIntent(Recipe recipe) {
-        Intent intent = new Intent(instrumentation.getContext(), RecipeActivity.class);
-        intent.putExtra(RecipeActivity.EXTRA_RECIPE, recipe);
+        Intent intent = new Intent(instrumentation.getContext(), EditRecipeActivity.class);
+        // intent.putExtra(EditRecipeActivity.EXTRA_RECIPE, recipe);
         return intent;
     }
 
     /**
-     * Verify that {@link RecipeActivity} exists.
+     * Verify that {@link EditRecipeActivity} exists.
      */
     public void testActivityDisplaysFields() throws Exception {
         Spoon.screenshot(activity, "initial_state");
@@ -109,7 +109,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     }
 
     /**
-     * Verify that {@link RecipeActivity} is shown with empty directions and doesn't save.
+     * Verify that {@link EditRecipeActivity} is shown with empty directions and doesn't save.
      */
     public void testIsShownWithEmptyDirectionsAndSaveFails() throws Exception {
         Spoon.screenshot(activity, "initial_state");
@@ -158,7 +158,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     }
 
     /**
-     * Verify that {@link RecipeActivity} is shown with empty tags.
+     * Verify that {@link EditRecipeActivity} is shown with empty tags.
      */
     public void testIsShownWithEmptyTags() throws Exception {
         Spoon.screenshot(activity, "initial_state");
@@ -166,13 +166,12 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     }
 
     /**
-     * Verify that {@link RecipeActivity} is shown with no ingredients.
+     * Verify that {@link EditRecipeActivity} is shown with no ingredients.
      */
     public void testIsShownWithEmptyIngredientsAndSaveFails() throws Exception {
         Spoon.screenshot(activity, "initial_state");
         clearList(ingredientList, "ingredients");
         assertThat(editTextIngredient).hasNoError();
-        final View save = activity.findViewById(R.id.recipe_menu_save);
         instrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {
@@ -185,7 +184,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     }
 
     /**
-     * Verify that {@link RecipeActivity} doesn't save with an empty name.
+     * Verify that {@link EditRecipeActivity} doesn't save with an empty name.
      */
     public void testFailsSaveWithEmptyName() throws Exception {
         Spoon.screenshot(activity, "initial_state");
@@ -198,7 +197,6 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
         });
         instrumentation.waitForIdleSync();
         assertThat(editTextName).hasTextString("").hasNoError();
-        final View save = activity.findViewById(R.id.recipe_menu_save);
         instrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {
@@ -211,7 +209,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
     }
 
     /**
-     * Verify that {@link RecipeActivity} shows all the errors.
+     * Verify that {@link EditRecipeActivity} shows all the errors.
      */
     public void testShowsAllErrors() throws Exception {
         Spoon.screenshot(activity, "initial_state");
@@ -228,7 +226,7 @@ public class RecipeActivityTest extends ActivityInstrumentationTestCase2<RecipeA
         clearList(directionsList, "directions");
         clearList(ingredientList, "ingredients");
         Spoon.screenshot(activity, "cleared");
-        final View save = activity.findViewById(R.id.recipe_menu_save);
+        // final View save = activity.findViewById(R.id.recipe_menu_save);
         instrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {

@@ -76,5 +76,8 @@
     <string name="invalid">Invalid</string>
     <string name="invalid_email">Invalid Email</string>
     <string name="recipe_deleted">Recipe Deleted</string>
+    <string name="menu_edit">Edit</string>
+    <string name="direction">Direction</string>
+    <string name="tags">Tags</string>
 
 </resources>

@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
      * Start an activity to add a new Recipe.
      */
     private void addRecipe() {
-        Intent intent = new Intent(this, RecipeActivity.class);
+        Intent intent = new Intent(this, EditRecipeActivity.class);
         startActivity(intent);
     }
 
@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        new SearchTask().execute(query);
+        new SearchTask(query).execute();
         return true;
     }
 
@@ -148,7 +148,12 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
         return false;
     }
 
-    private class SearchTask extends AsyncTask<String, Void, ArrayList<Recipe>> {
+    private class SearchTask extends AsyncTask<Void, Void, ArrayList<Recipe>> {
+        String query;
+
+        public SearchTask(String query) {
+            this.query = query;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -157,8 +162,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
         }
 
         @Override
-        protected ArrayList<Recipe> doInBackground(String... strings) {
-            String query = strings[0];
+        protected ArrayList<Recipe> doInBackground(Void... params) {
             ESClient client = new ESClient();
             if (query.charAt(0) == '@') {
                 return client.searchRecipesFromUser(query.substring(1));
@@ -174,6 +178,7 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
             setSupportProgressBarIndeterminateVisibility(false);
             Intent intent = new Intent(MainActivity.this, SearchRecipeActivity.class);
             intent.putParcelableArrayListExtra(SearchRecipeActivity.EXTRA_RECIPE_LIST, recipes);
+            intent.putExtra(SearchRecipeActivity.EXTRA_SEARCH_TERM, query);
             startActivity(intent);
             super.onPostExecute(recipes);
         }
