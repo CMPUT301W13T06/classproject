@@ -19,9 +19,9 @@
 
 package com.cmput301.recipebot;
 
-import com.cmput301.recipebot.model.Ingredient;
-import com.cmput301.recipebot.model.Recipe;
-import com.cmput301.recipebot.model.User;
+import com.cmput301.recipebot.model.beans.Ingredient;
+import com.cmput301.recipebot.model.beans.Recipe;
+import com.cmput301.recipebot.model.beans.User;
 import com.cmput301.recipebot.model.network.ESClient;
 import org.junit.Before;
 import org.junit.Test;

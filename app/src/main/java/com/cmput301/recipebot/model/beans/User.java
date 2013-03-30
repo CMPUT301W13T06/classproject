@@ -17,7 +17,7 @@
  *  limitations under the License.
  */
 
-package com.cmput301.recipebot.model;
+package com.cmput301.recipebot.model.beans;
 
 import android.os.Parcel;
 import android.os.Parcelable;

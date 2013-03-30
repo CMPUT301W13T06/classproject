@@ -18,8 +18,8 @@
  */
 
 /**
- * Provides the interface necessary to communicate with the Elastic Search Backend.
+ * Provides the interface for communicating with data that is local.
  *
  * @see com.cmput301.recipebot.model.beans.Recipe
  */
-package com.cmput301.recipebot.model.network;
+package com.cmput301.recipebot.model.local;

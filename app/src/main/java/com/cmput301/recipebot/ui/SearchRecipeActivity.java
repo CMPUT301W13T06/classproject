@@ -20,7 +20,7 @@
 package com.cmput301.recipebot.ui;
 
 import android.os.Bundle;
-import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.ui.fragments.NetworkRecipeGridFragment;
 import roboguice.inject.InjectExtra;
 

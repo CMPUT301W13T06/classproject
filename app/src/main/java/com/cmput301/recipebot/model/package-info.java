@@ -20,6 +20,6 @@
 /**
  * Provides the interface to communicate
  *
- * @see com.cmput301.recipebot.model.Recipe
+ * @see com.cmput301.recipebot.model.beans.Recipe
  */
 package com.cmput301.recipebot.model;

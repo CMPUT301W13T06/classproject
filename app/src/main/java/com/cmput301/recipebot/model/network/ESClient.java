@@ -20,8 +20,8 @@
 package com.cmput301.recipebot.model.network;
 
 import android.util.Log;
-import com.cmput301.recipebot.model.Ingredient;
-import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.beans.Ingredient;
+import com.cmput301.recipebot.model.beans.Recipe;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

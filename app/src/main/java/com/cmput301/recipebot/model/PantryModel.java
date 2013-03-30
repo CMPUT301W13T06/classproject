@@ -21,6 +21,7 @@ package com.cmput301.recipebot.model;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import com.cmput301.recipebot.model.beans.Ingredient;
 import com.cmput301.recipebot.model.local.DatabaseHelper;
 
 import java.util.ArrayList;

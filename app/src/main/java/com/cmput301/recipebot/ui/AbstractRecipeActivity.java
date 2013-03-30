@@ -33,7 +33,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.beans.Recipe;
 import com.google.gson.Gson;
 import roboguice.inject.InjectView;
 

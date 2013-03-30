@@ -21,6 +21,7 @@ package com.cmput301.recipebot.model;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.model.local.DatabaseHelper;
 import com.cmput301.recipebot.model.network.ESClient;
 import com.cmput301.recipebot.util.NetworkUtils;

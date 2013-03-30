@@ -28,7 +28,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import com.cmput301.recipebot.R;
-import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.ui.EditRecipeActivity;
 import com.squareup.spoon.Spoon;
 

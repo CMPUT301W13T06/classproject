@@ -24,8 +24,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.cmput301.recipebot.model.Ingredient;
-import com.cmput301.recipebot.model.Recipe;
+import com.cmput301.recipebot.model.beans.Ingredient;
+import com.cmput301.recipebot.model.beans.Recipe;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
