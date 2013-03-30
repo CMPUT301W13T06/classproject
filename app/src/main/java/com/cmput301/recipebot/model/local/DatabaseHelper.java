@@ -32,39 +32,83 @@ import java.util.ArrayList;
 
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
+/**
+ * A wrapper around {@link SQLiteOpenHelper} and {@link SQLiteDatabase} so we can just query for our
+ * objects. It maintians a static instance of itself that should be used by other objects that need this.
+ *
+ * @see #instance
+ * @see #getInstance(android.content.Context)
+ */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String LOGTAG = makeLogTag(DatabaseHelper.class);
 
+    /**
+     * The database name.
+     */
     private static final String DATABASE_NAME = "recipebot.db";
+
+    /**
+     * The database version.
+     */
     private static final int DATABASE_VERSION = 1;
 
+    /**
+     * The table name for storing recipes.
+     */
     private static final String TABLE_RECIPES = "recipes";
     private static final String COLUMN_RECIPE_ID = "_id";
     private static final String COLUMN_RECIPE_DATA = "data";
 
-    private static final String TABLE_PANTRY = "pantry";
-    private static final String COLUMN_PANTRY_ID = "_id";
-    private static final String COLUMN_PANTRY_DATA = "data";
-
+    /**
+     * Create statement for {@link #TABLE_RECIPES}
+     */
     private static final String CREATE_TABLE_RECIPES = "create table "
             + TABLE_RECIPES + "(" + COLUMN_RECIPE_ID
             + " text primary key, " + COLUMN_RECIPE_DATA
             + " text not null);";
 
+    /**
+     * The table name for storing pantry objects {@link Ingredient}.
+     */
+    private static final String TABLE_PANTRY = "pantry";
+    private static final String COLUMN_PANTRY_ID = "_id";
+    private static final String COLUMN_PANTRY_DATA = "data";
+
+    /**
+     * Create statement for {@link #TABLE_PANTRY}
+     */
     private static final String CREATE_TABLE_PANTRY = "create table "
             + TABLE_PANTRY + "(" + COLUMN_PANTRY_ID
             + " text primary key, " + COLUMN_PANTRY_DATA
             + " text not null);";
 
+    /**
+     * A {@link Gson} instance to serialize and de-serialize our data.
+     */
     private Gson mGson;
+
+    /**
+     * A static instance of this class.
+     */
     private static DatabaseHelper instance;
 
+    /**
+     * Constructs the Database Helper.
+     *
+     * @param context Context to open the database.
+     */
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mGson = new Gson();
     }
 
+    /**
+     * Returns a static instance of the DatabaseHelper. If the instance does not exist, a new one is created.
+     *
+     * @param context Context to open the database. Regardless of the Context provided, it uses the Application context.
+     * @return an instance of the DatabaseHelper.
+     */
     public static DatabaseHelper getInstance(Context context) {
         if (instance == null) {
             instance = new DatabaseHelper(context.getApplicationContext());

@@ -19,6 +19,5 @@
 
 /**
  * Provides the interface for communicating with data that is locally stored.
- *
  */
 package com.cmput301.recipebot.model.local;
