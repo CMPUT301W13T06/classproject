@@ -20,36 +20,46 @@
 package com.cmput301.recipebot.test;
 
 import android.app.Instrumentation;
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import com.cmput301.recipebot.ui.EditRecipeActivity;
+import com.cmput301.recipebot.ui.SearchRecipeActivity;
 import com.squareup.spoon.Spoon;
 
+import java.util.Random;
+
+import static com.cmput301.recipebot.util.TestDataSetGenerator.generateRandomRecipes;
 import static org.fest.assertions.api.ANDROID.assertThat;
 
-public class NewRecipeActivityTest extends ActivityInstrumentationTestCase2<EditRecipeActivity> {
+public class SearchRecipeActivityTest extends ActivityInstrumentationTestCase2<SearchRecipeActivity> {
 
     protected Instrumentation instrumentation;
-    protected EditRecipeActivity activity;
+    protected SearchRecipeActivity activity;
+    private static final int MAX_TEST_SIZES = 50;
 
-    /**
-     * Create test for {@link com.cmput301.recipebot.ui.EditRecipeActivity}
-     */
-    public NewRecipeActivityTest() {
-        super(EditRecipeActivity.class);
+    public SearchRecipeActivityTest() {
+        super(SearchRecipeActivity.class);
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         instrumentation = getInstrumentation();
+        setActivityIntent(getTestIntent()); // Set intent first
         activity = getActivity();
     }
 
     /**
-     * Test that new recipe activity can be started.
+     * Verify that {@link com.cmput301.recipebot.ui.SearchRecipeActivity} exists
      */
-    public void testNewRecipeActivityExists() {
+    public void testRecipeActivityExists() {
         assertThat(activity).isNotNull();
         Spoon.screenshot(activity, "initial_state");
+    }
+
+    private Intent getTestIntent() {
+        Intent intent = new Intent(instrumentation.getContext(), SearchRecipeActivity.class);
+        intent.putExtra(SearchRecipeActivity.EXTRA_RECIPE_LIST, generateRandomRecipes(new Random().nextInt(MAX_TEST_SIZES)));
+        intent.putExtra(SearchRecipeActivity.EXTRA_SEARCH_TERM, "testing");
+        return intent;
     }
 }

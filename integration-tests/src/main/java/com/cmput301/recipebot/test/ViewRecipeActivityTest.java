@@ -20,35 +20,51 @@
 package com.cmput301.recipebot.test;
 
 import android.app.Instrumentation;
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import com.cmput301.recipebot.model.Recipe;
 import com.cmput301.recipebot.ui.EditRecipeActivity;
+import com.cmput301.recipebot.ui.ViewRecipeActivity;
 import com.squareup.spoon.Spoon;
 
+import static com.cmput301.recipebot.util.TestDataSetGenerator.getTestRecipe;
 import static org.fest.assertions.api.ANDROID.assertThat;
 
-public class NewRecipeActivityTest extends ActivityInstrumentationTestCase2<EditRecipeActivity> {
+/**
+ * Tests for a new Recipe Activity
+ */
+public class ViewRecipeActivityTest extends ActivityInstrumentationTestCase2<ViewRecipeActivity> {
 
     protected Instrumentation instrumentation;
-    protected EditRecipeActivity activity;
+    protected ViewRecipeActivity activity;
+    private Recipe recipe;
 
     /**
      * Create test for {@link com.cmput301.recipebot.ui.EditRecipeActivity}
      */
-    public NewRecipeActivityTest() {
-        super(EditRecipeActivity.class);
+    public ViewRecipeActivityTest() {
+        super(ViewRecipeActivity.class);
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         instrumentation = getInstrumentation();
+        recipe = getTestRecipe();
+        setActivityIntent(makeTestIntent(recipe));
         activity = getActivity();
+    }
+
+    private Intent makeTestIntent(Recipe recipe) {
+        Intent intent = new Intent(instrumentation.getContext(), EditRecipeActivity.class);
+        intent.putExtra(EditRecipeActivity.EXTRA_RECIPE, recipe);
+        return intent;
     }
 
     /**
      * Test that new recipe activity can be started.
      */
-    public void testNewRecipeActivityExists() {
+    public void testViewRecipeActivityExists() {
         assertThat(activity).isNotNull();
         Spoon.screenshot(activity, "initial_state");
     }

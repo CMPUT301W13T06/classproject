@@ -28,8 +28,6 @@ import com.cmput301.recipebot.ui.adapters.ImagePagerAdapter;
 
 public class ViewRecipeActivity extends AbstractRecipeActivity {
 
-    private static final int MENU_EDIT = 2193;
-
     @Override
     public void setPhotos() {
         mViewPhotos.setAdapter(new ImagePagerAdapter(this, mRecipe.getPhotos()));
@@ -37,7 +35,7 @@ public class ViewRecipeActivity extends AbstractRecipeActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(Menu.NONE, MENU_EDIT, Menu.NONE, R.string.menu_edit)
+        menu.add(Menu.NONE, R.id.menu_edit, Menu.NONE, R.string.menu_edit)
                 .setIcon(R.drawable.ic_action_edit)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return super.onCreateOptionsMenu(menu);
@@ -46,7 +44,7 @@ public class ViewRecipeActivity extends AbstractRecipeActivity {
     @Override
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_EDIT:
+            case R.id.menu_edit:
                 editRecipe();
                 return true;
             default:

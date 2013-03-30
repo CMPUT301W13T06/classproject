@@ -75,12 +75,12 @@ public class EditRecipeActivityTest extends ActivityInstrumentationTestCase2<Edi
         directionsList = (LinearLayout) activity.findViewById(R.id.list_directions);
         tagsList = (LinearLayout) activity.findViewById(R.id.list_tags);
         viewPager = (ViewPager) activity.findViewById(R.id.pager_recipe_images);
-        save = null;
+        save = activity.findViewById(R.id.menu_save);
     }
 
     private Intent makeTestIntent(Recipe recipe) {
         Intent intent = new Intent(instrumentation.getContext(), EditRecipeActivity.class);
-        // intent.putExtra(EditRecipeActivity.EXTRA_RECIPE, recipe);
+        intent.putExtra(EditRecipeActivity.EXTRA_RECIPE, recipe);
         return intent;
     }
 
@@ -114,7 +114,7 @@ public class EditRecipeActivityTest extends ActivityInstrumentationTestCase2<Edi
     public void testIsShownWithEmptyDirectionsAndSaveFails() throws Exception {
         Spoon.screenshot(activity, "initial_state");
         assertThat(editTextDirection).hasNoError();
-        clearList(directionsList, "directions");
+        clearList(directionsList);
         instrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {
@@ -131,7 +131,7 @@ public class EditRecipeActivityTest extends ActivityInstrumentationTestCase2<Edi
      *
      * @param layout
      */
-    private void clearList(LinearLayout layout, String tag) {
+    private void clearList(LinearLayout layout) {
         int child_count = layout.getChildCount();
         for (int i = 0; i < child_count; i++) {
             final CheckBox child = (CheckBox) layout.getChildAt(0);
@@ -141,7 +141,6 @@ public class EditRecipeActivityTest extends ActivityInstrumentationTestCase2<Edi
                     child.setChecked(true);
                 }
             });
-            Spoon.screenshot(activity, tag + "_checked_" + i);
             instrumentation.waitForIdleSync();
             final View delete = activity.findViewById(R.id.menu_delete_item_from_list);
             instrumentation.runOnMainSync(new Runnable() {
@@ -151,7 +150,6 @@ public class EditRecipeActivityTest extends ActivityInstrumentationTestCase2<Edi
                 }
             });
             instrumentation.waitForIdleSync();
-            Spoon.screenshot(activity, tag + "_deleted_" + i);
         }
         assertThat(layout).hasChildCount(0);
         Spoon.screenshot(activity, "cleared");
@@ -162,7 +160,7 @@ public class EditRecipeActivityTest extends ActivityInstrumentationTestCase2<Edi
      */
     public void testIsShownWithEmptyTags() throws Exception {
         Spoon.screenshot(activity, "initial_state");
-        clearList(tagsList, "tags");
+        clearList(tagsList);
     }
 
     /**
@@ -170,7 +168,7 @@ public class EditRecipeActivityTest extends ActivityInstrumentationTestCase2<Edi
      */
     public void testIsShownWithEmptyIngredientsAndSaveFails() throws Exception {
         Spoon.screenshot(activity, "initial_state");
-        clearList(ingredientList, "ingredients");
+        clearList(ingredientList);
         assertThat(editTextIngredient).hasNoError();
         instrumentation.runOnMainSync(new Runnable() {
             @Override
@@ -223,10 +221,8 @@ public class EditRecipeActivityTest extends ActivityInstrumentationTestCase2<Edi
             }
         });
         instrumentation.waitForIdleSync();
-        clearList(directionsList, "directions");
-        clearList(ingredientList, "ingredients");
-        Spoon.screenshot(activity, "cleared");
-        // final View save = activity.findViewById(R.id.recipe_menu_save);
+        clearList(directionsList);
+        clearList(ingredientList);
         instrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {

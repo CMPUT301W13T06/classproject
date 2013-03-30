@@ -57,7 +57,6 @@ import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 public class EditRecipeActivity extends AbstractRecipeActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private static final String LOGTAG = makeLogTag(EditRecipeActivity.class);
-    private static final int MENU_SAVE = 7862;
     private static final int RESULT_LOAD_IMAGE = 458;
     private static final int TAKE_PICTURE = 531;
     private Uri cameraImageUri;
@@ -121,7 +120,7 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(Menu.NONE, MENU_SAVE, Menu.NONE, R.string.menu_save)
+        menu.add(Menu.NONE, R.id.menu_save, Menu.NONE, R.string.menu_save)
                 .setIcon(R.drawable.ic_action_save)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return super.onCreateOptionsMenu(menu);
@@ -350,7 +349,7 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
     @Override
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_SAVE:
+            case R.id.menu_save:
                 save();
                 return true;
             default:
