@@ -31,39 +31,35 @@ public class TestDataSetGenerator {
 
     public static final String[] RECIPE_NAMES = {"Chicken Parmesan", "Kentucky Fried Chicken", "Green Salad", "Kahlua",
             "Stir Fry", "Fried Rice", "Hamburger", "Mocha", "Cream Soda", "Omelette's", "Chicken Wings", "Caesar Salad",
-            "Steak", "Chilli", "Baked Rice", "Roasted Potatoes", "Chicken Satay", "Ravioli", "Corn on the Cob"};
+            "Steak", "Chilli", "Baked Rice", "Roasted Potatoes", "Chicken Satay", "Ravioli", "Corn on the Cob",
+            "Pancakes", "Waffles", "Cake", "Pie", "Pizza"};
     public static final String[] RECIPE_DESCRIPTIONS = {"Very Healthy", "Not so healthy!", "Unhealthy"};
     public static final String[] RECIPE_INGREDIENTS = {"Chicken", "Butter", "Water", "Fresh Vegetables",
             "Fresh Greens", "Vodka", "Oil", "Bun", "Salt", "Lamb", "Peas", "Fish", "Beans", "Tofu", "Cream",
             "Sugar", "Rhubarb", "Milk", "Eggs", "Strawberry", "Honey Garlic", "Corn", "Beans", "Kale", "Bacon"};
     public static final String[] RECIPE_DIRECTIONS = {"Bake", "Mix", "Shake", "Blend", "Eat", "Heat",
             "Fry", "Saute", "Mash", "Steam", "Stir", "Whip", "Chop", "Blend", "Boil", "Grill"};
-    public static final User[] RECIPE_USERS = {new User("1@gmail.com", "prateek"), new User("2@gmail.com", "adam"), new User("3@gmail.com", "ethan"),
-            new User("4@gmail.com", "brian"), new User("5@gmail.com", "bruce"), new User("6@gmail.com", "clark")};
-    public static final String[] RECIPE_TAGS = {"Chicken", "Dairy", "Vegetarian", "Southern", "Baked", "Fried"};
+    public static final User[] RECIPE_USERS = {new User("1@gmail.com", "prateek"), new User("2@gmail.com", "adam"),
+            new User("3@gmail.com", "ethan"), new User("4@gmail.com", "brian"), new User("5@gmail.com", "bruce"),
+            new User("6@gmail.com", "clark")};
+    public static final String[] RECIPE_TAGS = {"Chicken", "Dairy", "Vegetarian", "Southern", "Baked", "Fried", "Breakfast", "Dinner"};
     public static final String[] RECIPE_PHOTOS = new String[]{
-            "https://lh6.googleusercontent.com/-jZgveEqb6pg/T3R4kXScycI/AAAAAAAAAE0/xQ7CvpfXDzc/s1024/sample_image_01.jpg",
-            "https://lh4.googleusercontent.com/-K2FMuOozxU0/T3R4lRAiBTI/AAAAAAAAAE8/a3Eh9JvnnzI/s1024/sample_image_02.jpg",
-            "https://lh5.googleusercontent.com/-SCS5C646rxM/T3R4l7QB6xI/AAAAAAAAAFE/xLcuVv3CUyA/s1024/sample_image_03.jpg",
-            "https://lh6.googleusercontent.com/-f0NJR6-_Thg/T3R4mNex2wI/AAAAAAAAAFI/45oug4VE8MI/s1024/sample_image_04.jpg",
-            "https://lh3.googleusercontent.com/-n-xcJmiI0pg/T3R4mkSchHI/AAAAAAAAAFU/EoiNNb7kk3A/s1024/sample_image_05.jpg",
-            "https://lh3.googleusercontent.com/-X43vAudm7f4/T3R4nGSChJI/AAAAAAAAAFk/3bna6D-2EE8/s1024/sample_image_06.jpg",
-            "https://lh5.googleusercontent.com/-MpZneqIyjXU/T3R4nuGO1aI/AAAAAAAAAFg/r09OPjLx1ZY/s1024/sample_image_07.jpg",
-            "https://lh6.googleusercontent.com/-ql3YNfdClJo/T3XvW9apmFI/AAAAAAAAAL4/_6HFDzbahc4/s1024/sample_image_08.jpg",
-            "https://lh5.googleusercontent.com/-Pxa7eqF4cyc/T3R4oasvPEI/AAAAAAAAAF0/-uYDH92h8LA/s1024/sample_image_09.jpg",
-            "https://lh4.googleusercontent.com/-Li-rjhFEuaI/T3R4o-VUl4I/AAAAAAAAAF8/5E5XdMnP1oE/s1024/sample_image_10.jpg",
-            "https://lh5.googleusercontent.com/-_HU4fImgFhA/T3R4pPVIwWI/AAAAAAAAAGA/0RfK_Vkgth4/s1024/sample_image_11.jpg",
-            "https://lh6.googleusercontent.com/-0gnNrVjwa0Y/T3R4peGYJwI/AAAAAAAAAGU/uX_9wvRPM9I/s1024/sample_image_12.jpg",
-            "https://lh3.googleusercontent.com/-HBxuzALS_Zs/T3R4qERykaI/AAAAAAAAAGQ/_qQ16FaZ1q0/s1024/sample_image_13.jpg",
-            "https://lh4.googleusercontent.com/-cKojDrARNjQ/T3R4qfWSGPI/AAAAAAAAAGY/MR5dnbNaPyY/s1024/sample_image_14.jpg",
-            "https://lh3.googleusercontent.com/-WujkdYfcyZ8/T3R4qrIMGUI/AAAAAAAAAGk/277LIdgvnjg/s1024/sample_image_15.jpg",
-            "https://lh6.googleusercontent.com/-FMHR7Vy3PgI/T3R4rOXlEKI/AAAAAAAAAGs/VeXrDNDBkaw/s1024/sample_image_16.jpg",
-            "https://lh4.googleusercontent.com/-mrR0AJyNTH0/T3R4rZs6CuI/AAAAAAAAAG0/UE1wQqCOqLA/s1024/sample_image_17.jpg",
-            "https://lh6.googleusercontent.com/-z77w0eh3cow/T3R4rnLn05I/AAAAAAAAAG4/BaerfWoNucU/s1024/sample_image_18.jpg",
-            "https://lh5.googleusercontent.com/-aWVwh1OU5Bk/T3R4sAWw0yI/AAAAAAAAAHE/4_KAvJttFwA/s1024/sample_image_19.jpg",
-            "https://lh6.googleusercontent.com/-q-js52DMnWQ/T3R4tZhY2sI/AAAAAAAAAHM/A8kjp2Ivdqg/s1024/sample_image_20.jpg",
-            "https://lh5.googleusercontent.com/-_jIzvvzXKn4/T3R4t7xpdVI/AAAAAAAAAHU/7QC6eZ10jgs/s1024/sample_image_21.jpg",
-            "https://lh3.googleusercontent.com/-lnGi4IMLpwU/T3R4uCMa7vI/AAAAAAAAAHc/1zgzzz6qTpk/s1024/sample_image_22.jpg",
+            "http://yrfn.ca/wp-content/uploads/2010/11/good-food-box.jpg",
+            "http://www.cosmopolitanclublahore.com/wp-content/uploads/2011/06/fast-food-burger.jpg",
+            "https://lh3.ggpht.com/-4fwd4r_Fi3s/TpxSc3uPFNI/AAAAAAAABA4/FHvNdzLiycA/s1600/food.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/4/48/Korean.food-Hoe.naengmyeon-01.jpg",
+            "http://trentarthur.ca/wp-content/uploads/2012/11/Foods.jpg",
+            "http://visportsnutrition.ca/wp-content/uploads/2013/02/Close-Up-Kiwi-Fruit-Salad.jpg",
+            "https://lh3.ggpht.com/_v45-TBo7M6U/TAiPRuojI_I/AAAAAAAAJto/39o51Eh9tYI/s1600/Hot+Food01.jpg",
+            "http://www.realfoods.co.uk/Uploads/kim/fresh-fruit-and-vegetables.jpg",
+            "http://www.gx94radio.com/blogs/middays/wp-content/upLoads/food.jpg",
+            "http://www.ctvnews.ca/polopoly_fs/1.840137!/httpImage/image.jpg_gen/derivatives/landscape_960/image.jpg",
+            "https://lh3.ggpht.com/_v45-TBo7M6U/TA7okOMBe6I/AAAAAAAAJ0c/bwm_U9nNmI8/s1600/Food02.jpg",
+            "http://www.theweathernetwork.com/common/images/uploadnewstorm/Food_art-7-18684.jpg",
+            "http://i-cdn.apartmenttherapy.com/uimages/kitchen/2008_04_15-PlaneFood.jpg",
+            "http://blogs.uoregon.edu/natewoodburyaad250/files/2012/10/PSD_Food_illustrations_3190_pancakes_with_butter-1wi1tz5.jpg",
+            "http://www.thefooddudes.com/_files/canvas/close-ups/larges/food-dudes-dingers-3.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/5/51/Korean.food-Kimbap-03.jpg"
     };
 
     /**

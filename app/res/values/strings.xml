@@ -79,5 +79,6 @@
     <string name="menu_edit">Edit</string>
     <string name="direction">Direction</string>
     <string name="tags">Tags</string>
+    <string name="search_ingredients">Search By Ingredients</string>
 
 </resources>

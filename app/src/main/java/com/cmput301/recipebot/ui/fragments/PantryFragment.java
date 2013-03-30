@@ -218,6 +218,7 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
             getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
             Intent intent = new Intent(getSherlockActivity(), SearchRecipeActivity.class);
             intent.putParcelableArrayListExtra(SearchRecipeActivity.EXTRA_RECIPE_LIST, recipes);
+            intent.putExtra(SearchRecipeActivity.EXTRA_SEARCH_TERM, getString(R.string.search_ingredients));
             startActivity(intent);
             super.onPostExecute(recipes);
         }

@@ -47,7 +47,7 @@ public class ESClient {
     /**
      * The index that we're using.
      */
-    private static final String CLIENT_INDEX = "test-cmput301w13t06";// "cmput301w13t06";
+    private static final String CLIENT_INDEX = "cmput301w13t06";
 
     /**
      * An identifier for the recipe object.
