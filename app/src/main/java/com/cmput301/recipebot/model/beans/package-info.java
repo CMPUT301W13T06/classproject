@@ -18,6 +18,6 @@
  */
 
 /**
- * Package that stores our objects.
+ * Package that contains our objects.
  */
 package com.cmput301.recipebot.model.beans;

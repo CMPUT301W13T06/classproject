@@ -56,7 +56,7 @@
     <!-- Recipe Activity !-->
     <string name="menu_camera">Camera</string>
     <string name="enter_ingredients">Enter Ingredients</string>
-    <string name="enter_instructions">Enter Instructions</string>
+    <string name="enter_directions">Enter Directions</string>
     <string name="enter_tags">Enter Tags</string>
     <string name="menu_save">Save</string>
     <string name="at_least_one_ingredient_required">At least one ingredient required.</string>
