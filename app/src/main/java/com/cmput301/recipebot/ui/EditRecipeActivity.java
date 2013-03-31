@@ -45,6 +45,8 @@ import com.cmput301.recipebot.model.beans.User;
 import com.cmput301.recipebot.ui.adapters.EditableImagePagerAdapter;
 import com.cmput301.recipebot.util.AppConstants;
 import com.cmput301.recipebot.util.BitmapUtils;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import roboguice.inject.InjectView;
 
 import java.io.File;
@@ -383,6 +385,7 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
         } else {
             RecipeModel.getInstance(this).insertRecipe(mRecipe);
         }
+        Crouton.makeText(this, R.string.recipe_saved, Style.CONFIRM).show();
         new WriteRecipeToFileTask().execute(mRecipe);
     }
 

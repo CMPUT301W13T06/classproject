@@ -244,13 +244,31 @@ public class Recipe implements Parcelable {
     }
 
     public String toEmail() {
-        return "Recipe : " + name + "\n" +
-                description + "\n" +
-                "by " + user + "\n" +
-                "Ingredients : " + ingredients + "\n" +
-                "Directions : " + directions + "\n" +
-                "Photos : " + photos + "\n" +
-                "Tags=" + tags;
+        String ingredientList = "";
+        String directionList = "";
+        String photoList = "";
+        String tagList = "";
+
+        for (Ingredient ingredient : ingredients)
+            ingredientList = ingredientList.concat(
+                    "\t" + ingredient + "\n");
+
+        for (String direction : directions)
+            directionList = directionList.concat(
+                    "\t" + direction + "\n");
+
+        for (String tag : tags)
+            tagList = tagList.concat(
+                    "\t" + tag + "\t\t\n");
+
+        return "Recipe :\n" +
+                "Id: " + id + "\n" +
+                "Name: " + name + "\n" +
+                "Description: " + description + "\n" +
+                "User: " + user + "\n" +
+                "Ingredients:\n" + ingredientList +
+                "Directions:\n" + directionList +
+                "Tags: \n" + tagList;
     }
 
     @Override

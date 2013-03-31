@@ -44,6 +44,8 @@ import com.cmput301.recipebot.ui.fragments.PantryFragment;
 import com.cmput301.recipebot.ui.fragments.SavedRecipesGridFragment;
 import com.cmput301.recipebot.util.AppConstants;
 import com.cmput301.recipebot.util.NetworkUtils;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
@@ -83,6 +85,8 @@ public class MainActivity extends BaseActivity implements SearchView.OnQueryText
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
+        } else {
+            Crouton.makeText(this, getString(R.string.hello_user, name), Style.CONFIRM).show();
         }
     }
 

@@ -20,8 +20,11 @@
 package com.cmput301.recipebot.ui;
 
 import android.os.Bundle;
+import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.ui.fragments.NetworkRecipeGridFragment;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import roboguice.inject.InjectExtra;
 
 import java.util.ArrayList;
@@ -48,6 +51,10 @@ public class SearchRecipeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         getSupportActionBar().setTitle(query);
+
+        if (recipes == null || recipes.size() == 0) {
+            Crouton.makeText(this, R.string.no_results_found, Style.INFO).show();
+        }
 
         if (savedInstanceState == null) {
             NetworkRecipeGridFragment f = NetworkRecipeGridFragment.newInstance(recipes);

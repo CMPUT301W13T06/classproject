@@ -100,19 +100,22 @@ public class Ingredient implements Parcelable {
 
     @Override
     public String toString() {
-        if (unit == null || quantity == 0.0f) {
-            return name;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (quantity != 0.0f) {
+            if (quantity == (int) quantity) {
+                stringBuilder.append(String.format("%d", (int) quantity)).append(" ");
+            } else {
+                stringBuilder.append(String.format("%s", quantity)).append(" ");
+            }
         }
-        if (unit == "") {
-            if (quantity == (int) quantity)
-                return String.format("%d of %s", (int) quantity, name);
-            else
-                return String.format("%s of %s", quantity, name);
+
+        if (unit != null && unit.equals("")) {
+            stringBuilder.append(unit).append(" ");
         }
-        if (quantity == (int) quantity)
-            return String.format("%d %s of %s", (int) quantity, unit, name);
-        else
-            return String.format("%s %s of %s", quantity, unit, name);
+
+        stringBuilder.append(name);
+        return stringBuilder.toString();
     }
 
     /**
