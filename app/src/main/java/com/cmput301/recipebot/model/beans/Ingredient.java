@@ -118,6 +118,12 @@ public class Ingredient implements Parcelable {
         return stringBuilder.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        Ingredient ingredient = (Ingredient) o;
+        return name.compareToIgnoreCase(ingredient.getName()) == 0;
+    }
+
     /**
      * Constructs an Ingredient object from a {@link Parcel}
      *

@@ -34,10 +34,12 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.PantryModel;
+import com.cmput301.recipebot.model.RecipeModel;
 import com.cmput301.recipebot.model.beans.Ingredient;
 import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.model.network.ESClient;
 import com.cmput301.recipebot.ui.SearchRecipeActivity;
+import com.cmput301.recipebot.util.NetworkUtils;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockListFragment;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -211,8 +213,12 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         @Override
         protected ArrayList<Recipe> doInBackground(ArrayList<Ingredient>... arrayLists) {
             ArrayList<Ingredient> ingredients = arrayLists[0];
-            ESClient client = new ESClient();
-            return client.searchRecipes(ingredients, true);
+            if (NetworkUtils.isConnected(getSherlockActivity())) {
+                ESClient client = new ESClient();
+                return client.searchRecipes(ingredients, true);
+            } else {
+                return RecipeModel.getInstance(getSherlockActivity()).searchRecipesByIngredients(ingredients);
+            }
         }
 
         @Override

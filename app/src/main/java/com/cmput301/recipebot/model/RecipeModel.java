@@ -21,6 +21,7 @@ package com.cmput301.recipebot.model;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import com.cmput301.recipebot.model.beans.Ingredient;
 import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.model.local.DatabaseHelper;
 import com.cmput301.recipebot.model.network.ESClient;
@@ -225,6 +226,22 @@ public class RecipeModel {
         ArrayList<Recipe> recipes = new ArrayList<Recipe>();
         for (Recipe recipe : mRecipes) {
             if (recipe.getUser().getEmail().compareToIgnoreCase(email) == 0) {
+                recipes.add(recipe);
+            }
+        }
+        return recipes;
+    }
+
+    /**
+     * Search for recipes by a list of ingredients.
+     *
+     * @param searchIngredients Ingredients to search for.
+     * @return recipes for this search.
+     */
+    public ArrayList<Recipe> searchRecipesByIngredients(ArrayList<Ingredient> searchIngredients) {
+        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+        for (Recipe recipe : mRecipes) {
+            if (recipe.getIngredients().containsAll(searchIngredients)) {
                 recipes.add(recipe);
             }
         }
