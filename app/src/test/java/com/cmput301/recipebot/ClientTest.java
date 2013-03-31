@@ -24,6 +24,7 @@ import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.model.beans.User;
 import com.cmput301.recipebot.model.network.ESClient;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 /**
  * Unit tests of Elastic Search API
  */
+@Ignore
 public class ClientTest {
 
     private ESClient mClient;
@@ -45,7 +47,7 @@ public class ClientTest {
     @Before
     public void setUp() throws Exception {
         mClient = new ESClient();
-        // insertRecipesToServer();
+        insertRecipesToServer();
         recipeComparator = new RecipeComparator();
     }
 
@@ -216,7 +218,7 @@ public class ClientTest {
      */
     private void insertRecipesToServer() {
         ArrayList<Recipe> mRecipeList;
-        mRecipeList = generateRandomRecipes(50);
+        mRecipeList = generateRandomRecipes(100);
         for (Recipe recipe : mRecipeList) {
             mClient.insertRecipe(recipe);
         }

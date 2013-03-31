@@ -31,6 +31,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.util.AppConstants;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import roboguice.inject.InjectView;
 
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
@@ -86,6 +88,8 @@ public class GetUserActivity extends BaseActivity implements View.OnClickListene
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
+        } else {
+            Crouton.makeText(this, R.string.invalid, Style.ALERT).show();
         }
     }
 

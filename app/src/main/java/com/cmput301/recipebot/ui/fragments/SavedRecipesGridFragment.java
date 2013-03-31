@@ -24,13 +24,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.model.RecipeModel;
 import com.cmput301.recipebot.model.beans.Recipe;
 import com.cmput301.recipebot.model.beans.User;
 import com.cmput301.recipebot.ui.adapters.RecipeGridAdapter;
 import com.cmput301.recipebot.util.AppConstants;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +87,7 @@ public class SavedRecipesGridFragment extends AbstractRecipeGridFragment impleme
             RecipeModel.getInstance(getSherlockActivity()).networkDeleteRecipe(recipe.getId());
         }
         RecipeModel.getInstance(getSherlockActivity()).deleteRecipe(recipe.getId());
-        Toast.makeText(getSherlockActivity(), R.string.recipe_deleted, Toast.LENGTH_LONG);
+        Crouton.makeText(getSherlockActivity(), R.string.recipe_deleted, Style.ALERT).show();
         return true;
     }
 
