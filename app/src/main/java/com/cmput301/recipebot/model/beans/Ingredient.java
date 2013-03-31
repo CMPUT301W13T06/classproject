@@ -110,8 +110,8 @@ public class Ingredient implements Parcelable {
             }
         }
 
-        if (unit != null && unit.equals("")) {
-            stringBuilder.append(unit).append(" ");
+        if (unit != null && !unit.equals("")) {
+            stringBuilder.append(unit).append(" ").append("of").append(" ");
         }
 
         stringBuilder.append(name);
