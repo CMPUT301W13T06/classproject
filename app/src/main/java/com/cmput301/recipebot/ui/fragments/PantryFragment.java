@@ -85,6 +85,9 @@ public class PantryFragment extends RoboSherlockListFragment implements View.OnC
         fillView();
     }
 
+    /**
+     * fill the view with and grab references.
+     */
     private void fillView() {
         mPantryItems = PantryModel.getInstance(getSherlockActivity()).loadPantry();
         LayoutInflater layoutInflater = getSherlockActivity().getLayoutInflater();

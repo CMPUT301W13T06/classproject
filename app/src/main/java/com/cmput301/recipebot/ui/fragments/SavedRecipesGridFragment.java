@@ -64,6 +64,11 @@ public class SavedRecipesGridFragment extends AbstractRecipeGridFragment impleme
         gridview.setOnItemLongClickListener(this);
     }
 
+    /**
+     * Intialise the gridview
+     *
+     * @param recipes Recipe to load into the gridview
+     */
     private void initaliseGridView(List<Recipe> recipes) {
         mAdapter = new RecipeGridAdapter(getSherlockActivity(), recipes);
         gridview.setAdapter(mAdapter);
@@ -91,6 +96,11 @@ public class SavedRecipesGridFragment extends AbstractRecipeGridFragment impleme
         return true;
     }
 
+    /**
+     * Get the user from our preferences.
+     *
+     * @return User stored in preferences.
+     */
     private User getUserFromPreferences() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getSherlockActivity());
         String email = sharedPref.getString(AppConstants.KEY_USER_EMAIL, null);
