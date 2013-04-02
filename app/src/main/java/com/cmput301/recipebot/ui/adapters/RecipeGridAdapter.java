@@ -35,11 +35,21 @@ import java.util.List;
 
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
+/**
+ * A simple grid adapter that shows a grid of recipes.
+ */
 public class RecipeGridAdapter extends BaseAdapter {
 
     private static final String LOGTAG = makeLogTag(RecipeGridAdapter.class);
 
+    /**
+     * Recipes to display.
+     */
     private List<Recipe> mRecipes;
+
+    /**
+     * Context to construct the views.
+     */
     private Context mContext;
 
     /**
@@ -94,6 +104,11 @@ public class RecipeGridAdapter extends BaseAdapter {
         }
     }
 
+    /**
+     * Swap the adapter with a new dataset
+     *
+     * @param recipes New list of recipes.
+     */
     public void swapData(List<Recipe> recipes) {
         mRecipes = recipes;
         notifyDataSetChanged();

@@ -30,11 +30,28 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
+/**
+ * A {@link PagerAdapter} that shows a list of images. Each image can be a {@link java.util.prefs.Base64} encoded String
+ * or a link to a online image. The loading is automatically done on a background thread.
+ */
 public class ImagePagerAdapter extends PagerAdapter {
 
+    /**
+     * List of images to display.
+     */
     protected ArrayList<String> mImages;
+
+    /**
+     * To construct the views.
+     */
     protected Context mContext;
 
+    /**
+     * Constructs the adapter.
+     *
+     * @param context Context to construct the views
+     * @param images  Images to display.
+     */
     public ImagePagerAdapter(Context context, ArrayList<String> images) {
         this.mContext = context;
         this.mImages = images;

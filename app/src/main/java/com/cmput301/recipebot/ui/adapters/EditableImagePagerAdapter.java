@@ -29,11 +29,32 @@ import com.cmput301.recipebot.R;
 
 import java.util.ArrayList;
 
+/**
+ * An extension of {@link ImagePagerAdapter} that shows two additional items.
+ * These two items add two extra buttons, an add from gallery button and add from Camera button.
+ * It is upto the hostigin activity or fragment to provide a callback for these buttons, and their behaviour is tied
+ * to however it is defined by the host.
+ */
 public class EditableImagePagerAdapter extends ImagePagerAdapter {
 
+    /**
+     * Callback for when gallery button is clicked.
+     */
     private View.OnClickListener galleryClickListener;
+
+    /**
+     * Callback for when camera button is clicked.
+     */
     private View.OnClickListener cameraClickListener;
 
+    /**
+     * Constructs the adapter.
+     *
+     * @param context              to make the views
+     * @param images               the list of images to display
+     * @param galleryClickListener Callback to invoke when gallery button is clicked
+     * @param cameraClickListener  Callback to invoke when camera button is clicked.
+     */
     public EditableImagePagerAdapter(Context context, ArrayList<String> images,
                                      View.OnClickListener galleryClickListener,
                                      View.OnClickListener cameraClickListener) {
