@@ -27,6 +27,9 @@ import org.fest.assertions.api.Assertions;
 
 import java.util.Comparator;
 
+/**
+ * A custom {@link AbstractAssert} to help with performing {@link Recipe} assertions.
+ */
 public class RecipeAssert extends AbstractAssert<RecipeAssert, Recipe> {
 
     public RecipeAssert(Recipe actual) {
