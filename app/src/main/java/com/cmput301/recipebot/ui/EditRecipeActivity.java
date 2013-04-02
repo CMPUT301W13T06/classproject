@@ -99,7 +99,10 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
         mViewPhotos.setAdapter(new EditableImagePagerAdapter(this, mRecipe.getPhotos(),
                 addImageFromGalleryListener, addImageFromCameraListener));
     }
-
+    
+    /**
+     * Allows user to add image from Gallery
+     */
     private View.OnClickListener addImageFromGalleryListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -109,6 +112,9 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
         }
     };
 
+    /**
+     * Allows user to add image from Camera
+     */
     private View.OnClickListener addImageFromCameraListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -120,7 +126,7 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
             startActivityForResult(i, TAKE_PICTURE);
         }
     };
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(Menu.NONE, R.id.menu_save, Menu.NONE, R.string.menu_save)
@@ -183,13 +189,20 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
 
     }
 
+    
+    /**
+     * Allows user remove a direction from recipe
+     */
     private void deleteSelectedDirection(String direction) {
         if (direction != null) {
             mRecipe.getDirections().remove(direction);
             fillListLayout(mListViewDirections, mRecipe.getDirections(), TYPE_DIRECTION);
         }
     }
-
+    
+    /**
+     * Allows user to remove a ingredient from recipe
+     */
     private void deleteSelectedIngredient(Ingredient ingredient) {
         if (ingredient != null) {
             mRecipe.getIngredients().remove(ingredient);
@@ -197,6 +210,10 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
         }
     }
 
+    
+    /**
+     * Allows user to remove a tag from recipe
+     */
     private void deleteSelectedTag(String tag) {
         if (tag != null) {
             mRecipe.getTags().remove(tag);
@@ -347,6 +364,10 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
 
     }
 
+    
+    /**
+     * Asynchronous task to speed up image loading times for improved user experience
+     */
     private class EncodeBitmapTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -374,7 +395,7 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
                 return super.onOptionsItemSelected(item);
         }
     }
-
+    
     private void save() {
         boolean update = mRecipe.getId() != null;
         if (!updateRecipeFromUI()) {
