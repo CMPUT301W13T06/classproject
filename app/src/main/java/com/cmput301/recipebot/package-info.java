@@ -18,6 +18,6 @@
  */
 
 /**
- * Contains all UI related classes. Views may also be in the resource folder.
+ * Source for the app.
  */
-package com.cmput301.recipebot.ui;
+package com.cmput301.recipebot;

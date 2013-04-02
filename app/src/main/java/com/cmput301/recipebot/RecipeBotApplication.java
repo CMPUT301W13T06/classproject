@@ -76,6 +76,9 @@ public class RecipeBotApplication extends Application {
         buildImageCache();
     }
 
+    /**
+     * Build the {@link HttpResponseCache}.
+     */
     private void buildHttpCache() {
         File httpCacheDir = new File(getCacheDir(), "http");
         long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
@@ -86,6 +89,9 @@ public class RecipeBotApplication extends Application {
         }
     }
 
+    /**
+     * Build the {@link UnlimitedDiscCache} for images.
+     */
     private void buildImageCache() {
         File cacheDir = new File(getCacheDir(), "uil");
 
