@@ -4,6 +4,8 @@
  * Copyright 2013 Ethan Mykytiuk
  * Copyright 2013 Prateek Srivastava (@f2prateek)
  *
+ * Copyright 2012 Donn Felker
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,6 +30,9 @@ import com.squareup.otto.Bus;
  */
 public class RecipeBotModule extends AbstractModule {
 
+    /**
+     * Contributes bindings and other configurations for this module to binder.
+     */
     @Override
     protected void configure() {
 
