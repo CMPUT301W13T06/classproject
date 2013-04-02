@@ -148,7 +148,7 @@ public class ClientTest {
      */
     @Test
     public void testSearchByIndividualIngredient() throws Exception {
-        Recipe recipe = mClient.getRecipe("2479e0a8-dc4d-4118-b9f5-c09cb928a440");
+        Recipe recipe = mClient.getRecipe("07661cb1-f279-4699-be34-af12364c9b41");
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
         ingredients.add(new Ingredient("vodka", 2f, ""));
         ArrayList<Recipe> recipes = mClient.searchRecipes(ingredients, false);
