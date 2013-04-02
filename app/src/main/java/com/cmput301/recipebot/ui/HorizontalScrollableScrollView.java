@@ -26,6 +26,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
 
+/**
+ * A custom {@link ScrollView} taht doesn't interfere with horizontal swiping.
+ * Used to allow the viewpager swiping in our {@link AbstractRecipeActivity}
+ */
 public class HorizontalScrollableScrollView extends ScrollView {
 
     private GestureDetector mGestureDetector;

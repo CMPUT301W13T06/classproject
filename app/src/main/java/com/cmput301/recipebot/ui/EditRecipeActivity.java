@@ -63,8 +63,8 @@ public class EditRecipeActivity extends AbstractRecipeActivity implements Compou
     private static final String LOGTAG = makeLogTag(EditRecipeActivity.class);
     private static final int RESULT_LOAD_IMAGE = 458;
     private static final int TAKE_PICTURE = 531;
-    private Uri cameraImageUri;
 
+    private Uri cameraImageUri;
     private ActionMode mActionMode;
     private CompoundButton selectedCheckBox;
 

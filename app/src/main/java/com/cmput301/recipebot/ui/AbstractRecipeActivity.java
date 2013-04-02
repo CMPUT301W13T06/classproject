@@ -43,6 +43,10 @@ import java.util.List;
 
 import static com.cmput301.recipebot.util.LogUtils.makeLogTag;
 
+/**
+ * An abstract {@link android.app.Activity} that displays a Recipe to the user.
+ * It sets up a share action provider to share the recipe and the views that should be displayed to the user.
+ */
 public abstract class AbstractRecipeActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
     public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
@@ -122,6 +126,9 @@ public abstract class AbstractRecipeActivity extends BaseActivity implements Com
         fillListLayout(mListViewTags, mRecipe.getTags(), TYPE_TAG);
     }
 
+    /**
+     * Display the images to the user.
+     */
     public abstract void setPhotos();
 
     /**
@@ -155,6 +162,10 @@ public abstract class AbstractRecipeActivity extends BaseActivity implements Com
         int type;
     }
 
+    /**
+     * A task that writes the recipe to a file for sharing.
+     * In our case, we're simply storing it as a Json file.
+     */
     class WriteRecipeToFileTask extends AsyncTask<Recipe, Void, File> {
 
         private static final String STORAGE_DIRECTORY = "RecipeBot";

@@ -26,6 +26,10 @@ import com.actionbarsherlock.view.MenuItem;
 import com.cmput301.recipebot.R;
 import com.cmput301.recipebot.ui.adapters.ImagePagerAdapter;
 
+/**
+ * An activity that allows the user to view a recipe. It displays an actin bar item to allow the user to launch an
+ * {@link EditRecipeActivity} to edit the recipe.
+ */
 public class ViewRecipeActivity extends AbstractRecipeActivity {
 
     @Override
