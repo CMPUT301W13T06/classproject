@@ -23,8 +23,17 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+/**
+ * Logic for working with network stuff.
+ */
 public class NetworkUtils {
 
+    /**
+     * This returns true if the device is connected to the network.
+     *
+     * @param context Context to check the network.
+     * @return true if the device is connected to the network.
+     */
     public static boolean isConnected(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);

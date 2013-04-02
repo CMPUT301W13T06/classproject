@@ -17,21 +17,7 @@
  *  limitations under the License.
  */
 
-package com.cmput301.recipebot.util;
-
 /**
- * Class to store constant values shared across multiple componets of the app.
+ * Utility classes.
  */
-public class AppConstants {
-
-    /**
-     * Key identifier to store user's name.
-     */
-    public static final String KEY_USER_NAME = "KEY_USER_NAME";
-
-    /**
-     * Key identifier to store user's email.
-     */
-    public static final String KEY_USER_EMAIL = "KEY_USER_EMAIL";
-
-}
+package com.cmput301.recipebot.util;

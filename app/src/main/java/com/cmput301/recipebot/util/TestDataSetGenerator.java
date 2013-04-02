@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
+/**
+ * A utilty class to generate some test data.
+ */
 public class TestDataSetGenerator {
 
     public static final String[] RECIPE_NAMES = {"Chicken Parmesan", "Kentucky Fried Chicken", "Green Salad", "Kahlua",
@@ -75,6 +78,11 @@ public class TestDataSetGenerator {
         return recipeList;
     }
 
+    /**
+     * Generate a random recipe.
+     *
+     * @return
+     */
     public static Recipe generateRandomRecipe() {
         String id = UUID.randomUUID().toString();
         Random random = new Random();

@@ -28,8 +28,17 @@ import android.widget.ImageView;
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 
+/**
+ * A utiltiy class to wrap our bitmap logic in.
+ */
 public class BitmapUtils {
 
+    /**
+     * Encode an image form the given path into a {@link Base64}  string
+     *
+     * @param imagePath Path of the image to encode (must be absolute)
+     * @return a {@link Base64} encoded string.
+     */
     public static String encodeBitmap(String imagePath) {
         Bitmap image = BitmapFactory.decodeFile(imagePath);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -39,6 +48,9 @@ public class BitmapUtils {
         return imageEncoded;
     }
 
+    /**
+     * A task that decodes the an image from a {@link Base64} encoded string into an imageview.
+     */
     public static class DecodeBitmapTask extends AsyncTask<String, Void, Bitmap> {
         private final WeakReference<ImageView> imageViewReference;
         private String data = null;
@@ -67,6 +79,12 @@ public class BitmapUtils {
         }
     }
 
+    /**
+     * Decodes a string into a Bitmap
+     *
+     * @param input String to decode
+     * @return decoded Bitmap
+     */
     private static Bitmap decodeBitmap(String input) {
         byte[] decodedByte = Base64.decode(input, 0);
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
