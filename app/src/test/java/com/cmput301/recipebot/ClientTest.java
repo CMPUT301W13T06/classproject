@@ -132,7 +132,7 @@ public class ClientTest {
     @Test
     public void testSearchByName() throws Exception {
         // Test the initial conditions, verify that the recipe exists on the server.
-        Recipe recipe = mClient.getRecipe("2fd6b7af-8867-41fe-9d50-d6334efeb6c1");
+        Recipe recipe = mClient.getRecipe("c3764532-f057-48fa-8722-0f5f632d6152");
         assertThat(recipe).hasName("Fried Rice");
 
         ArrayList<Recipe> recipes = mClient.searchRecipes("Fried Rice");
@@ -148,30 +148,26 @@ public class ClientTest {
      */
     @Test
     public void testSearchByIndividualIngredient() throws Exception {
-        Recipe recipe = mClient.getRecipe("58cbeec7-5020-49d6-83cd-ccc416b7960a");
-
-        // Search with the every ingredient individually.
-        for (Ingredient i : recipe.getIngredients()) {
-            ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-            ingredients.add(i);
-            ArrayList<Recipe> recipes = mClient.searchRecipes(ingredients, false);
-            assertThat(recipes.size()).isGreaterThan(0); // We know this exists, but could be multiple (random).
-            assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe);
-        }
-
+        Recipe recipe = mClient.getRecipe("2479e0a8-dc4d-4118-b9f5-c09cb928a440");
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-        ingredients.add(new Ingredient("dsadsadasdasdasdada", 2f, ""));
+        ingredients.add(new Ingredient("vodka", 2f, ""));
         ArrayList<Recipe> recipes = mClient.searchRecipes(ingredients, false);
+        assertThat(recipes.size()).isGreaterThan(0); // We know this exists, but could be multiple (random).
+        assertThat(recipes).usingElementComparator(recipeComparator).contains(recipe);
+
+        ingredients = new ArrayList<Ingredient>();
+        ingredients.add(new Ingredient("dsadsadasdasdasdada", 2f, ""));
+        recipes = mClient.searchRecipes(ingredients, false);
         assertThat(recipes.size()).isEqualTo(0); // We know this doesn't exist.
     }
 
     /**
-     * Test that mulitple {@link Recipe} is given by a search.
+     * Test that multiple {@link Recipe} is given by a search.
      */
     @Test
     public void testSearchByIngredientsReturnsMultipleRecipes() throws Exception {
         Recipe recipe1 = mClient.getRecipe("2b52eb1c-ae43-4ef3-8e9e-f591d53df7d8");
-        Recipe recipe2 = mClient.getRecipe("722b908e-f153-401a-bf3b-b5ff57dab98c");
+        Recipe recipe2 = mClient.getRecipe("602b3a1d-8228-45a0-a08c-247522971005");
         Ingredient ingredient = new Ingredient("Bacon", 2f, "");
         assertThat(recipe1).hasIngredient(ingredient);
         assertThat(recipe2).hasIngredient(ingredient);
@@ -189,16 +185,18 @@ public class ClientTest {
      */
     @Test
     public void testSearchByMultipleIngredients() throws Exception {
-        Recipe recipe = mClient.getRecipe("7386b25d-3935-4f74-b486-64730f207c3a");
-        Ingredient honey_garlic = new Ingredient("Honey Garlic", 2f, "");
+        Recipe recipe = mClient.getRecipe("e8c8a411-db82-4252-bd32-2125ec6992fe");
+        Ingredient vodka = new Ingredient("Vodka", 2f, "");
         Ingredient bacon = new Ingredient("Bacon", 2f, "");
         Ingredient salt = new Ingredient("Salt", 2f, "");
-        assertThat(recipe).hasIngredient(honey_garlic).hasIngredient(bacon).hasIngredient(salt);
+        Ingredient strawberry = new Ingredient("Strawberry", 2f, "");
+        assertThat(recipe).hasIngredient(vodka).hasIngredient(bacon).hasIngredient(salt).hasIngredient(strawberry);
 
         ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-        ingredients.add(honey_garlic);
+        ingredients.add(vodka);
         ingredients.add(bacon);
         ingredients.add(salt);
+        ingredients.add(strawberry);
 
         // Test that we get at least this one (many recipes with one or more of these ingredients.
         ArrayList<Recipe> recipes = mClient.searchRecipes(ingredients, false);
