@@ -80,6 +80,20 @@
                 android:label="@string/app_name">
         </activity>
 
+        <activity
+                android:name=".ui.RecipeReceiverActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:label="@string/app_name">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="*" />
+                <data android:mimeType="application/json" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
